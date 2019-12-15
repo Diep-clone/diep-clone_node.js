@@ -1,5 +1,5 @@
 # diep.io-tankMaker
 
-click : summon current type tank \n
-\ key : change tank type \n
-O key : kill all tank
++click : summon current type tank
++\ key : change tank type
++O key : kill all tank
