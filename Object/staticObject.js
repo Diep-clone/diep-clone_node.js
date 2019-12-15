@@ -1,0 +1,10 @@
+function StaticObject(){
+  this.x1;
+  this.y1;
+  this.x2;
+  this.y2;
+  this.opacity;
+  this.isCollision = function(obj){
+
+  }
+}
