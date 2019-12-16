@@ -59,7 +59,7 @@ function Tank(){
     this.guns = [];
   }
   this.keydown = function(){
-
+    console.log(this);
   }
   this.setCanvasSize = function(){
     this.canvas.width = (this.radius * 2) * camera.z;
