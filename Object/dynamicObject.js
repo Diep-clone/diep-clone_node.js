@@ -9,7 +9,7 @@ function DynamicObject(){
   this.health=10;
   this.damage=8;
   this.opacity=1;
-  this.ids;
+  this.id;
   this.addForce = function(x,y){
 
   }
