@@ -225,7 +225,7 @@ TriAngle.prototype.constructor = TriAngle;
 
 function Destroyer(){
   this.clearGun();
-  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.8,1.9],[-0.8,1.9],[-0.8, 0]],0));
+  this.addGun(new Gun(this,[[0,0],[0.7,0],[0.7,1.9],[-0.7,1.9],[-0.7, 0]],0));
   this.tankType = "Destroyer";
 }
 Destroyer.prototype = new Tank();
