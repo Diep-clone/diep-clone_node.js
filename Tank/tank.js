@@ -17,7 +17,7 @@ function Tank(){
   this.ctx = this.canvas.getContext('2d');
   this.canvasPos = {x:0,y:0};
   this.animate = function(){
-    if (this.isDead){
+    if (this.isDead || this.health<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
         object_list[this.id] = null;
