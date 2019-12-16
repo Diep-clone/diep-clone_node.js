@@ -3,7 +3,7 @@ var tanktype = 0;
 
 window.onmousedown = function(e){
   switch (e.button){
-    case 1:
+    case 0:
       var tank = new tanklist[tanktype];
 
       object_list.push(tank);
@@ -15,6 +15,8 @@ window.onmousedown = function(e){
       tank.opacity = 1;
 
       im_count++;
+    break;
+    case 1:
     break;
     case 2:
     break;
