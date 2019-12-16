@@ -1,10 +1,11 @@
-function Gun(tank,paths,dir,bullet,pos){
+function Gun(tank,paths,dir,bullet,pos,force){
   SubObject.apply(this, arguments);
   this.parentObject = tank;
   this.point = paths;
   this.addRotate = dir;
   this.bullet = bullet;
   this.bulletPosition = pos;
+  this.bulletForce = force;
   this.cooltime = 0;
   this.isCanShot = true;
   this.lastShotTime = 0;
