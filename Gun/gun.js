@@ -1,4 +1,5 @@
 function Gun(tank,paths,dir,bullet,pos){
+  SubObject.apply(this, arguments);
   this.parentObject = tank;
   this.point = paths;
   this.addRotate = dir;
