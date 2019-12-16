@@ -9,7 +9,9 @@ function BasicBullet(tank,sx,sy){
   this.canvasPos = {x:0,y:0};
   this.animate = function(){
     if (this.time<0){
+      
     }
+    this.time-=tick;
     this.move();
     this.draw();
   }
