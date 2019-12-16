@@ -53,7 +53,7 @@ function BasicBullet(tank,sx,sy){
 
     this.ctx.lineWidth = 1;
     this.ctx.strokeStyle = "#777777";
-    this.ctx.beginPath();
+    /*this.ctx.beginPath();
     this.ctx.moveTo(0,0);
     this.ctx.lineTo(this.canvas.width,this.canvas.height);
     this.ctx.stroke();
@@ -62,7 +62,7 @@ function BasicBullet(tank,sx,sy){
     this.ctx.moveTo(0,this.canvas.height);
     this.ctx.lineTo(this.canvas.width,0);
     this.ctx.stroke();
-    this.ctx.closePath();
+    this.ctx.closePath();*/
     this.ctx.strokeRect(0,0,this.canvas.width,this.canvas.height);
 
     ctx.globalAlpha = this.opacity;
