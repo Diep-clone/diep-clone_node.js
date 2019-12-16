@@ -1,7 +1,15 @@
-function Gun(tank,paths,dir){
+function Gun(tank,paths,dir,bullet){
   this.parentObject = tank;
   this.point = paths;
   this.addRotate = dir;
+  this.bullet = bullet;
+  this.cooltime = 0;
+  this.isCanShot = true;
+  this.lastShotTime = 0;
+  
+  this.shot = function (){
+    
+  }
 
   this.setParentCanvasSize = function (){
     let rotate = this.parentObject.rotate;
@@ -51,10 +59,6 @@ function Gun(tank,paths,dir){
     this.parentObject.ctx.stroke();
     this.parentObject.ctx.closePath();
   }
-  this.bullet;
-  this.cooltime;
-  this.isCanShot;
-  this.lastShotTime;
 }
 Gun.prototype = new SubObject();
 Gun.prototype.constructor = Gun;
