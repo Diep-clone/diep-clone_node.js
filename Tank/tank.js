@@ -215,8 +215,8 @@ FlankGuard.prototype.constructor = FlankGuard;
 function TriAngle(){
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
-  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI / 8 * 7));
-  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],-Math.PI / 8 * 7));
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI / 6 * 5));
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],-Math.PI / 6 * 5));
   this.tankType = "TriAngle";
 }
 TriAngle.prototype = new Tank();
