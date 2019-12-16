@@ -1,35 +1,35 @@
 function Tank(){
   this.stats = [0,0,0,0,0,0,0,0];
   this.maxStats = [7,7,7,7,7,7,7,7];
-  this.statCount;
+  this.statCount = 0;
   this.tankType = null;
   this.guns = [];
   this.color = new RGB(0,176,225);
   this.gunColor = new RGB(153,153,153);
-  this.lv;
-  this.score;
-  this.click;
-  this.rclick;
-  this.autoC;
-  this.autoE;
-  this.isDead;
+  this.lv = 1;
+  this.score = 0;
+  this.click = false;
+  this.rclick = false;
+  this.autoC = false;
+  this.autoE = false;
+  this.isDead = false;
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
   this.canvasPos = {x:0,y:0};
-  this.setCanvasSize = function(){
-    this.canvas.width = (this.radius * 2) * camera.z;
-    this.canvas.height = (this.radius * 2) * camera.z;
-    this.canvasPos = {x:this.radius * camera.z,y:this.radius * camera.z};
-    for (let i=0;i<this.guns.length;i++){
-      this.guns[i].setParentCanvasSize();
+  this.animate = function(){
+    if (this.isDead){
+      if (this.opacity <= 0.1){
+        this.opacity = 0;
+        object_list[this.id] = null;
+        return;
+      }
+      else{
+        this.opacity -= 0.1;
+        this.radius += 0.3;
+      }
     }
-    this.canvas.width += 4 * camera.z + 6;
-    this.canvas.height += 4 * camera.z + 6;
-    this.canvasPos.x += 2 * camera.z + 2;
-    this.canvasPos.y += 2 * camera.z + 2;
-    this.ctx.lineWidth = 2 * camera.z;
-    this.ctx.lineCap = "round";
-    this.ctx.lineJoin = "round";
+    this.rotate += 0.01;
+    this.draw();
   }
   this.levelUP = function(){
 
@@ -60,6 +60,21 @@ function Tank(){
   }
   this.keydown = function(){
 
+  }
+  this.setCanvasSize = function(){
+    this.canvas.width = (this.radius * 2) * camera.z;
+    this.canvas.height = (this.radius * 2) * camera.z;
+    this.canvasPos = {x:this.radius * camera.z,y:this.radius * camera.z};
+    for (let i=0;i<this.guns.length;i++){
+      this.guns[i].setParentCanvasSize();
+    }
+    this.canvas.width += 4 * camera.z + 6;
+    this.canvas.height += 4 * camera.z + 6;
+    this.canvasPos.x += 2 * camera.z + 2;
+    this.canvasPos.y += 2 * camera.z + 2;
+    this.ctx.lineWidth = 2 * camera.z;
+    this.ctx.lineCap = "round";
+    this.ctx.lineJoin = "round";
   }
   this.draw = function(){
     this.setCanvasSize();
@@ -94,21 +109,6 @@ function Tank(){
 
     ctx.globalAlpha = this.opacity;
     ctx.drawImage(this.canvas,this.x * camera.z-this.canvasPos.x,this.y * camera.z-this.canvasPos.y);
-  }
-  this.animate = function(){
-    if (this.isDead){
-      if (this.opacity <= 0.1){
-        this.opacity = 0;
-        object_list[this.id] = null;
-        return;
-      }
-      else{
-        this.opacity -= 0.1;
-        this.radius += 0.3;
-      }
-    }
-    this.rotate += 0.01;
-    this.draw();
   }
 }
 Tank.prototype = new HealthShowObject();
@@ -205,12 +205,22 @@ MachineGun.prototype.constructor = MachineGun;
 function FlankGuard(){
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
-  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,-1.3],[-0.4,-1.3],[-0.4, 0]],Math.PI));
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.3],[-0.4,1.3],[-0.4, 0]],Math.PI));
   this.tankType = "FlankGuard";
 }
 FlankGuard.prototype = new Tank();
 FlankGuard.prototype.constructor = FlankGuard;
 
+
+function TriAngle(){
+  this.clearGun();
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.3],[-0.4,1.3],[-0.4, 0]],Math.PI / 8 * 7));
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.3],[-0.4,1.3],[-0.4, 0]],-Math.PI / 8 * 7));
+  this.tankType = "TriAngle";
+}
+TriAngle.prototype = new Tank();
+TriAngle.prototype.constructor = TriAngle;
 
 
 var tanklist = [
@@ -222,5 +232,6 @@ var tanklist = [
   OctoTank,
   Sniper,
   MachineGun,
-  FlankGuard
+  FlankGuard,
+  TriAngle
 ];
