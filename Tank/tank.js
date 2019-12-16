@@ -117,6 +117,7 @@ Tank.prototype.constructor = Tank;
 
 
 function Basic(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
   this.tankType = "Basic";
@@ -126,6 +127,7 @@ Basic.prototype.constructor = Basic;
 
 
 function Twin(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.9,0],[0.9,1.9],[0.1,1.9],[0.1, 0]],0));
   this.addGun(new Gun(this,[[0,0],[-0.1,0],[-0.1,1.9],[-0.9,1.9],[-0.9, 0]],0));
@@ -136,6 +138,7 @@ Twin.prototype.constructor = Twin;
 
 
 function Triplet(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.9,0],[0.9,1.6],[0.1,1.6],[0.1, 0]],0));
   this.addGun(new Gun(this,[[0,0],[-0.1,0],[-0.1,1.6],[-0.9,1.6],[-0.9, 0]],0));
@@ -147,6 +150,7 @@ Triplet.prototype.constructor = Triplet;
 
 
 function TripleShot(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],-Math.PI / 4));
@@ -158,6 +162,7 @@ TripleShot.prototype.constructor = TripleShot;
 
 
 function QuadTank(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],-Math.PI / 2));
@@ -170,6 +175,7 @@ QuadTank.prototype.constructor = QuadTank;
 
 
 function OctoTank(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],-Math.PI / 2));
@@ -186,6 +192,7 @@ OctoTank.prototype.constructor = OctoTank;
 
 
 function Sniper(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,2.2],[-0.4,2.2],[-0.4, 0]],0));
   this.tankType = "Sniper";
@@ -195,6 +202,7 @@ Sniper.prototype.constructor = Sniper;
 
 
 function MachineGun(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.8,1.9],[-0.8,1.9],[-0.4, 0]],0));
   this.tankType = "MachineGun";
@@ -204,6 +212,7 @@ MachineGun.prototype.constructor = MachineGun;
 
 
 function FlankGuard(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI));
@@ -214,6 +223,7 @@ FlankGuard.prototype.constructor = FlankGuard;
 
 
 function TriAngle(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI / 6 * 5));
@@ -225,6 +235,7 @@ TriAngle.prototype.constructor = TriAngle;
 
 
 function Destroyer(){
+  Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.7,0],[0.7,1.9],[-0.7,1.9],[-0.7, 0]],0));
   this.tankType = "Destroyer";
