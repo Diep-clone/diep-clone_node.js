@@ -8,7 +8,10 @@ function BasicBullet(tank,sx,sy){
   this.ctx = canvas.getContext("2d");
   this.canvasPos = {x:0,y:0};
   this.animate = function(){
+    if (this.time<0){
+    }
     this.move();
+    this.draw();
   }
   this.move = function(){
     this.addForce(this.speedX,this.speedY);
