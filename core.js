@@ -18,7 +18,7 @@ window.onmousedown = function(e){
     break;
     case 2:
     break;
-    defualt:
+    default:
     break;
   }
 }
