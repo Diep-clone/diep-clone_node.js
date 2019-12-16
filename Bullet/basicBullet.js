@@ -5,11 +5,12 @@ function BasicBullet(tank,sx,sy){
   this.speedX = sx;
   this.speedY = sy;
   this.time = 3000;
+  this.isDead = false;
   this.canvas = document.createElement("canvas");
   this.ctx = canvas.getContext("2d");
   this.canvasPos = {x:0,y:0};
   this.animate = function(){
-    if (this.time<0){
+    if (this.isDead || this.health<0 || this.time<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
         object_list[this.id] = null;
