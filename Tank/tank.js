@@ -242,5 +242,6 @@ var tanklist = [
   Sniper,
   MachineGun,
   FlankGuard,
-  TriAngle
+  TriAngle,
+  Destroyer
 ];
