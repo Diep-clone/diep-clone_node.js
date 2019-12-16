@@ -34,8 +34,8 @@ function BasicBullet(tank,sx,sy){
     this.canvasPos = {x:this.radius * camera.z,y:this.radius * camera.z};
     this.canvas.width += 4 * camera.z + 6;
     this.canvas.height += 4 * camera.z + 6;
-    this.canvasPos.x += 2 * camera.z + 2;
-    this.canvasPos.y += 2 * camera.z + 2;
+    this.canvasPos.x += 2 * camera.z + 3;
+    this.canvasPos.y += 2 * camera.z + 3;
     this.ctx.lineWidth = 2 * camera.z;
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
