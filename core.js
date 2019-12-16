@@ -19,10 +19,12 @@ window.onmousedown = function(e){
 window.onkeydown = function(e){
   switch (e.keyCode){
     case 32: // Space키
+     for (var i=0;i<object_list.length;i++){
+      if (object_list[i]) object_list[i].keydown();
+     }
     break;
     case 79: // O키
     for (var i=0;i<object_list.length;i++){
-      if (object_list[i]) object_list[i].keydown();
       if (object_list[i]) object_list[i].isDead = true;
     }
     im_count = 0;
