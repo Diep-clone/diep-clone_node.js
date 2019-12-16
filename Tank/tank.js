@@ -1,4 +1,5 @@
 function Tank(){
+  HealthShowObject.apply(this, arguments);
   this.stats = [0,0,0,0,0,0,0,0];
   this.maxStats = [7,7,7,7,7,7,7,7];
   this.statCount = 0;
