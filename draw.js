@@ -48,14 +48,14 @@ onResize();
 
 im_count = 0;
 var tick = 0;
-var last_time = Date.time();
+var last_time = Date.time;
 
 function draw_(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ui_ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  tick = Date.time() - last_time;
-  last_time = Date.time();
+  tick = Date.time - last_time;
+  last_time = Date.time;
   
   for (var i=0;i<object_list.length;i++){
     if (object_list[i]){
