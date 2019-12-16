@@ -202,6 +202,16 @@ MachineGun.prototype = new Tank();
 MachineGun.prototype.constructor = MachineGun;
 
 
+function FlankGuard(){
+  this.clearGun();
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
+  this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,-1.3],[-0.4,-1.3],[-0.4, 0]],Math.PI));
+  this.tankType = "FlankGuard";
+}
+FlankGuard.prototype = new Tank();
+FlankGuard.prototype.constructor = FlankGuard;
+
+
 
 var tanklist = [
   Basic,
@@ -211,5 +221,6 @@ var tanklist = [
   QuadTank,
   OctoTank,
   Sniper,
-  MachineGun
+  MachineGun,
+  FlankGuard
 ];
