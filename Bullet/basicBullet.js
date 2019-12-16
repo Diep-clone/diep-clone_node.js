@@ -9,7 +9,15 @@ function BasicBullet(tank,sx,sy){
   this.canvasPos = {x:0,y:0};
   this.animate = function(){
     if (this.time<0){
-      
+      if (this.opacity <= 0.1){
+        this.opacity = 0;
+        object_list[this.id] = null;
+        return;
+      }
+      else{
+        this.opacity -= 0.1;
+        this.radius += 0.3;
+      }
     }
     this.time-=tick;
     this.move();
