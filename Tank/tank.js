@@ -30,7 +30,6 @@ function Tank(){
       }
     }
     this.rotate += 0.01;
-    this.draw();
   }
   this.levelUP = function(){
     if (this.lv<45) this.lv+=1;
