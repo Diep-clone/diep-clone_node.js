@@ -94,20 +94,6 @@ function Tank(){
     this.ctx.stroke();
     this.ctx.closePath();
 
-    this.ctx.lineWidth = 1;
-    this.ctx.strokeStyle = "#777777";
-    /*this.ctx.beginPath();
-    this.ctx.moveTo(0,0);
-    this.ctx.lineTo(this.canvas.width,this.canvas.height);
-    this.ctx.stroke();
-    this.ctx.closePath();
-    this.ctx.beginPath();
-    this.ctx.moveTo(0,this.canvas.height);
-    this.ctx.lineTo(this.canvas.width,0);
-    this.ctx.stroke();
-    this.ctx.closePath();*/
-    this.ctx.strokeRect(0,0,this.canvas.width,this.canvas.height);
-
     ctx.globalAlpha = this.opacity;
     ctx.drawImage(this.canvas,this.x * camera.z-this.canvasPos.x,this.y * camera.z-this.canvasPos.y);
   }
