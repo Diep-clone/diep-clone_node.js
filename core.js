@@ -34,7 +34,7 @@ window.onkeydown = function(e){
     break;
     case 75: // K키
       for (var i=0;i<object_list.length;i++){
-        if (object_list[i]) object_list[i].levelup();
+        if (object_list[i]) object_list[i].levelUP();
       }
     break;
     case 79: // O키
