@@ -50,3 +50,9 @@ window.onkeydown = function(e){
     break;
   }
 }
+
+function tick(){
+  
+}
+
+setInterval(tick, 20);
