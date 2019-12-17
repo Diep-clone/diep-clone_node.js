@@ -23,7 +23,6 @@ function BasicBullet(tank,sx,sy){
     }
     this.time-=tick;
     this.move();
-    this.draw();
   }
   this.move = function(){
     this.addForce(this.speedX,this.speedY);
