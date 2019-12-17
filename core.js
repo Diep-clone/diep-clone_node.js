@@ -32,6 +32,11 @@ window.onkeydown = function(e){
         if (object_list[i]) object_list[i].keydown();
       }
     break;
+    case 75: // K키
+      for (var i=0;i<object_list.length;i++){
+        if (object_list[i]) object_list[i].levelup();
+      }
+    break;
     case 79: // O키
       for (var i=0;i<object_list.length;i++){
         if (object_list[i]) object_list[i].isDead = true;
