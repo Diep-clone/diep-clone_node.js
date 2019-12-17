@@ -10,7 +10,7 @@ window.onmousedown = function(e){
       tank.x=e.clientX / camera.z * window.devicePixelRatio;
       tank.y=e.clientY / camera.z * window.devicePixelRatio;
       tank.id = object_list.length-1;
-      tank.radius = 20; // 13 : 1렙 크기, 20 : 45렙 크기
+      tank.radius = 13; // 13 : 1렙 크기, 20 : 45렙 크기
       tank.rotate = -1;
       tank.opacity = 1;
 
