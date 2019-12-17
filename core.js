@@ -68,4 +68,5 @@ function tick(){
   }
 }
 
+tick();
 setInterval(tick, 20);
