@@ -34,7 +34,7 @@ function Tank(){
   }
   this.levelUP = function(){
     if (this.lv<45) this.lv+=1;
-    this.radius = 13 + (lv-1) / 44 * 7;
+    this.radius = 13 + (this.lv-1) / 44 * 7;
   }
   this.setRotate = function(){
 
