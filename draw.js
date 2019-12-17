@@ -46,17 +46,10 @@ window.onbeforeunload=function(){
 window.onresize=onResize;
 onResize();
 
-im_count = 0;
-var tick = 0;
-var last_time = Date.now();
-
 function draw_(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ui_ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  tick = Date.now() - last_time;
-  last_time = Date.now();
-  
   for (var i=0;i<object_list.length;i++){
     if (object_list[i]){
       object_list[i].draw();
