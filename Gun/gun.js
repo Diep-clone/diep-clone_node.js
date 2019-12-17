@@ -1,4 +1,4 @@
-function Gun(tank,paths,dir,bullet,pos,force){
+function Gun(tank,paths,dir,type,pos,speed,damage,health,reload,force){
   SubObject.apply(this, arguments);
   this.parentObject = tank;
   this.point = paths;
