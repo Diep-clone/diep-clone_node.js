@@ -1,6 +1,8 @@
 var object_list = [];
 var tanktype = 0;
 
+var im_count = 0;
+
 window.onmousedown = function(e){
   switch (e.button){
     case 0:
@@ -51,8 +53,19 @@ window.onkeydown = function(e){
   }
 }
 
+var tick = 0;
+var last_time = Date.now();
+
+
 function tick(){
+  tick = Date.now() - last_time;
+  last_time = Date.now();
   
+  for (var i=0;i<object_list.length;i++){
+    if (object_list[i]){
+      object_list[i].animate();
+    }
+  }
 }
 
 setInterval(tick, 20);
