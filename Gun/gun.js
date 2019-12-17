@@ -1,11 +1,19 @@
-function Gun(tank,paths,dir,type,pos,speed,damage,health,reload,force){
+function Gun(tank,paths,dir,type,pos,radius,speed,damage,health,reload,shottime,force){
   SubObject.apply(this, arguments);
   this.parentObject = tank;
   this.point = paths;
   this.addRotate = dir;
-  this.bullet = bullet;
-  this.bulletPosition = pos;
-  this.bulletForce = force;
+  this.bullet = {
+    type: type,
+    pos: pos,
+    radius: radius,
+    speed: speed,
+    damage: damage,
+    health: health,
+    reload: reload,
+    shottime: shottime,
+    force: force
+  };
   this.cooltime = 0;
   this.isCanShot = true;
   this.lastShotTime = 0;
