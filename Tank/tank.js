@@ -30,6 +30,9 @@ function Tank(){
       }
     }
     this.rotate += 0.01 * tick * 0.05;
+    for (let i=0;i<this.guns.length;i++){
+      this.guns[i].animate();
+    }
   }
   this.levelUP = function(){
     if (this.lv<45) this.lv+=1;
