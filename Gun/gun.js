@@ -1,4 +1,4 @@
-function Gun(tank,paths,dir,type,pos,radius,speed,damage,health,reload,spread,shottime,force){
+function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,spread,shottime,force){
   SubObject.apply(this, arguments);
   this.parentObject = tank;
   this.point = paths;
@@ -18,6 +18,11 @@ function Gun(tank,paths,dir,type,pos,radius,speed,damage,health,reload,spread,sh
   this.cooltime = 0;
   this.isCanShot = true;
   this.lastShotTime = 0;
+  this.isCustom = custom;
+  
+  this.animate = function (){
+    
+  }
   
   this.shot = function (){
     let x = this.bullet.pos[0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.bullet.pos[1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;
