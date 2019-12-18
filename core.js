@@ -63,8 +63,8 @@ var last_time = Date.now();
 
 
 function loop(){
-  if (canvas.width<canvas.height/9*16) camera.z=canvas.height/900*1.9; // 화면 크기에 따른 줌값 조정
-  else camera.z=canvas.width/1600*1.9;
+  if (canvas.width<canvas.height/9*16) camera.z=canvas.height/900*1.8; // 화면 크기에 따른 줌값 조정
+  else camera.z=canvas.width/1600*1.8;
   
   tick = Date.now() - last_time;
   last_time = Date.now();
