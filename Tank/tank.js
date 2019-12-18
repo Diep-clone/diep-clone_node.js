@@ -25,11 +25,11 @@ function Tank(){
         return;
       }
       else{
-        this.opacity -= 0.1;
-        this.radius += 0.3;
+        this.opacity -= 0.1 * tick * 0.05;
+        this.radius += 0.3 * tick * 0.05;
       }
     }
-    this.rotate += 0.01;
+    this.rotate += 0.01 * tick * 0.05;
   }
   this.levelUP = function(){
     if (this.lv<45) this.lv+=1;
