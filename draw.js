@@ -51,17 +51,17 @@ function draw_(){
   ui_ctx.clearRect(0,0,canvas.width,canvas.height);
   
   ctx.beginPath(); // 격자 그리기
-  for (let i=-camera.x % 20 * camera.z;i<=canvas.width;i+=15 * camera.z){
+  for (let i=-camera.x % 20 * camera.z;i<=canvas.width;i+=13 * camera.z){
       ctx.moveTo(i,0);
       ctx.lineTo(i,canvas.height);
   }
-  for (let i=-camera.y % 20 * camera.z;i<=canvas.height;i+=15 * camera.z){
+  for (let i=-camera.y % 20 * camera.z;i<=canvas.height;i+=13 * camera.z){
       ctx.moveTo(0,i);
       ctx.lineTo(canvas.width,i);
   }
   ctx.strokeStyle = "black";
   ctx.globalAlpha = 0.1;
-  ctx.lineWidth = 0.5;
+  ctx.lineWidth = 0.2;
   ctx.stroke();
 
   for (var i=0;i<object_list.length;i++){
