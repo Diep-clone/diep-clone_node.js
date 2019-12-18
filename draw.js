@@ -1,4 +1,26 @@
-var canvas_ = document.getElementById("canvas");
+function DrawObject(){
+  this.canvas = document.getElementById("canvas");
+  this.ctx = canvas.getContext("2d");
+  this.ui_canvas = document.createElement("canvas");
+  this.ui_ctx = ui_canvas.getContext("2d");
+  this.camera = {
+    x:0,
+    y:0,
+    z:3
+  }
+  this.resize = function (){
+    this.canvas.width=this.ui_canvas.width=window.innerWidth * window.devicePixelRatio;
+    this.canvas.height=this.ui_canvas.height=window.innerHeight * window.devicePixelRatio;
+  }
+  this.objectDraw = function (){
+    
+  }
+  this.uiDraw = function (){
+    
+  }
+}
+
+var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 
@@ -12,8 +34,8 @@ var camera = {
 };
 
 function onResize(){
-  canvas_.width=ui_layer.width=window.innerWidth * window.devicePixelRatio;
-  canvas_.height=ui_layer.height=window.innerHeight * window.devicePixelRatio;
+  canvas.width=ui_layer.width=window.innerWidth * window.devicePixelRatio;
+  canvas.height=ui_layer.height=window.innerHeight * window.devicePixelRatio;
 }
 
 function RGB(r,g,b){
@@ -70,8 +92,6 @@ function draw_(){
       object_list[i].draw();
     }
   }
-  
-  //ui_ctx.
 
   requestAnimationFrame(draw_);
 }
