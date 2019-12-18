@@ -98,8 +98,8 @@ function draw_(){
 
   for (var i=0;i<object_list.length;i++){
     if (object_list[i]){
-      object_list[i].animate();
       object_list[i].draw();
+      object_list[i].animate();
     }
   }
 
