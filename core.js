@@ -57,7 +57,7 @@ var tick = 0;
 var last_time = Date.now();
 
 
-function tick(){
+function loop(){
   tick = Date.now() - last_time;
   last_time = Date.now();
   
@@ -68,5 +68,5 @@ function tick(){
   }
 }
 
-tick();
-setInterval(tick, 20);
+//loop();
+setInterval(loop, 20);
