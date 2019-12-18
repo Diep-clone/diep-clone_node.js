@@ -49,6 +49,20 @@ onResize();
 function draw_(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ui_ctx.clearRect(0,0,canvas.width,canvas.height);
+  
+  ctx.beginPath(); // 격자 그리기
+  for (let i=-camera.x % 20 * camera.z;i<=canvas.width;i+=20 * camera.z){
+      ctx.moveTo(i,0);
+      ctx.lineTo(i,canvas.height);
+  }
+  for (let i=-camera.y % 20 * camera.z;i<=canvas.height;i+=20 * camera.z){
+      ctx.moveTo(0,i);
+      ctx.lineTo(canvas.width,i);
+  }
+  ctx.strokeStyle = "black";
+  ctx.globalAlpha = 0.1;
+  ctx.lineWidth = 0.5;
+  ctx.stroke();
 
   for (var i=0;i<object_list.length;i++){
     if (object_list[i]){
