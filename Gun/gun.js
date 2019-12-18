@@ -21,7 +21,9 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
   this.isCustom = custom;
   
   this.animate = function (){
-    
+    if (this.isCustom){
+      
+    }
   }
   
   this.shot = function (){
