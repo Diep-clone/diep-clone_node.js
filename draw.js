@@ -8,6 +8,7 @@ function DrawObject(){
     y:0,
     z:3
   }
+  this.controlTank;
   this.resize = function (){
     this.canvas.width=this.ui_canvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.ui_canvas.height=window.innerHeight * window.devicePixelRatio;
@@ -17,6 +18,15 @@ function DrawObject(){
   }
   this.uiDraw = function (){
     
+  }
+  this.cameraMove = function (){
+      if (this.controlTank){
+      if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78;
+      else this.camera.z=this.canvas.width/1600*1.78;
+
+      this.camera.x=(this.controlTank.x-this.canvas.width/2/this.camera.z);
+      this.camera.y=(this.controlTank.y-this.canvas.height/2/this.camera.z);
+    }
   }
 }
 
