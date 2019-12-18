@@ -74,7 +74,7 @@ var last_time = Date.now();
 
 function draw_(){
   if (canvas.width<canvas.height/9*16) camera.z=canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
-  else camera.z=canvas.width/1600*1.78;
+  else camera.z=canvas.width/1600*1.78; // *1.78 은 1레벨 탱크의 시야 
   
   tick = Date.now() - last_time;
   last_time = Date.now();
