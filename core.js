@@ -13,6 +13,7 @@ var im_count = 0;
 window.onmousedown = function(e){
   switch (e.button){
     case 0:
+      /*
       var tank = new tanklist[tanktype];
 
       object_list.push(tank);
@@ -24,6 +25,7 @@ window.onmousedown = function(e){
       tank.opacity = 1;
 
       im_count++;
+      */
     break;
     case 1:
     break;
@@ -42,9 +44,10 @@ window.onkeydown = function(e){
       }
     break;
     case 75: // K키
+      /*
       for (var i=0;i<object_list.length;i++){
         if (object_list[i]) object_list[i].levelUP();
-      }
+      }*/
     break;
     case 79: // O키
       for (var i=0;i<object_list.length;i++){
