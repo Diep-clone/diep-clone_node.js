@@ -69,7 +69,16 @@ window.onbeforeunload=function(){
 window.onresize=onResize;
 onResize();
 
+var tick = 0;
+var last_time = Date.now();
+
 function draw_(){
+  if (canvas.width<canvas.height/9*16) camera.z=canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
+  else camera.z=canvas.width/1600*1.78;
+  
+  tick = Date.now() - last_time;
+  last_time = Date.now();
+
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ui_ctx.clearRect(0,0,canvas.width,canvas.height);
   
