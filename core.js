@@ -1,6 +1,8 @@
-function AnimateObject(){
+function System(){
   this.object_list = [];
-  
+  this.createObject = function (){
+    
+  }
 }
 
 var object_list = [];
@@ -57,18 +59,3 @@ window.onkeydown = function(e){
     break;
   }
 }
-
-
-/*
-function loop(){
-  
-  
-  for (var i=0;i<object_list.length;i++){
-    if (object_list[i]){
-      object_list[i].animate();
-    }
-  }
-}*/
-
-//loop();
-//setInterval(loop, 20);
