@@ -1,5 +1,6 @@
 var canvas_ = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
 
 var ui_layer = document.createElement("canvas");
 var ui_ctx = ui_layer.getContext("2d");
