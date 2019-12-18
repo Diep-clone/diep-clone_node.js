@@ -58,23 +58,17 @@ window.onkeydown = function(e){
   }
 }
 
-var tick = 0;
-var last_time = Date.now();
 
-
+/*
 function loop(){
-  if (canvas.width<canvas.height/9*16) camera.z=canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
-  else camera.z=canvas.width/1600*1.78;
   
-  tick = Date.now() - last_time;
-  last_time = Date.now();
   
   for (var i=0;i<object_list.length;i++){
     if (object_list[i]){
       object_list[i].animate();
     }
   }
-}
+}*/
 
 //loop();
-setInterval(loop, 20);
+//setInterval(loop, 20);
