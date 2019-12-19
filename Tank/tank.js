@@ -19,7 +19,7 @@ function Tank(){
   this.canvasPos = {x:0,y:0};
   this.isCustom = false;
 
-  this.animate = function(e){
+  this.animate = function(e,tick){
     if (this.isDead || this.health<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
@@ -67,12 +67,12 @@ function Tank(){
   this.keydown = function(){
     console.log(this);
   }
-  this.setCanvasSize = function(){
+  this.setCanvasSize = function(camera){
     this.canvas.width = (this.radius * 2) * camera.z;
     this.canvas.height = (this.radius * 2) * camera.z;
     this.canvasPos = {x:this.radius * camera.z,y:this.radius * camera.z};
     for (let i=0;i<this.guns.length;i++){
-      this.guns[i].setParentCanvasSize();
+      this.guns[i].setParentCanvasSize(camera);
     }
     this.canvas.width += 4 * camera.z + 6;
     this.canvas.height += 4 * camera.z + 6;
@@ -82,13 +82,13 @@ function Tank(){
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
   }
-  this.draw = function(){
-    this.setCanvasSize();
+  this.draw = function(ctx,camera){
+    this.setCanvasSize(camera);
 
     this.ctx.strokeStyle = this.gunColor.getDarkRGB(); // 총구 그리기
     this.ctx.fillStyle = this.gunColor.getRGB();
     for (let i=0;i<this.guns.length;i++){
-      this.guns[i].drawGun();
+      this.guns[i].drawGun(this.ctx,camera);
     }
 
     this.ctx.strokeStyle = this.color.getDarkRGB(); // 몸체 그리기
@@ -100,7 +100,7 @@ function Tank(){
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,this.x * camera.z-this.canvasPos.x,this.y * camera.z-this.canvasPos.y);
+    ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-this.canvasPos.x,(this.y - camera.y) * camera.z-this.canvasPos.y);
   }
 }
 Tank.prototype = new HealthShowObject();

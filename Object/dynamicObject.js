@@ -1,7 +1,7 @@
 function DynamicObject(){
   this.x=0;
   this.y=0;
-  this.radius = 8.0;
+  this.radius = 13.0;
   this.dx=0;
   this.dy=0;
   this.rotate=0;

@@ -22,9 +22,6 @@ function DrawObject(){ // 그리기 담당
     else this.camera.z=this.canvas.width/1600*1.78; // *1.78 은 1레벨 탱크의 시야
 
     if (tank){
-      if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78;
-      else this.camera.z=this.canvas.width/1600*1.78;
-
       this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);
       this.camera.y=(tank.y-this.canvas.height/2/this.camera.z);
     }
@@ -35,11 +32,11 @@ function DrawObject(){ // 그리기 담당
     this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
     this.ctx.beginPath(); // 격자 그리기
-    for (let i=-this.camera.x % 20 * this.camera.z;i<=this.canvas.width;i+=12.9 * this.camera.z){
+    for (let i=-this.camera.x % (12.9 * this.camera.z);i<=this.canvas.width;i+=12.9 * this.camera.z){
         this.ctx.moveTo(i,0);
         this.ctx.lineTo(i,this.canvas.height);
     }
-    for (let i=-this.camera.y % 20 * this.camera.z;i<=this.canvas.height;i+=12.9 * this.camera.z){
+    for (let i=-this.camera.y % (12.9 * this.camera.z);i<=this.canvas.height;i+=12.9 * this.camera.z){
         this.ctx.moveTo(0,i);
         this.ctx.lineTo(this.canvas.width,i);
     }
@@ -52,17 +49,17 @@ function DrawObject(){ // 그리기 담당
   this.objectDraw = function (obj){
     for (let i=0;i<obj.length;i++){
       if (obj[i]){
-        obj[i].draw();
+        obj[i].draw(this.ctx,this.camera);
       }
     }
   }
-  
+
   this.uiDraw = function (ui){
 
   }
 
-  window.onresize=this.resize;
-  this.resize();
+  window.onload=this.resize.bind(this);
+  window.onresize=this.resize.bind(this);
 
   window.onbeforeunload=function(){
     return "정말 나가실 건가요?";

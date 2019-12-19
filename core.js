@@ -6,6 +6,7 @@ function System(){ // 게임의 전체 진행 담당
   this.lastTime = Date.now();
 
   this.controlTank = new tanklist[Math.ceil(Math.random()*(tanklist.length-1))]();
+  this.objectList.push(this.controlTank);
 
   this.drawObject = new DrawObject();
 
@@ -19,7 +20,7 @@ function System(){ // 게임의 전체 진행 담당
 
     for (let i=0;i<this.objectList.length;i++){
       if (this.objectList[i]){
-        this.objectList[i].animate();
+        this.objectList[i].animate(null,this.tick);
       }
     }
 

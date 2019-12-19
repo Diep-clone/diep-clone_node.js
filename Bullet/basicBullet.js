@@ -51,9 +51,8 @@ function BasicBullet(tank,sx,sy){
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,this.x * camera.z-this.canvasPos.x,this.y * camera.z-this.canvasPos.y);
+    ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-this.canvasPos.x,(this.y - camera.y) * camera.z-this.canvasPos.y);
   }
 }
 BasicBullet.prototype = new DynamicObject();
 BasicBullet.prototype.constructor = BasicBullet;
-
