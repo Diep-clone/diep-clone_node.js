@@ -17,8 +17,6 @@ function System(){ // 게임의 전체 진행 담당
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
-    console.log(this.objectList); // 왜 두번째 프레임에서 null 값이 저장될까요?
-
     for (let i=0;i<this.objectList.length;i++){
       if (this.objectList[i]){
         this.objectList[i].animate();
