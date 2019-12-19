@@ -1,66 +1,67 @@
-function System(){
+function System(){ // 게임의 전체 진행 담당
   this.objectList = [];
-  this.uiObjectList;
+  this.uiObjectList = [];
+
+  this.tick = 0;
+  this.lastTime = Date.now();
+
+  this.controlTank = new tanklist[Math.ceil(Math.random()*(tanklist.length-1))]();
+
   this.createObject = function (){
 
   }
+  this.cameraMove = function (){
+    if (this.controlTank){
+      if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78;
+      else this.camera.z=this.canvas.width/1600*1.78;
 
-}
-
-var object_list = [];
-var tanktype = 0;
-
-var im_count = 0;
-
-window.onmousedown = function(e){
-  switch (e.button){
-    case 0:
-      /*
-      var tank = new tanklist[tanktype];
-
-      object_list.push(tank);
-      tank.x=e.clientX / camera.z * window.devicePixelRatio;
-      tank.y=e.clientY / camera.z * window.devicePixelRatio;
-      tank.id = object_list.length-1;
-      tank.radius = 13; // 13 : 1렙 크기, 20 : 45렙 크기
-      tank.rotate = -1;
-      tank.opacity = 1;
-
-      im_count++;
-      */
-    break;
-    case 1:
-    break;
-    case 2:
-    break;
-    default:
-    break;
+      this.camera.x=(this.controlTank.x-this.canvas.width/2/this.camera.z);
+      this.camera.y=(this.controlTank.y-this.canvas.height/2/this.camera.z);
+    }
   }
-}
 
-window.onkeydown = function(e){
-  switch (e.keyCode){
-    case 32: // Space키
-      for (var i=0;i<object_list.length;i++){
-        if (object_list[i]) object_list[i].keydown();
+  this.loop = function (){
+    tick = Date.now() - last_time;
+    last_time = Date.now();
+
+    for (var i=0;i<object_list.length;i++){
+      if (object_list[i]){
+        object_list[i].animate();
       }
-    break;
-    case 75: // K키
-      /*
-      for (var i=0;i<object_list.length;i++){
-        if (object_list[i]) object_list[i].levelUP();
-      }*/
-    break;
-    case 79: // O키
-      for (var i=0;i<object_list.length;i++){
-        if (object_list[i]) object_list[i].isDead = true;
-      }
-      im_count = 0;
-    break;
-    case 220: // \키
-      tanktype=(tanktype+1)%tanklist.length;
-    break;
-    default:
-    break;
+    }
+
+    requestAnimationFrame(this.loop);
+  }
+  this.loop();
+
+  window.onmousedown = function (e){
+    let x = e.clientX;
+    let y = e.clientY;
+
+    switch (e.button){
+      case 0: // 좌클릭
+      break;
+      case 1: // 마우스 휠 클릭
+      break;
+      case 2: // 우클릭
+      break;
+      default:
+      break;
+    }
+  }
+
+  window.onkeydown = function(e){
+    switch (e.keyCode){
+      case 32: // Space키
+      break;
+      case 75: // K키
+      break;
+      case 79: // O키
+      break;
+      case 220: // \키
+      break;
+      default:
+      break;
+    }
   }
 }

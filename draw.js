@@ -1,51 +1,60 @@
-function DrawObject(){
+function DrawObject(){ // 그리기 담당
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d");
-  this.ui_canvas = document.createElement("canvas");
-  this.ui_ctx = ui_canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+
+  this.uiCanvas = document.createElement("canvas");
+  this.uiCtx = ui_canvas.getContext("2d");
+
   this.camera = {
     x:0,
     y:0,
     z:3
-  }
-  this.controlTank;
+  };
+
   this.resize = function (){
     this.canvas.width=this.ui_canvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.ui_canvas.height=window.innerHeight * window.devicePixelRatio;
   }
-  this.objectDraw = function (){
-    
-  }
-  this.uiDraw = function (){
-    
-  }
-  this.cameraMove = function (){
-      if (this.controlTank){
-      if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78;
-      else this.camera.z=this.canvas.width/1600*1.78;
 
-      this.camera.x=(this.controlTank.x-this.canvas.width/2/this.camera.z);
-      this.camera.y=(this.controlTank.y-this.canvas.height/2/this.camera.z);
+  this.cameraSet = function (){
+    if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
+    else this.camera.z=this.canvas.width/1600*1.78; // *1.78 은 1레벨 탱크의 시야
+
+  }
+
+  this.backgroundDraw = function (){
+    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+    this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
+
+    this.ctx.beginPath(); // 격자 그리기
+    for (let i=-this.camera.x % 20 * this.camera.z;i<=this.canvas.width;i+=12.9 * this.camera.z){
+        this.ctx.moveTo(i,0);
+        this.ctx.lineTo(i,this.canvas.height);
     }
+    for (let i=-this.camera.y % 20 * this.camera.z;i<=this.canvas.height;i+=12.9 * this.camera.z){
+        this.ctx.moveTo(0,i);
+        this.ctx.lineTo(this.canvas.width,i);
+    }
+    this.ctx.strokeStyle = "black";
+    this.ctx.globalAlpha = 0.5;
+    this.ctx.lineWidth = 0.1;
+    this.ctx.stroke();
   }
-}
 
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-ctx.imageSmoothingEnabled = false;
+  this.objectDraw = function (obj){
 
-var ui_layer = document.createElement("canvas");
-var ui_ctx = ui_layer.getContext("2d");
+  }
+  this.uiDraw = function (ui){
 
-var camera = {
-  x:0,
-  y:0,
-  z:3
-};
+  }
 
-function onResize(){
-  canvas.width=ui_layer.width=window.innerWidth * window.devicePixelRatio;
-  canvas.height=ui_layer.height=window.innerHeight * window.devicePixelRatio;
+  window.onresize=this.resize;
+  this.resize();
+
+  window.onbeforeunload=function(){
+    return "정말 나가실 건가요?";
+  }
 }
 
 function RGB(r,g,b){
@@ -70,50 +79,3 @@ function RGB(r,g,b){
 
   }
 }
-
-
-window.onbeforeunload=function(){
-  return "정말 나가실 건가요?";
-}
-
-window.onresize=onResize;
-onResize();
-
-var tick = 0;
-var last_time = Date.now();
-
-function draw_(){
-  if (canvas.width<canvas.height/9*16) camera.z=canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
-  else camera.z=canvas.width/1600*1.78; // *1.78 은 1레벨 탱크의 시야 
-  
-  tick = Date.now() - last_time;
-  last_time = Date.now();
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ui_ctx.clearRect(0,0,canvas.width,canvas.height);
-  
-  ctx.beginPath(); // 격자 그리기
-  for (let i=-camera.x % 20 * camera.z;i<=canvas.width;i+=12.9 * camera.z){
-      ctx.moveTo(i,0);
-      ctx.lineTo(i,canvas.height);
-  }
-  for (let i=-camera.y % 20 * camera.z;i<=canvas.height;i+=12.9 * camera.z){
-      ctx.moveTo(0,i);
-      ctx.lineTo(canvas.width,i);
-  }
-  ctx.strokeStyle = "black";
-  ctx.globalAlpha = 0.5;
-  ctx.lineWidth = 0.1;
-  ctx.stroke();
-
-  for (var i=0;i<object_list.length;i++){
-    if (object_list[i]){
-      object_list[i].draw();
-      object_list[i].animate();
-    }
-  }
-
-  requestAnimationFrame(draw_);
-}
-
-draw_();

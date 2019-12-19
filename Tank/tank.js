@@ -17,7 +17,9 @@ function Tank(){
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
   this.canvasPos = {x:0,y:0};
-  this.animate = function(){
+  this.isCustom = false;
+
+  this.animate = function(e){
     if (this.isDead || this.health<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
@@ -31,7 +33,7 @@ function Tank(){
     }
     this.rotate += 0.01 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
-      this.guns[i].animate();
+      this.guns[i].animate(e);
     }
   }
   this.levelUP = function(){
