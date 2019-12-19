@@ -14,19 +14,21 @@ function System(){ // 게임의 전체 진행 담당
   }
 
   this.loop = function (){
-    tick = Date.now() - last_time;
-    last_time = Date.now();
+    this.tick = Date.now() - this.lastTime;
+    this.lastTime = Date.now();
 
-    for (var i=0;i<object_list.length;i++){
-      if (object_list[i]){
-        object_list[i].animate();
+    console.log(this.objectList); // 왜 두번째 프레임에서 null 값이 저장될까요?
+
+    for (let i=0;i<this.objectList.length;i++){
+      if (this.objectList[i]){
+        this.objectList[i].animate();
       }
     }
 
-    drawObject.cameraSet(this.controlTank);
-    drawObject.backgroundDraw();
-    drawObject.objectDraw();
-    drawObject.uiDraw();
+    this.drawObject.cameraSet(this.controlTank);
+    this.drawObject.backgroundDraw();
+    this.drawObject.objectDraw(this.objectList);
+    this.drawObject.uiDraw(this.uiObjectList);
 
     requestAnimationFrame(this.loop);
   }

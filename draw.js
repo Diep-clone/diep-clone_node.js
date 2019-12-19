@@ -1,10 +1,10 @@
 function DrawObject(){ // 그리기 담당
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d");
-  ctx.imageSmoothingEnabled = false;
+  this.ctx.imageSmoothingEnabled = false;
 
   this.uiCanvas = document.createElement("canvas");
-  this.uiCtx = ui_canvas.getContext("2d");
+  this.uiCtx = this.uiCanvas.getContext("2d");
 
   this.camera = {
     x:0,
@@ -13,8 +13,8 @@ function DrawObject(){ // 그리기 담당
   };
 
   this.resize = function (){
-    this.canvas.width=this.ui_canvas.width=window.innerWidth * window.devicePixelRatio;
-    this.canvas.height=this.ui_canvas.height=window.innerHeight * window.devicePixelRatio;
+    this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
+    this.canvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
   }
 
   this.cameraSet = function (tank){
@@ -50,8 +50,13 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.objectDraw = function (obj){
-
+    for (let i=0;i<obj.length;i++){
+      if (obj[i]){
+        obj[i].draw();
+      }
+    }
   }
+  
   this.uiDraw = function (ui){
 
   }
