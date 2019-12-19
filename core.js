@@ -30,7 +30,7 @@ function System(){ // 게임의 전체 진행 담당
     this.drawObject.objectDraw(this.objectList);
     this.drawObject.uiDraw(this.uiObjectList);
 
-    requestAnimationFrame(this.loop);
+    requestAnimationFrame(this.loop.bind(this));
   }
   this.loop();
 
