@@ -1,8 +1,10 @@
 function System(){
-  this.object_list = [];
+  this.objectList = [];
+  this.uiObjectList;
   this.createObject = function (){
-    
+
   }
+
 }
 
 var object_list = [];

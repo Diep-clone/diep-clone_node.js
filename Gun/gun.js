@@ -19,22 +19,22 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
   this.isCanShot = true;
   this.lastShotTime = 0;
   this.isCustom = custom;
-  
-  this.animate = function (){
+
+  this.animate = function (e){
     if (this.isCustom){
       
     }
   }
-  
+
   this.shot = function (){
     let x = this.bullet.pos[0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.bullet.pos[1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;
     let y = this.bullet.pos[0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.bullet.pos[1]*Math.sin(rotate+this.addRotate)*camera.z*radius+yy;
     let obj = new this.bullet.type();
-    
+
     obj.x = x;
     obj.y = y;
     obj.radius = this.bullet.radius;
-    
+
   }
 
   this.setParentCanvasSize = function (){
