@@ -7,17 +7,10 @@ function System(){ // 게임의 전체 진행 담당
 
   this.controlTank = new tanklist[Math.ceil(Math.random()*(tanklist.length-1))]();
 
+  this.drawObject = new DrawObject();
+
   this.createObject = function (){
 
-  }
-  this.cameraMove = function (){
-    if (this.controlTank){
-      if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78;
-      else this.camera.z=this.canvas.width/1600*1.78;
-
-      this.camera.x=(this.controlTank.x-this.canvas.width/2/this.camera.z);
-      this.camera.y=(this.controlTank.y-this.canvas.height/2/this.camera.z);
-    }
   }
 
   this.loop = function (){
@@ -29,6 +22,11 @@ function System(){ // 게임의 전체 진행 담당
         object_list[i].animate();
       }
     }
+
+    drawObject.cameraSet(this.controlTank);
+    drawObject.backgroundDraw();
+    drawObject.objectDraw();
+    drawObject.uiDraw();
 
     requestAnimationFrame(this.loop);
   }

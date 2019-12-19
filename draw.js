@@ -17,10 +17,17 @@ function DrawObject(){ // 그리기 담당
     this.canvas.height=this.ui_canvas.height=window.innerHeight * window.devicePixelRatio;
   }
 
-  this.cameraSet = function (){
+  this.cameraSet = function (tank){
     if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
     else this.camera.z=this.canvas.width/1600*1.78; // *1.78 은 1레벨 탱크의 시야
 
+    if (tank){
+      if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78;
+      else this.camera.z=this.canvas.width/1600*1.78;
+
+      this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);
+      this.camera.y=(tank.y-this.canvas.height/2/this.camera.z);
+    }
   }
 
   this.backgroundDraw = function (){
