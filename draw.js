@@ -119,7 +119,6 @@ function Button(){
   }
 }
 
-
 function Bar(){
   this.x1;
   this.x2;
@@ -142,5 +141,17 @@ function Bar(){
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
+  }
+}
+
+function Text(){
+  this.text;
+  this.x;
+  this.y;
+  this.align;
+  this.rotate;
+  
+  this.draw = function (ctx){
+    
   }
 }
