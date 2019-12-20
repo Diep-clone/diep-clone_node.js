@@ -47,7 +47,7 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
-  }
+  }.bind(this);
 
   window.onkeydown = function(e){
     switch (e.keyCode){
@@ -63,5 +63,5 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
-  }
+  }.bind(this);
 }
