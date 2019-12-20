@@ -62,7 +62,7 @@ function DrawObject(){ // 그리기 담당
     }
 
     this.ctx.globalAlpha = 0.7;
-    this.ctx.drawImage(this.uiCtx,0,0);
+    this.ctx.drawImage(this.uiCanvas,0,0);
   }
 
   window.onload=this.resize.bind(this);
