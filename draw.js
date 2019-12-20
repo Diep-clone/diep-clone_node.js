@@ -14,14 +14,15 @@ function DrawObject(){ // 그리기 담당
   };
 
   this.resize = function (){
-    this.ctx.imageSmoothingEnabled = false;
     this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
+    this.ctx.imageSmoothingEnabled = false;
+    console.log(this.ctx);
   }
 
   this.cameraSet = function (tank){
-    if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.78; // 화면 크기에 따른 줌값 조정
-    else this.camera.z=this.canvas.width/1600*1.78; // *1.78 은 1레벨 탱크의 시야
+    if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.43; // 화면 크기에 따른 줌값 조정
+    else this.camera.z=this.canvas.width/1600*1.43; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야
 
     if (tank){
       this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);

@@ -33,7 +33,7 @@ function Tank(){
         this.radius += 0.3 * tick * 0.05;
       }
     }
-    this.rotate += 0.01 * tick * 0.05;
+    this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].animate(e);
     }
@@ -72,7 +72,7 @@ function Tank(){
   this.setCanvasSize = function(camera){
     this.canvas.width = (this.radius * 2) * camera.z;
     this.canvas.height = (this.radius * 2) * camera.z;
-    this.canvasPos = {x:this.radius * camera.z,y:this.radius * camera.z};
+    this.canvasPos = {x:Math.round(this.radius * camera.z),y:Math.round(this.radius * camera.z)};
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].setParentCanvasSize(camera);
     }
