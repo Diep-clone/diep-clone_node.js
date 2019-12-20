@@ -1,8 +1,10 @@
 function DrawObject(){ // 그리기 담당
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d");
+  console.dir(this.canvas,this.ctx);
   this.ctx.imageSmoothingEnabled = false;
-
+  console.dir(this.canvas,this.ctx);
+  
   this.uiCanvas = document.createElement("canvas");
   this.uiCtx = this.uiCanvas.getContext("2d");
 
