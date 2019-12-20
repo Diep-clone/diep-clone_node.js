@@ -60,6 +60,9 @@ function DrawObject(){ // 그리기 담당
         ui[i].draw(this.uiCtx);
       }
     }
+
+    this.ctx.globalAlpha = 0.7;
+    this.ctx.drawImage(this.uiCtx,0,0);
   }
 
   window.onload=this.resize.bind(this);
@@ -85,10 +88,10 @@ function RGB(r,g,b){
   this.getDarkRGB = function(){
     return "rgb(" + this.r*0.74 + "," + this.g*0.74 + "," + this.b*0.74 + ")";
   }
-  this.getLightRGB = function(){
+  this.getLightRGB = function(per){
 
   }
-  this.getRedRGB = function(){
+  this.getRedRGB = function(per){
 
   }
 }
@@ -99,13 +102,18 @@ function Button(){
   this.x2;
   this.y2;
 
+  this.color = new RGB(127,127,127);
+
   this.inMousePoint = function (x,y){
-    
+    if (){
+      
+    }
   }
 
   this.draw = function (ctx){
     ctx.beginPath();
     
+    ctx.stroke();
     ctx.closePath();
   }
 }
