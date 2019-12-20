@@ -54,6 +54,7 @@ function System(){ // 게임의 전체 진행 담당
       case 32: // Space키
       break;
       case 75: // K키
+        this.controlTank.levelUP();
       break;
       case 79: // O키
       break;
