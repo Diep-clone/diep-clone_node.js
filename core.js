@@ -1,6 +1,22 @@
 function System(){ // 게임의 전체 진행 담당
+  "use strict";
+
   this.objectList = [];
   this.uiObjectList = [];
+
+  this.tankList = [
+    Basic,
+    Twin,
+    Triplet,
+    TripleShot,
+    QuadTank,
+    OctoTank,
+    Sniper,
+    MachineGun,
+    FlankGuard,
+    TriAngle,
+    Destroyer
+  ];
 
   this.tick = 0;
   this.lastTime = Date.now();
@@ -18,7 +34,7 @@ function System(){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.controlTank = this.createObject(tanklist[Math.ceil(Math.random()*(tanklist.length-1))]);
+  this.controlTank = this.createObject(this.tankList[Math.ceil(Math.random()*(this.tankList.length-1))]);
 
   this.loop = function (){
     this.tick = Date.now() - this.lastTime;

@@ -1,4 +1,6 @@
 function Tank(){
+  "use strict";
+
   HealthShowObject.apply(this, arguments);
   this.stats = [0,0,0,0,0,0,0,0];
   this.maxStats = [7,7,7,7,7,7,7,7];
@@ -108,6 +110,7 @@ Tank.prototype.constructor = Tank;
 
 
 function Basic(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
@@ -118,6 +121,7 @@ Basic.prototype.constructor = Basic;
 
 
 function Twin(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.9,0],[0.9,1.9],[0.1,1.9],[0.1, 0]],0));
@@ -129,6 +133,7 @@ Twin.prototype.constructor = Twin;
 
 
 function Triplet(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.9,0],[0.9,1.6],[0.1,1.6],[0.1, 0]],0));
@@ -141,6 +146,7 @@ Triplet.prototype.constructor = Triplet;
 
 
 function TripleShot(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
@@ -153,6 +159,7 @@ TripleShot.prototype.constructor = TripleShot;
 
 
 function QuadTank(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
@@ -166,6 +173,7 @@ QuadTank.prototype.constructor = QuadTank;
 
 
 function OctoTank(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
@@ -183,6 +191,7 @@ OctoTank.prototype.constructor = OctoTank;
 
 
 function Sniper(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,2.2],[-0.4,2.2],[-0.4, 0]],0));
@@ -193,6 +202,7 @@ Sniper.prototype.constructor = Sniper;
 
 
 function MachineGun(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.8,1.9],[-0.8,1.9],[-0.4, 0]],0));
@@ -203,6 +213,7 @@ MachineGun.prototype.constructor = MachineGun;
 
 
 function FlankGuard(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
@@ -214,6 +225,7 @@ FlankGuard.prototype.constructor = FlankGuard;
 
 
 function TriAngle(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0));
@@ -226,6 +238,7 @@ TriAngle.prototype.constructor = TriAngle;
 
 
 function Destroyer(){
+  "use strict";
   Tank.apply(this, arguments);
   this.clearGun();
   this.addGun(new Gun(this,[[0,0],[0.7,0],[0.7,1.9],[-0.7,1.9],[-0.7, 0]],0));
@@ -233,18 +246,3 @@ function Destroyer(){
 }
 Destroyer.prototype = new Tank();
 Destroyer.prototype.constructor = Destroyer;
-
-
-var tanklist = [
-  Basic,
-  Twin,
-  Triplet,
-  TripleShot,
-  QuadTank,
-  OctoTank,
-  Sniper,
-  MachineGun,
-  FlankGuard,
-  TriAngle,
-  Destroyer
-];

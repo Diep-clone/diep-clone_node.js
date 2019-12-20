@@ -1,4 +1,6 @@
 function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,spread,shottime,force){
+  "use strict";
+
   SubObject.apply(this, arguments);
   this.parentObject = tank;
   this.point = paths;

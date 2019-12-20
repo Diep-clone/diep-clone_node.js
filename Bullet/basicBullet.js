@@ -1,4 +1,6 @@
 function BasicBullet(tank,sx,sy){
+  "use strict";
+  
   DynamicObject.apply(this, arguments);
   this.color = new RGB(0,176,225);
   this.owner = tank;

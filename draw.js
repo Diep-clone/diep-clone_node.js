@@ -1,4 +1,6 @@
 function DrawObject(){ // 그리기 담당
+  "use strict";
+
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d");
 
