@@ -105,7 +105,7 @@ function Button(){
   this.color = new RGB(127,127,127);
 
   this.inMousePoint = function (x,y){
-    if (){
+    if (true){
       
     }
   }
