@@ -113,6 +113,33 @@ function Button(){
   this.draw = function (ctx){
     ctx.beginPath();
     
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+  }
+}
+
+
+function Bar(){
+  this.x1;
+  this.x2;
+  this.y;
+  this.percent;
+  this.radius;
+  
+  this.color = new RGB(0,0,0);
+  
+  this.inMousePoint = function (x,y){
+    if (true){
+      
+    }
+  }
+  
+  this.draw = function (ctx){
+    ctx.beginPath();
+    
+    
+    ctx.fill();
     ctx.stroke();
     ctx.closePath();
   }
