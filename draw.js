@@ -1,10 +1,7 @@
 function DrawObject(){ // 그리기 담당
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d");
-  console.dir(this.ctx);
-  this.ctx.imageSmoothingEnabled = false;
-  console.dir(this.ctx);
-  
+
   this.uiCanvas = document.createElement("canvas");
   this.uiCtx = this.uiCanvas.getContext("2d");
 
@@ -15,6 +12,7 @@ function DrawObject(){ // 그리기 담당
   };
 
   this.resize = function (){
+    this.ctx.imageSmoothingEnabled = false;
     this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
   }
