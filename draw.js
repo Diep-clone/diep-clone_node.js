@@ -105,14 +105,12 @@ function Button(){
   this.color = new RGB(127,127,127);
 
   this.inMousePoint = function (x,y){
-    if (true){
-      
-    }
+    return false;
   }
 
   this.draw = function (ctx){
     ctx.beginPath();
-    
+
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
@@ -125,19 +123,17 @@ function Bar(){
   this.y;
   this.percent;
   this.radius;
-  
+
   this.color = new RGB(0,0,0);
-  
+
   this.inMousePoint = function (x,y){
-    if (true){
-      
-    }
+    return false;
   }
-  
+
   this.draw = function (ctx){
     ctx.beginPath();
-    
-    
+
+
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
@@ -150,8 +146,8 @@ function Text(){
   this.y;
   this.align;
   this.rotate;
-  
+
   this.draw = function (ctx){
-    
+
   }
 }
