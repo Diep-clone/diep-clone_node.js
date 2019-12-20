@@ -86,7 +86,8 @@ function RGB(r,g,b){
     return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
   }
   this.getDarkRGB = function(){
-    return "rgb(" + this.r*0.74 + "," + this.g*0.74 + "," + this.b*0.74 + ")";
+    //console.log("rgb(" + (this.r*0.74) + "," + (this.g*0.74) + "," + (this.b*0.74) + ")");
+    return "rgb(" + Math.round(this.r*0.74) + "," + Math.round(this.g*0.74) + "," + Math.round(this.b*0.74) + ")";
   }
   this.getLightRGB = function(per){
 
