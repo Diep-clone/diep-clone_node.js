@@ -1,6 +1,6 @@
 function BasicBullet(tank,sx,sy){
   "use strict";
-  
+
   DynamicObject.apply(this, arguments);
   this.color = new RGB(0,176,225);
   this.owner = tank;
@@ -32,7 +32,7 @@ function BasicBullet(tank,sx,sy){
   this.setCanvasSize = function(){
     this.canvas.width = (this.radius * 2) * camera.z;
     this.canvas.height = (this.radius * 2) * camera.z;
-    this.canvasPos = {x:this.radius * camera.z,y:this.radius * camera.z};
+    this.canvasPos = {x:Math.round(this.radius * camera.z),y:Math.round(this.radius * camera.z)};
     this.canvas.width += 4 * camera.z + 6;
     this.canvas.height += 4 * camera.z + 6;
     this.canvasPos.x += 2 * camera.z + 3;
