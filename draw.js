@@ -55,7 +55,11 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.uiDraw = function (ui){
-
+    for (let i=0;i<ui.length;i++){
+      if (ui[i]){
+        ui[i].draw(this.uiCtx);
+      }
+    }
   }
 
   window.onload=this.resize.bind(this);
