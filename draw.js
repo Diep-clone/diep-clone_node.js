@@ -92,3 +92,20 @@ function RGB(r,g,b){
 
   }
 }
+
+function Button(){
+  this.x1;
+  this.y1;
+  this.x2;
+  this.y2;
+
+  this.inMousePoint = function (x,y){
+    
+  }
+
+  this.draw = function (ctx){
+    ctx.beginPath();
+    
+    ctx.closePath();
+  }
+}
