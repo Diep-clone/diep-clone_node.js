@@ -18,6 +18,7 @@ function Tank(){
   this.isDead = false;
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
+  this.canvasSize = {x:0,y:0};
   this.canvasPos = {x:0,y:0};
   this.isCustom = false;
 
@@ -70,14 +71,14 @@ function Tank(){
     console.log(this);
   }
   this.setCanvasSize = function(camera){
-    this.canvas.width = (this.radius * 2) * camera.z;
-    this.canvas.height = (this.radius * 2) * camera.z;
-    this.canvasPos = {x:Math.round(this.radius * camera.z),y:Math.round(this.radius * camera.z)};
+    this.canvasSize.x = ((this.radius * 2) * camera.z);
+    this.canvasSize.y = ((this.radius * 2) * camera.z);
+    this.canvasPos = {x:(this.radius * camera.z),y:(this.radius * camera.z)};
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].setParentCanvasSize(camera);
     }
-    this.canvas.width += 4 * camera.z + 6;
-    this.canvas.height += 4 * camera.z + 6;
+    this.canvas.width = this.canvasSize.x + 4 * camera.z + 6;
+    this.canvas.height = this.canvasSize.y + 4 * camera.z + 6;
     this.canvasPos.x += 2 * camera.z + 3;
     this.canvasPos.y += 2 * camera.z + 3;
     this.ctx.lineWidth = 2 * camera.z;
@@ -96,13 +97,13 @@ function Tank(){
     this.ctx.strokeStyle = this.color.getDarkRGB(); // 몸체 그리기
     this.ctx.fillStyle = this.color.getRGB();
     this.ctx.beginPath();
-    this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
+    this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();
     this.ctx.stroke();
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-this.canvasPos.x,(this.y - camera.y) * camera.z-this.canvasPos.y);
+    ctx.drawImage(this.canvas,((this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x)),((this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y)));
   }
 }
 Tank.prototype = new HealthShowObject();

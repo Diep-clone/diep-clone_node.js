@@ -17,7 +17,6 @@ function DrawObject(){ // 그리기 담당
     this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
     this.ctx.imageSmoothingEnabled = false;
-    console.log(this.ctx);
   }
 
   this.cameraSet = function (tank){
@@ -25,6 +24,8 @@ function DrawObject(){ // 그리기 담당
     else this.camera.z=this.canvas.width/1600*1.43; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야
 
     if (tank){
+      //this.camera.x = tank.x - 100;
+      //this.camera.y = tank.y - 100;
       this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);
       this.camera.y=(tank.y-this.canvas.height/2/this.camera.z);
     }

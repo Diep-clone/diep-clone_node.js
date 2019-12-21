@@ -50,20 +50,20 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
       let y = Math.floor(this.point[i][0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.sin(rotate+this.addRotate)*camera.z*radius+yy);
 
       if (x<0){
-        this.parentObject.canvas.width += -x;
+        this.parentObject.canvasSize.x += -x;
         this.parentObject.canvasPos.x += -x;
         xx = this.parentObject.canvasPos.x;
       }
-      else if (x>this.parentObject.canvas.width){
-        this.parentObject.canvas.width = x;
+      else if (x>this.parentObject.canvasSize.x){
+        this.parentObject.canvasSize.x = x;
       }
       if (y<0){
-        this.parentObject.canvas.height += -y;
+        this.parentObject.canvasSize.y += -y;
         this.parentObject.canvasPos.y += -y;
         yy = this.parentObject.canvasPos.y;
       }
-      else if (y>this.parentObject.canvas.height){
-        this.parentObject.canvas.height = y;
+      else if (y>this.parentObject.canvasSize.y){
+        this.parentObject.canvasSize.y = y;
       }
     }
   }
