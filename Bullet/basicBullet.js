@@ -32,7 +32,7 @@ function BasicBullet(tank,sx,sy){
   this.setCanvasSize = function(){
     this.canvas.width = (this.radius * 2) * camera.z;
     this.canvas.height = (this.radius * 2) * camera.z;
-    this.canvasPos = {x:Math.round(this.radius * camera.z),y:Math.round(this.radius * camera.z)};
+    this.canvasPos = {x:Math.floor(this.radius * camera.z),y:Math.floor(this.radius * camera.z)};
     this.canvas.width += 4 * camera.z + 6;
     this.canvas.height += 4 * camera.z + 6;
     this.canvasPos.x += 2 * camera.z + 3;
