@@ -35,13 +35,29 @@ function System(){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.controlTank = /*this.createObject(Tank);*/this.createObject(this.tankList[Math.ceil(Math.random()*(this.tankList.length-1))]);
+  this.createUiObject = function (type){
+    let obj = new type();
+    this.uiObjectList.push(obj);
+    return obj;
+  }
+
+  this.controlTank = this.createObject(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
+  this.showTankLevel = this.createUiObject(Text);
+
+  this.uiSet = function (){
+    let whz = this.drawObject.getCanvasSize();
+
+    this.showTankLevel.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
+    this.showTankLevel.setText(this.controlTank.lv);
+  }
 
   this.loop = function (){
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
     if (this.input.k) this.controlTank.levelUP();
+
+    this.uiSet();
 
     for (let i=0;i<this.objectList.length;i++){
       if (this.objectList[i]){

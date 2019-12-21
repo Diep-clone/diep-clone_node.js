@@ -1,8 +1,8 @@
-function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,spread,shottime,force){
+function Gun(paths,dir,type,pos,radius,speed,damage,health,reload,spread,shottime,force){
   "use strict";
 
-  SubObject.apply(this, arguments);
-  this.parentObject = tank;
+  this.x;
+  this.y;
   this.point = paths;
   this.addRotate = dir;
   this.bullet = {
@@ -20,12 +20,9 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
   this.cooltime = 0;
   this.isCanShot = true;
   this.lastShotTime = 0;
-  this.isCustom = custom;
 
   this.animate = function (e){
-    if (this.isCustom){
 
-    }
   }
 
   this.shot = function (){
@@ -39,40 +36,40 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
 
   }
 
-  this.setParentCanvasSize = function (camera){
-    let rotate = this.parentObject.rotate;
-    let radius = this.parentObject.radius;
-    let xx = this.parentObject.canvasPos.x;
-    let yy = this.parentObject.canvasPos.y;
+  this.setParentCanvasSize = function (tank,camera){
+    let rotate = tank.rotate;
+    let radius = tank.radius;
+    let xx = tank.canvasPos.x;
+    let yy = tank.canvasPos.y;
 
     for (let i=0;i<this.point.length;i++){
       let x = Math.floor(this.point[i][0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx);
       let y = Math.floor(this.point[i][0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.sin(rotate+this.addRotate)*camera.z*radius+yy);
 
       if (x<0){
-        this.parentObject.canvasSize.x += -x;
-        this.parentObject.canvasPos.x += -x;
-        xx = this.parentObject.canvasPos.x;
+        tank.canvasSize.x += -x;
+        tank.canvasPos.x += -x;
+        xx = tank.canvasPos.x;
       }
-      else if (x>this.parentObject.canvasSize.x){
-        this.parentObject.canvasSize.x = x;
+      else if (x>tank.canvasSize.x){
+        tank.canvasSize.x = x;
       }
       if (y<0){
-        this.parentObject.canvasSize.y += -y;
-        this.parentObject.canvasPos.y += -y;
-        yy = this.parentObject.canvasPos.y;
+        tank.canvasSize.y += -y;
+        tank.canvasPos.y += -y;
+        yy = tank.canvasPos.y;
       }
-      else if (y>this.parentObject.canvasSize.y){
-        this.parentObject.canvasSize.y = y;
+      else if (y>tank.canvasSize.y){
+        tank.canvasSize.y = y;
       }
     }
   }
 
-  this.drawGun = function (ctx,camera){
-    let rotate = this.parentObject.rotate;
-    let radius = this.parentObject.radius;
-    let xx = Math.floor(this.parentObject.canvasPos.x);
-    let yy = Math.floor(this.parentObject.canvasPos.y);
+  this.drawGun = function (tank,ctx,camera){
+    let rotate = tank.rotate;
+    let radius = tank.radius;
+    let xx = Math.floor(tank.canvasPos.x);
+    let yy = Math.floor(tank.canvasPos.y);
 
     ctx.beginPath();
     let x = this.point[0][0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[0][1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;
@@ -88,5 +85,3 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
     ctx.closePath();
   }
 }
-Gun.prototype = new SubObject();
-Gun.prototype.constructor = Gun;

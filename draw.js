@@ -10,8 +10,13 @@ function DrawObject(){ // 그리기 담당
   this.camera = {
     x:0,
     y:0,
-    z:3
+    z:3,
+    uiz:1
   };
+
+  this.getCanvasSize = function (){
+    return [this.canvas.width,this.canvas.height,this.camera.uiz];
+  }
 
   this.resize = function (){
     this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
@@ -20,8 +25,12 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.cameraSet = function (tank){
-    if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900*1.43; // 화면 크기에 따른 줌값 조정
-    else this.camera.z=this.canvas.width/1600*1.43; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야
+    if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900; // 화면 크기에 따른 줌값 조정
+    else this.camera.z=this.canvas.width/1600;
+
+    this.camera.uiz = this.camera.z;
+
+    this.camera.z *= 1.43; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야
 
     if (tank){
       //this.camera.x = tank.x - 100;
@@ -61,7 +70,7 @@ function DrawObject(){ // 그리기 담당
   this.uiDraw = function (ui){
     for (let i=0;i<ui.length;i++){
       if (ui[i]){
-        ui[i].draw(this.uiCtx);
+        ui[i].draw(this.uiCtx,this.camera.uiz);
       }
     }
 
@@ -111,8 +120,18 @@ function Button(){
 
   this.color = new RGB(127,127,127);
 
+  this.setPosition = function (x1,y1,x2,y2){
+    this.x1= x1;
+    this.y1= y1;
+    this.x2= x2;
+    this.y2= y2;
+  }
+
   this.inMousePoint = function (x,y){
-    return false;
+    if (x1<x && x2>x && y1<y && y2>y){
+      return true;
+    }
+    else return false;
   }
 
   this.draw = function (ctx){
@@ -153,12 +172,38 @@ function Text(){
   "use strict";
 
   this.text;
+  this.size = 30;
   this.x;
   this.y;
-  this.align;
+  this.align = "center";
   this.rotate;
 
-  this.draw = function (ctx){
+  this.inMousePoint = function (x,y){
+    return false;
+  }
 
+  this.setPosition = function (x,y,rotate){
+    this.x = x;
+    this.y = y;
+    this.rotate = rotate;
+  }
+
+  this.setText = function (text){
+    this.text = text;
+  }
+
+  this.draw = function (ctx,z){
+    ctx.save();
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 5 * z;
+    ctx.translate(this.x,this.y);
+    ctx.rotate(this.rotate);
+    ctx.textAlign = this.align;
+    ctx.font = this.size * z + "px Ubuntu";
+
+    ctx.strokeText(this.text,0,0);
+    ctx.fillText(this.text,0,0);
+    ctx.restore();
   }
 }
