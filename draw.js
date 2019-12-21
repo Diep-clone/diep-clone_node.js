@@ -54,8 +54,8 @@ function DrawObject(){ // 그리기 담당
         this.ctx.lineTo(this.canvas.width,i);
     }
     this.ctx.strokeStyle = "black";
-    this.ctx.globalAlpha = 0.5;
-    this.ctx.lineWidth = 0.1;
+    this.ctx.globalAlpha = 0.1;
+    this.ctx.lineWidth = 0.5;
     this.ctx.stroke();
   }
 
@@ -132,6 +132,10 @@ function Button(){
       return true;
     }
     else return false;
+  }
+
+  this.event = function (){
+
   }
 
   this.draw = function (ctx){
