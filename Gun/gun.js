@@ -71,8 +71,8 @@ function Gun(tank,paths,dir,custom,type,pos,radius,speed,damage,health,reload,sp
   this.drawGun = function (ctx,camera){
     let rotate = this.parentObject.rotate;
     let radius = this.parentObject.radius;
-    let xx = this.parentObject.canvasPos.x;
-    let yy = this.parentObject.canvasPos.y;
+    let xx = Math.floor(this.parentObject.canvasPos.x);
+    let yy = Math.floor(this.parentObject.canvasPos.y);
 
     ctx.beginPath();
     let x = this.point[0][0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[0][1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;

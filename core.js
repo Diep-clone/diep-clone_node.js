@@ -35,7 +35,7 @@ function System(){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.controlTank = this.createObject(Tank);//this.createObject(this.tankList[Math.ceil(Math.random()*(this.tankList.length-1))]);
+  this.controlTank = /*this.createObject(Tank);*/this.createObject(this.tankList[Math.ceil(Math.random()*(this.tankList.length-1))]);
 
   this.loop = function (){
     this.tick = Date.now() - this.lastTime;
