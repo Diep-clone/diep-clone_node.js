@@ -102,6 +102,8 @@ function RGB(r,g,b){
 }
 
 function Button(){
+  "use strict";
+
   this.x1;
   this.y1;
   this.x2;
@@ -123,6 +125,8 @@ function Button(){
 }
 
 function Bar(){
+  "use strict";
+
   this.x1;
   this.x2;
   this.y;
@@ -146,6 +150,8 @@ function Bar(){
 }
 
 function Text(){
+  "use strict";
+
   this.text;
   this.x;
   this.y;
