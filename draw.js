@@ -139,8 +139,10 @@ function Button(){
   }
 
   this.draw = function (ctx){
+    ctx.fillStyle = this.color.getRGB;
+    ctx.strokeStyle = "#000000";
     ctx.beginPath();
-
+    
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
