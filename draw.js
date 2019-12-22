@@ -68,13 +68,16 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.uiDraw = function (ui){
+    this.uiCtx.lineCap = "round";
+    this.uiCtx.lineJoin = "round";
+
     for (let i=0;i<ui.length;i++){
       if (ui[i]){
         ui[i].draw(this.uiCtx,this.camera.uiz);
       }
     }
 
-    this.ctx.globalAlpha = 0.7;
+    this.ctx.globalAlpha = 0.82;
     this.ctx.drawImage(this.uiCanvas,0,0);
   }
 
@@ -118,6 +121,8 @@ function Button(){
   this.x2;
   this.y2;
 
+  this.text = new Text();
+
   this.color = new RGB(127,127,127);
 
   this.setPosition = function (x1,y1,x2,y2){
@@ -127,25 +132,26 @@ function Button(){
     this.y2= y2;
   }
 
+  this.setColor = function (color){
+    this.color = color;
+  }
+
   this.inMousePoint = function (x,y){
-    if (x1<x && x2>x && y1<y && y2>y){
+    if (this.x1<x && this.x2>x && this.y1<y && this.y2>y){
       return true;
     }
     else return false;
   }
 
-  this.event = function (){
+  this.draw = function (ctx,z){
+    ctx.fillStyle = this.color.getRGB();
+    ctx.strokeStyle = "#333333";
+    ctx.lineWidth = 8.7 * z;
+    ctx.strokeRect(this.x1,this.y1,this.x2-this.x1,this.y2-this.y1);
 
-  }
-
-  this.draw = function (ctx){
-    ctx.fillStyle = this.color.getRGB;
-    ctx.strokeStyle = "#000000";
-    ctx.beginPath();
-    
-    ctx.fill();
-    ctx.stroke();
-    ctx.closePath();
+    ctx.fillRect(this.x1,this.y1,this.x2-this.x1,this.y2-this.y1);
+    ctx.fillStyle = this.color.getDarkRGB();
+    ctx.fillRect(this.x1,(this.y1+this.y2)/2+6.5 * z,this.x2-this.x1,(this.y2-this.y1)/2-6.5 * z);
   }
 }
 
@@ -164,7 +170,7 @@ function Bar(){
     return false;
   }
 
-  this.draw = function (ctx){
+  this.draw = function (ctx,z){
     ctx.beginPath();
 
 
@@ -174,10 +180,10 @@ function Bar(){
   }
 }
 
-function Text(){
+function Text(text){
   "use strict";
 
-  this.text;
+  this.text = text;
   this.size = 30;
   this.x;
   this.y;

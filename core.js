@@ -43,12 +43,19 @@ function System(){ // 게임의 전체 진행 담당
 
   this.controlTank = this.createObject(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
   this.showTankLevel = this.createUiObject(Text);
+  this.showUpgradeTank = [
+    this.createUiObject(Button),
+    this.createUiObject(Button)
+  ];
 
   this.uiSet = function (){
     let whz = this.drawObject.getCanvasSize();
 
     this.showTankLevel.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
     this.showTankLevel.setText(this.controlTank.lv);
+
+    this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
+    this.showUpgradeTank[0].setColor(new RGB(166,248,244));
   }
 
   this.loop = function (){
