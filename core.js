@@ -18,6 +18,8 @@ function System(){ // 게임의 전체 진행 담당
     Destroyer
   ];
 
+  this.colorList = [];
+
   this.tick = 0;
   this.lastTime = Date.now();
 
@@ -45,6 +47,10 @@ function System(){ // 게임의 전체 진행 담당
   this.showTankLevel = this.createUiObject(Text);
   this.showUpgradeTank = [
     this.createUiObject(Button),
+    this.createUiObject(Button),
+    this.createUiObject(Button),
+    this.createUiObject(Button),
+    this.createUiObject(Button),
     this.createUiObject(Button)
   ];
 
@@ -53,9 +59,20 @@ function System(){ // 게임의 전체 진행 담당
 
     this.showTankLevel.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
     this.showTankLevel.setText(this.controlTank.lv);
+    this.showTankLevel.setSize(20);
 
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
     this.showUpgradeTank[0].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[1].setPosition(139.3*whz[2],62.3*whz[2],218.8*whz[2],141.8*whz[2]);
+    this.showUpgradeTank[1].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[2].setPosition(43.3*whz[2],154.3*whz[2],122.8*whz[2],233.8*whz[2]);
+    this.showUpgradeTank[2].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[3].setPosition(139.3*whz[2],154.3*whz[2],218.8*whz[2],233.8*whz[2]);
+    this.showUpgradeTank[3].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[4].setPosition(43.3*whz[2],246.3*whz[2],122.8*whz[2],325.8*whz[2]);
+    this.showUpgradeTank[4].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[5].setPosition(139.3*whz[2],246.3*whz[2],218.8*whz[2],325.8*whz[2]);
+    this.showUpgradeTank[5].setColor(new RGB(166,248,244));
   }
 
   this.loop = function (){
@@ -92,6 +109,13 @@ function System(){ // 게임의 전체 진행 담당
         this.input.isMouseOverUi = true;
       }
     }
+
+    if (this.input.isMouseOverUi){
+      this.drawObject.setCursor("pointer");
+    }
+    else{
+      this.drawObject.setCursor("default");
+    }
   }.bind(this);
 
   window.onmousedown = function (e){
@@ -125,11 +149,12 @@ function System(){ // 게임의 전체 진행 담당
       case 32: // Space키
       break;
       case 75: // K키
-        this.input.k = true;
+        //this.input.k = true;
       break;
       case 79: // O키
       break;
       case 220: // \키
+        this.controlTank.changeTank(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
       break;
       default:
       break;
@@ -141,7 +166,7 @@ function System(){ // 게임의 전체 진행 담당
       case 32: // Space키
       break;
       case 75: // K키
-        this.input.k = false;
+        //this.input.k = false;
       break;
       case 79: // O키
       break;
