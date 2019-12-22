@@ -10,17 +10,15 @@ function Tank(){
   this.guns = [];
   this.color = new RGB(0,176,225);
   this.gunColor = new RGB(153,153,153);
+  this.name = "";
   this.lv = 1;
   this.score = 0;
-  this.click = false;
-  this.rclick = false;
-  this.autoC = false;
-  this.autoE = false;
   this.isDead = false;
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
   this.canvasSize = {x:0,y:0};
   this.canvasPos = {x:0,y:0};
+  this.hitTime = 0;
 
   this.animate = function(e,tick){
     if (this.isDead || this.health<0){
@@ -40,8 +38,7 @@ function Tank(){
     }
   }
   this.levelUP = function(){
-    if (this.lv<45) this.lv+=1;
-    this.radius = 13 + (this.lv-1) / 44 * 7;
+
   }
   this.changeTank = function (type){
     let t = new type();
@@ -55,17 +52,11 @@ function Tank(){
   this.setMovement = function(){
 
   }
-  this.setAutoC = function(){
-
-  }
-  this.setAutoE = function(){
-
-  }
-  this.setClick = function(){
-
-  }
   this.setStat = function(){
 
+  }
+  this.hit = function(time){
+    this.hitTime+=time;
   }
   this.setCanvasSize = function(camera){
     this.canvasSize.x = ((this.radius * 2) * camera.z);
@@ -85,14 +76,14 @@ function Tank(){
   this.draw = function(ctx,camera){
     this.setCanvasSize(camera);
 
-    this.ctx.strokeStyle = this.gunColor.getDarkRGB(); // 총구 그리기
-    this.ctx.fillStyle = this.gunColor.getRGB();
+    this.ctx.strokeStyle = this.gunColor.getRedRGB().getLightRGB().getDarkRGB().getRGBValue(); // 총구 그리기
+    this.ctx.fillStyle = this.gunColor.getRedRGB().getLightRGB().getRGBValue();
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].drawGun(this,this.ctx,camera);
     }
 
-    this.ctx.strokeStyle = this.color.getDarkRGB(); // 몸체 그리기
-    this.ctx.fillStyle = this.color.getRGB();
+    this.ctx.strokeStyle = this.color.getRedRGB().getLightRGB().getDarkRGB().getRGBValue(); // 몸체 그리기
+    this.ctx.fillStyle = this.color.getRedRGB().getLightRGB().getRGBValue();
     this.ctx.beginPath();
     this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();

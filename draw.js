@@ -50,7 +50,7 @@ function DrawObject(){ // 그리기 담당
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
     this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
-    this.ctx.fillStyle = this.backgroundColor.getRGB();
+    this.ctx.fillStyle = this.backgroundColor.getRGBValue();
     this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
 
     this.ctx.beginPath(); // 격자 그리기
@@ -64,7 +64,7 @@ function DrawObject(){ // 그리기 담당
     }
     this.ctx.strokeStyle = "black";
     this.ctx.globalAlpha = 0.1;
-    this.ctx.lineWidth = 0.3;
+    this.ctx.lineWidth = 0.5;
     this.ctx.stroke();
   }
 
@@ -107,26 +107,27 @@ function RGB(r,g,b){
     this.g=g;
     this.b=b;
   }
-  this.getRGB = function(){
+  this.getRGBValue = function(){
     return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
   }
-  this.getDarkRGB = function(per=0.25){
+  this.getDarkRGB = function(per){
+    if (per==null) per=0.25;
     let r = (0 - this.r) * per + this.r;
     let g = (0 - this.g) * per + this.g;
     let b = (0 - this.b) * per + this.b;
-    return "rgb(" + r + "," + g + "," + b + ")";
+    return new RGB(r,g,b);
   }
   this.getLightRGB = function(per){
     let r = (255 - this.r) * per + this.r;
     let g = (255 - this.g) * per + this.g;
     let b = (255 - this.b) * per + this.b;
-    return "rgb(" + r + "," + g + "," + b + ")";
+    return new RGB(r,g,b);
   }
   this.getRedRGB = function(per){
     let r = (255 - this.r) * per + this.r;
     let g = (0 - this.g) * per + this.g;
     let b = (0 - this.b) * per + this.b;
-    return "rgb(" + r + "," + g + "," + b + ")";
+    return new RGB(r,g,b);
   }
 }
 
@@ -161,13 +162,13 @@ function Button(text){
   }
 
   this.draw = function (ctx,z){
-    ctx.fillStyle = this.color.getRGB();
+    ctx.fillStyle = this.color.getRGBValue();
     ctx.strokeStyle = "#444444";
     ctx.lineWidth = 8.4 * z;
     ctx.strokeRect(this.x1,this.y1,this.x2-this.x1,this.y2-this.y1);
 
     ctx.fillRect(this.x1,this.y1,this.x2-this.x1,this.y2-this.y1);
-    ctx.fillStyle = this.color.getDarkRGB();
+    ctx.fillStyle = this.color.getDarkRGB().getRGBValue();
     ctx.fillRect(this.x1,(this.y1+this.y2)/2+6.5 * z,this.x2-this.x1,(this.y2-this.y1)/2-6.5 * z);
   }
 }
