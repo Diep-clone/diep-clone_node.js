@@ -115,19 +115,19 @@ function RGB(r,g,b){
     let r = (0 - this.r) * per + this.r;
     let g = (0 - this.g) * per + this.g;
     let b = (0 - this.b) * per + this.b;
-    return new RGB(r,g,b);
+    return new RGB(Math.round(r),Math.round(g),Math.round(b));
   }
   this.getLightRGB = function(per){
     let r = (255 - this.r) * per + this.r;
     let g = (255 - this.g) * per + this.g;
     let b = (255 - this.b) * per + this.b;
-    return new RGB(r,g,b);
+    return new RGB(Math.round(r),Math.round(g),Math.round(b));
   }
   this.getRedRGB = function(per){
     let r = (255 - this.r) * per + this.r;
     let g = (0 - this.g) * per + this.g;
     let b = (0 - this.b) * per + this.b;
-    return new RGB(r,g,b);
+    return new RGB(Math.round(r),Math.round(g),Math.round(b));
   }
 }
 
