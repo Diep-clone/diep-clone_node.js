@@ -76,14 +76,14 @@ function Tank(){
   this.draw = function(ctx,camera){
     this.setCanvasSize(camera);
 
-    this.ctx.strokeStyle = this.gunColor.getRedRGB().getLightRGB().getDarkRGB().getRGBValue(); // 총구 그리기
-    this.ctx.fillStyle = this.gunColor.getRedRGB().getLightRGB().getRGBValue();
+    this.ctx.strokeStyle = this.gunColor.getRedRGB(0).getLightRGB(0).getDarkRGB().getRGBValue(); // 총구 그리기
+    this.ctx.fillStyle = this.gunColor.getRedRGB(0).getLightRGB(0).getRGBValue();
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].drawGun(this,this.ctx,camera);
     }
 
-    this.ctx.strokeStyle = this.color.getRedRGB().getLightRGB().getDarkRGB().getRGBValue(); // 몸체 그리기
-    this.ctx.fillStyle = this.color.getRedRGB().getLightRGB().getRGBValue();
+    this.ctx.strokeStyle = this.color.getRedRGB(0).getLightRGB(0).getDarkRGB().getRGBValue(); // 몸체 그리기
+    this.ctx.fillStyle = this.color.getRedRGB(0).getLightRGB(0).getRGBValue();
     this.ctx.beginPath();
     this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();
