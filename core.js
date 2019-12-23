@@ -79,7 +79,7 @@ function System(){ // 게임의 전체 진행 담당
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
-    if (this.input.shot) this.controlTank.hit(0.1);
+    if (this.input.shot) this.controlTank.hit(0.08);
     if (this.input.k) this.controlTank.levelUP();
 
     this.uiSet();
