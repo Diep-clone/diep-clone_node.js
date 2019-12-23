@@ -79,6 +79,7 @@ function System(){ // 게임의 전체 진행 담당
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
+    if (this.input.shot) this.controlTank.hit(0.1);
     if (this.input.k) this.controlTank.levelUP();
 
     this.uiSet();
@@ -147,7 +148,7 @@ function System(){ // 게임의 전체 진행 담당
   window.onkeydown = function(e){
     switch (e.keyCode){
       case 32: // Space키
-        this.controlTank.hit(0.1);
+        this.input.shot = true;
       break;
       case 75: // K키
         //this.input.k = true;
@@ -165,6 +166,7 @@ function System(){ // 게임의 전체 진행 담당
   window.onkeyup = function (e){
     switch (e.keyCode){
       case 32: // Space키
+        this.input.shot = false;
       break;
       case 75: // K키
         //this.input.k = false;

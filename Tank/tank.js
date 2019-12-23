@@ -42,37 +42,32 @@ function Tank(){
         case 0:
           this.rwswitch = 1;
         case 1:
-          if (this.r<1) this.r+= 0.1 * tick * 0.05;
+          if (this.w>0) this.w= Math.max(this.w - 0.4 * tick * 0.05,0);
+          if (this.r<0.6) this.r+= 0.4 * tick * 0.05;
           else{
             this.rwswitch = 2;
-            this.w -= 1-this.r;
-            this.r += 1-this.r;
+            this.w -= 0.6-this.r;
+            this.r = 0.6;
           }
-          if (this.w>0) this.w-= 0.1 * tick * 0.05;
-          else this.w = 0;
           break;
         case 2:
-          if (this.w<1) this.w+= 0.1 * tick * 0.05;
+          if (this.r>0) this.r= Math.max(this.r - 0.4 * tick * 0.05,0);
+          if (this.w<0.6) this.w+= 0.4 * tick * 0.05;
           else{
             this.rwswitch = 1;
-            this.r -= 1-this.r;
-            this.w += 1-this.r;
+            this.r -= 0.6-this.w;
+            this.w = 0.6;
           }
-          if (this.r>0) this.r-= 0.1 * tick * 0.05;
-          else this.r = 0;
           break;
         default:
-          
           break;
       }
     }
     else{
       this.hitTime = 0;
       this.rwswitch = 0;
-      if (this.r>0) this.r -= 0.1 * tick * 0.05;
-      else this.r = 0;
-      if (this.w>0) this.w -= 0.1 * tick * 0.05;
-      else this.w = 0;
+      if (this.r>0) this.r= Math.max(this.r - 0.2 * tick * 0.05,0);
+      if (this.w>0) this.w= Math.max(this.w - 0.2 * tick * 0.05,0);
     }
     this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
