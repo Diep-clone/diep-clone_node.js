@@ -147,6 +147,7 @@ function System(){ // 게임의 전체 진행 담당
   window.onkeydown = function(e){
     switch (e.keyCode){
       case 32: // Space키
+        this.controlTank.hit(0.1);
       break;
       case 75: // K키
         //this.input.k = true;
