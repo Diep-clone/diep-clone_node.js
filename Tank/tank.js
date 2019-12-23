@@ -19,6 +19,9 @@ function Tank(){
   this.canvasSize = {x:0,y:0};
   this.canvasPos = {x:0,y:0};
   this.hitTime = 0;
+  this.r = 0;
+  this.w = 0;
+  this.rwswitch = 0;
 
   this.animate = function(e,tick){
     if (this.isDead || this.health<0){
@@ -31,6 +34,25 @@ function Tank(){
         this.opacity -= 0.1 * tick * 0.05;
         this.radius += 0.3 * tick * 0.05;
       }
+    }
+    if (this.hitTime>0){
+      this.hitTime -= tick * 0.05;
+      switch (this.rwswitch){
+        case 1:
+          break;
+        case 2:
+          break;
+        default:
+          break;
+      }
+    }
+    else{
+      this.hitTime = 0;
+      this.rwswitch = 0;
+      if (this.r>0) this.r -= tick * 0.05;
+      else this.r = 0;
+      if (this.w>0) this.w -= tick * 0.05;
+      else this.w = 0;
     }
     this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
