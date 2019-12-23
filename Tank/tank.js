@@ -36,31 +36,30 @@ function Tank(){
       }
     }
     if (this.hitTime>0){ // hit effect
-      this.hitTime -= tick * 0.05;
+      console.log(this.r,this.w,this.rwswitch);
+      this.hitTime -= 0.1 * tick * 0.05;
       switch (this.rwswitch){
         case 0:
           this.rwswitch = 1;
         case 1:
           if (this.r<1) this.r+= 0.1 * tick * 0.05;
           else{
+            this.rwswitch = 2;
             this.w -= 1-this.r;
             this.r += 1-this.r;
           }
           if (this.w>0) this.w-= 0.1 * tick * 0.05;
-          else{
-            this.w = 0;
-          }
+          else this.w = 0;
           break;
         case 2:
           if (this.w<1) this.w+= 0.1 * tick * 0.05;
           else{
+            this.rwswitch = 1;
             this.r -= 1-this.r;
             this.w += 1-this.r;
           }
           if (this.r>0) this.r-= 0.1 * tick * 0.05;
-          else{
-            this.r = 0;
-          }
+          else this.r = 0;
           break;
         default:
           
@@ -70,9 +69,9 @@ function Tank(){
     else{
       this.hitTime = 0;
       this.rwswitch = 0;
-      if (this.r>0) this.r -= tick * 0.05;
+      if (this.r>0) this.r -= 0.1 * tick * 0.05;
       else this.r = 0;
-      if (this.w>0) this.w -= tick * 0.05;
+      if (this.w>0) this.w -= 0.1 * tick * 0.05;
       else this.w = 0;
     }
     this.rotate += 0.02 * tick * 0.05;
