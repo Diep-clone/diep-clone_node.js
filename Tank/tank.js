@@ -42,21 +42,21 @@ function Tank(){
         case 0:
           this.rwswitch = 1;
         case 1:
-          if (this.w>0) this.w= Math.max(this.w - 0.4 * tick * 0.05,0);
-          if (this.r<0.6) this.r+= 0.4 * tick * 0.05;
+          if (this.w>0) this.w= Math.max(this.w - 0.6 * tick * 0.05,0);
+          if (this.r<0.4) this.r+= 0.6 * tick * 0.05;
           else{
             this.rwswitch = 2;
-            this.w -= 0.6-this.r;
-            this.r = 0.6;
+            this.w -= 0.4-this.r;
+            this.r = 0.4;
           }
           break;
         case 2:
-          if (this.r>0) this.r= Math.max(this.r - 0.4 * tick * 0.05,0);
-          if (this.w<0.6) this.w+= 0.4 * tick * 0.05;
+          if (this.r>0) this.r= Math.max(this.r - 0.6 * tick * 0.05,0);
+          if (this.w<0.4) this.w+= 0.6 * tick * 0.05;
           else{
             this.rwswitch = 1;
-            this.r -= 0.6-this.w;
-            this.w = 0.6;
+            this.r -= 0.4-this.w;
+            this.w = 0.4;
           }
           break;
         default:
