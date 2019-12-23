@@ -35,14 +35,35 @@ function Tank(){
         this.radius += 0.3 * tick * 0.05;
       }
     }
-    if (this.hitTime>0){
+    if (this.hitTime>0){ // hit effect
       this.hitTime -= tick * 0.05;
       switch (this.rwswitch){
+        case 0:
+          this.rwswitch = 1;
         case 1:
+          if (this.r<1) this.r+= tick * 0.05;
+          else{
+            this.w -= 1-this.r;
+            this.r += 1-this.r;
+          }
+          if (this.w>0) this.w-= tick * 0.05;
+          else{
+            this.w = 0;
+          }
           break;
         case 2:
+          if (this.w<1) this.w+= tick * 0.05;
+          else{
+            this.r -= 1-this.r;
+            this.w += 1-this.r;
+          }
+          if (this.r>0) this.r-= tick * 0.05;
+          else{
+            this.r = 0;
+          }
           break;
         default:
+          
           break;
       }
     }
@@ -98,14 +119,14 @@ function Tank(){
   this.draw = function(ctx,camera){
     this.setCanvasSize(camera);
 
-    this.ctx.strokeStyle = this.gunColor.getRedRGB(0).getLightRGB(0).getDarkRGB().getRGBValue(); // 총구 그리기
-    this.ctx.fillStyle = this.gunColor.getRedRGB(0).getLightRGB(0).getRGBValue();
+    this.ctx.strokeStyle = this.gunColor.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 총구 그리기
+    this.ctx.fillStyle = this.gunColor.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].drawGun(this,this.ctx,camera);
     }
 
-    this.ctx.strokeStyle = this.color.getRedRGB(0).getLightRGB(0).getDarkRGB().getRGBValue(); // 몸체 그리기
-    this.ctx.fillStyle = this.color.getRedRGB(0).getLightRGB(0).getRGBValue();
+    this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
+    this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
     this.ctx.beginPath();
     this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();
