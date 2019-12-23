@@ -41,23 +41,23 @@ function Tank(){
         case 0:
           this.rwswitch = 1;
         case 1:
-          if (this.r<1) this.r+= tick * 0.05;
+          if (this.r<1) this.r+= 0.1 * tick * 0.05;
           else{
             this.w -= 1-this.r;
             this.r += 1-this.r;
           }
-          if (this.w>0) this.w-= tick * 0.05;
+          if (this.w>0) this.w-= 0.1 * tick * 0.05;
           else{
             this.w = 0;
           }
           break;
         case 2:
-          if (this.w<1) this.w+= tick * 0.05;
+          if (this.w<1) this.w+= 0.1 * tick * 0.05;
           else{
             this.r -= 1-this.r;
             this.w += 1-this.r;
           }
-          if (this.r>0) this.r-= tick * 0.05;
+          if (this.r>0) this.r-= 0.1 * tick * 0.05;
           else{
             this.r = 0;
           }
