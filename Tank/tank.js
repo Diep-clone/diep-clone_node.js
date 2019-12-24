@@ -53,7 +53,7 @@ function Tank(){
         this.r = 0.6;
         this.w = 0;
       }
-      this.w= Math.max(this.r - 0.4 * tick * 0.05,0);
+      this.w= Math.max(this.w - 0.4 * tick * 0.05,0);
     }
     this.r= Math.max(this.r - 0.05 * tick * 0.05,0);
     this.rotate += 0.02 * tick * 0.05;
