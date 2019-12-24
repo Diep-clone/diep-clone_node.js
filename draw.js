@@ -12,7 +12,7 @@ function DrawObject(){ // 그리기 담당
   this.camera = {
     x:0,
     y:0,
-    z:3,
+    z:1,
     uiz:1
   };
 
