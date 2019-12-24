@@ -36,25 +36,16 @@ function Tank(){
     }
     if (this.hitTime>0){ // hit effect
       this.hitTime -= 0.1 * tick * 0.05;
-      this.w= Math.min(this.w + 0.4 * tick * 0.05,0.6);
-      /*
-      if (this.r==0){
-        this.r = 0.6;
-        this.w = 0;
-      }
-      else{
-        this.r = 0;
-        this.w = 0.6;
-      }*/
+      this.w= 0.6;
     }
     else{
       this.hitTime = 0;
-      if (this.w>0){
+      if (this.w==0.6){
         this.r = 0.6;
-        this.w = 0;
       }
+      this.w = Math.max(this.w - 0.4 * tick * 0.05,0);
     }
-    this.r= Math.max(this.r - 0.05 * tick * 0.05,0);
+    this.r= Math.max(this.r - 0.15 * tick * 0.05,0);
     this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].animate(e);
