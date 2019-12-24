@@ -100,8 +100,8 @@ function System(){ // 게임의 전체 진행 담당
   this.loop();
 
   window.onmousemove = function (e){
-    let x = e.clientX;
-    let y = e.clientY;
+    let x = e.clientX * window.devicePixelRatio;
+    let y = e.clientY * window.devicePixelRatio;
 
     this.input.isMouseOverUi = false;
 

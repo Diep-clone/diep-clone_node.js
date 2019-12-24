@@ -36,11 +36,11 @@ function Tank(){
     }
     if (this.hitTime>0){ // hit effect
       this.hitTime -= 0.1 * tick * 0.05;
-      this.w= 0.8;
+      this.w= 1;
     }
     else{
       this.hitTime = 0;
-      if (this.w>0) this.w = Math.max(this.w - 0.5 * tick * 0.05,0);
+      if (this.w>0) this.w = Math.max(this.w - 0.7 * tick * 0.05,0);
       if (this.w==0 && this.r==0){
         this.r = 0.8;
         this.w = -0.0001;
