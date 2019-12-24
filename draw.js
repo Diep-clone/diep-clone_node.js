@@ -108,26 +108,26 @@ function RGB(r,g,b){
     this.b=b;
   }
   this.getRGBValue = function(){
-    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+    return "rgb(" + Math.round(this.r) + "," + Math.round(this.g) + "," + Math.round(this.b) + ")";
   }
   this.getDarkRGB = function(per){
     if (per==null) per=0.25;
     let r = (0 - this.r) * per + this.r;
     let g = (0 - this.g) * per + this.g;
     let b = (0 - this.b) * per + this.b;
-    return new RGB(Math.round(r),Math.round(g),Math.round(b));
+    return new RGB(r,g,b);
   }
   this.getLightRGB = function(per){
     let r = (255 - this.r) * per + this.r;
     let g = (255 - this.g) * per + this.g;
     let b = (255 - this.b) * per + this.b;
-    return new RGB(Math.round(r),Math.round(g),Math.round(b));
+    return new RGB(r,g,b);
   }
   this.getRedRGB = function(per){
     let r = (255 - this.r) * per + this.r;
     let g = (0 - this.g) * per + this.g;
     let b = (0 - this.b) * per + this.b;
-    return new RGB(Math.round(r),Math.round(g),Math.round(b));
+    return new RGB(r,g,b);
   }
 }
 
@@ -201,7 +201,8 @@ function Bar(){
 
   this.draw = function (ctx,z){
     ctx.beginPath();
-
+    ctx.fillStyle = this.color.getRGBValue();
+    ctx.strokeStyle = "#000000";
 
     ctx.fill();
     ctx.stroke();

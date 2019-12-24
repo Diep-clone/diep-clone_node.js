@@ -21,7 +21,6 @@ function Tank(){
   this.hitTime = 0;
   this.r = 0;
   this.w = 0;
-  this.rwswitch = 0;
 
   this.animate = function(e,tick){
     if (this.isDead || this.health<0){
@@ -36,39 +35,26 @@ function Tank(){
       }
     }
     if (this.hitTime>0){ // hit effect
-      console.log(this.r,this.w,this.rwswitch);
       this.hitTime -= 0.1 * tick * 0.05;
-      switch (this.rwswitch){
-        case 0:
-          this.rwswitch = 1;
-        case 1:
-          if (this.w>0) this.w= Math.max(this.w - 0.6 * tick * 0.05,0);
-          if (this.r<0.4) this.r+= 0.6 * tick * 0.05;
-          else{
-            this.rwswitch = 2;
-            this.w -= 0.4-this.r;
-            this.r = 0.4;
-          }
-          break;
-        case 2:
-          if (this.r>0) this.r= Math.max(this.r - 0.6 * tick * 0.05,0);
-          if (this.w<0.4) this.w+= 0.6 * tick * 0.05;
-          else{
-            this.rwswitch = 1;
-            this.r -= 0.4-this.w;
-            this.w = 0.4;
-          }
-          break;
-        default:
-          break;
+      this.w= Math.min(this.w + 0.4 * tick * 0.05,0.6);
+      /*
+      if (this.r==0){
+        this.r = 0.6;
+        this.w = 0;
       }
+      else{
+        this.r = 0;
+        this.w = 0.6;
+      }*/
     }
     else{
       this.hitTime = 0;
-      this.rwswitch = 0;
-      if (this.r>0) this.r= Math.max(this.r - 0.2 * tick * 0.05,0);
-      if (this.w>0) this.w= Math.max(this.w - 0.2 * tick * 0.05,0);
+      if (this.w>0){
+        this.r = 0.6;
+        this.w = 0;
+      }
     }
+    if (this.r>0) this.r= Math.max(this.r - 0.05 * tick * 0.05,0);
     this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].animate(e);
