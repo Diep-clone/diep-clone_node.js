@@ -51,6 +51,11 @@ function DrawObject(){ // 그리기 담당
     this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
     this.ctx.fillStyle = this.backgroundColor.getRGBValue();
+    this.ctx.globalAlpha = 1;
+    this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+
+    this.ctx.globalAlpha = 0.1;
+    this.ctx.fillStyle = "#000000";
     this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
 
     this.ctx.beginPath(); // 격자 그리기
@@ -164,7 +169,7 @@ function Button(text){
   this.draw = function (ctx,z){
     ctx.fillStyle = this.color.getRGBValue();
     ctx.strokeStyle = "#444444";
-    ctx.lineWidth = 8.4 * z;
+    ctx.lineWidth = 8 * z;
     ctx.strokeRect(this.x1,this.y1,this.x2-this.x1,this.y2-this.y1);
 
     ctx.fillRect(this.x1,this.y1,this.x2-this.x1,this.y2-this.y1);

@@ -18,7 +18,16 @@ function System(){ // 게임의 전체 진행 담당
     Destroyer
   ];
 
-  this.colorList = [];
+  this.colorList = [
+    new RGB(230,176,138),
+    new RGB(228,102,233),
+    new RGB(148,102,234),
+    new RGB(103,144,234),
+    new RGB(234,178,102),
+    new RGB(231,103,98),
+    new RGB(147,234,103),
+    new RGB(103,233,233)
+  ];
 
   this.tick = 0;
   this.lastTime = Date.now();
