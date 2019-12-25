@@ -36,7 +36,7 @@ function Tank(){
     }
     if (this.hitTime>0){ // hit effect
       this.hitTime -= 0.1 * tick * 0.05;
-      this.w= 1;
+      this.w= 0.9 * tick * 0.05;
     }
     else{
       this.hitTime = 0;

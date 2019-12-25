@@ -63,23 +63,24 @@ function System(){ // 게임의 전체 진행 담당
 
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
     this.showUpgradeTank[0].setColor(new RGB(166,248,244));
+    //new RGB(145,248,244);
     this.showUpgradeTank[1].setPosition(139.3*whz[2],62.3*whz[2],218.8*whz[2],141.8*whz[2]);
-    this.showUpgradeTank[1].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[1].setColor(new RGB(181,248,145));
     this.showUpgradeTank[2].setPosition(43.3*whz[2],154.3*whz[2],122.8*whz[2],233.8*whz[2]);
-    this.showUpgradeTank[2].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[2].setColor(new RGB(248,145,146));
     this.showUpgradeTank[3].setPosition(139.3*whz[2],154.3*whz[2],218.8*whz[2],233.8*whz[2]);
-    this.showUpgradeTank[3].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[3].setColor(new RGB(248,230,146));
     this.showUpgradeTank[4].setPosition(43.3*whz[2],246.3*whz[2],122.8*whz[2],325.8*whz[2]);
-    this.showUpgradeTank[4].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[4].setColor(new RGB(145,178,247));
     this.showUpgradeTank[5].setPosition(139.3*whz[2],246.3*whz[2],218.8*whz[2],325.8*whz[2]);
-    this.showUpgradeTank[5].setColor(new RGB(166,248,244));
+    this.showUpgradeTank[5].setColor(new RGB(181,146,248));
   }
 
   this.loop = function (){
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
-    if (this.input.shot) this.controlTank.hit(0.09);
+    if (this.input.shot) this.controlTank.hit(0.1 * this.tick * 0.05);
     if (this.input.k) this.controlTank.levelUP();
 
     this.uiSet();
