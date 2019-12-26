@@ -29,6 +29,8 @@ function DynamicObject(){
 function Shape(){
   "use strict";
   
+  HealthShowObject.apply(this, arguments);
+  
   this.addRotate;
   this.moveRotate;
   
@@ -46,6 +48,8 @@ Shape.prototype.constructor = Shape;
 
 function Rectangle(){
   "use strict";
+  
+  Shape.apply(this, arguments);
   
   this.addRotate = 1;
   this.moveRotate = 1;
