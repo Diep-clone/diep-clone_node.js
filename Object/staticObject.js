@@ -6,7 +6,4 @@ function StaticObject(){
   this.x2;
   this.y2;
   this.opacity;
-  this.isCollision = function(obj){
-
-  }
 }

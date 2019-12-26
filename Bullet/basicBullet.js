@@ -4,8 +4,6 @@ function BasicBullet(tank,sx,sy){
   DynamicObject.apply(this, arguments);
   this.color = new RGB(0,176,225);
   this.owner = tank;
-  this.speedX = sx;
-  this.speedY = sy;
   this.time = 3000;
   this.isDead = false;
   this.canvas = document.createElement("canvas");
@@ -24,10 +22,6 @@ function BasicBullet(tank,sx,sy){
       }
     }
     this.time-=tick;
-    this.move();
-  }
-  this.move = function(){
-    this.addForce(this.speedX,this.speedY);
   }
   this.setCanvasSize = function(){
     this.canvas.width = (this.radius * 2) * camera.z;

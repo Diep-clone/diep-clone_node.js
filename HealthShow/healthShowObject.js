@@ -1,11 +1,7 @@
 function HealthShowObject(){
   "use strict";
-
   DynamicObject.apply(this, arguments);
-  this.getDamageTime;
-  this.naturelHeal = function(){
 
-  }
   this.drawHPBar = function(){
 
   }

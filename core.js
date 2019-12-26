@@ -70,6 +70,7 @@ function System(){ // 게임의 전체 진행 담당
     this.showTankLevel.setText(this.controlTank.lv);
     this.showTankLevel.setSize(20);
 
+/*
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
     this.showUpgradeTank[0].setColor(new RGB(166,248,244));
     //new RGB(145,248,244);
@@ -82,7 +83,7 @@ function System(){ // 게임의 전체 진행 담당
     this.showUpgradeTank[4].setPosition(43.3*whz[2],246.3*whz[2],122.8*whz[2],325.8*whz[2]);
     this.showUpgradeTank[4].setColor(new RGB(145,178,247));
     this.showUpgradeTank[5].setPosition(139.3*whz[2],246.3*whz[2],218.8*whz[2],325.8*whz[2]);
-    this.showUpgradeTank[5].setColor(new RGB(181,146,248));
+    this.showUpgradeTank[5].setColor(new RGB(181,146,248));*/
   }
 
   this.loop = function (){

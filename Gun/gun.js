@@ -1,40 +1,10 @@
-function Gun(paths,dir,type,pos,radius,speed,damage,health,reload,spread,shottime,force){
+function Gun(paths,dir){
   "use strict";
 
   this.x;
   this.y;
   this.point = paths;
   this.addRotate = dir;
-  this.bullet = {
-    type: type, // 총탄 타입
-    pos: pos, // 발사 위치
-    radius: radius, // 총탄 크기 %
-    speed: speed, // 총탄 속도 %
-    damage: damage, // 총탄 데미지 %
-    health: health, // 총탄 체력 %
-    reload: reload, // 총탄 리로드
-    spread: spread, // 탄퍼짐
-    shottime: shottime, // 총탄 발사 시점 %
-    force: force // 총탄 반동 %
-  };
-  this.cooltime = 0;
-  this.isCanShot = true;
-  this.lastShotTime = 0;
-
-  this.animate = function (e){
-
-  }
-
-  this.shot = function (){
-    let x = this.bullet.pos[0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.bullet.pos[1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;
-    let y = this.bullet.pos[0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.bullet.pos[1]*Math.sin(rotate+this.addRotate)*camera.z*radius+yy;
-    let obj = new this.bullet.type();
-
-    obj.x = x;
-    obj.y = y;
-    obj.radius = this.bullet.radius;
-
-  }
 
   this.setParentCanvasSize = function (tank,camera){
     let rotate = tank.rotate;
