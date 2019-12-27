@@ -6,7 +6,6 @@ function Tank(){
   this.maxStats = [7,7,7,7,7,7,7,7];
   this.statCount = 0;
   this.tankType = null;
-  this.upgradeTanks = [];
   this.guns = [];
   this.color = new RGB(0,176,225);
   this.gunColor = new RGB(153,153,153);

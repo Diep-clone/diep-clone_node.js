@@ -6,6 +6,10 @@ function Gun(paths,dir){
   this.point = paths;
   this.addRotate = dir;
 
+  this.animate = function (e) {
+    
+  }
+
   this.setParentCanvasSize = function (tank,camera){
     let rotate = tank.rotate;
     let radius = tank.radius;

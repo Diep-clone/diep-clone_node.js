@@ -90,6 +90,8 @@ function System(){ // 게임의 전체 진행 담당
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
+    socket.emit('input',this.input);
+
     if (this.input.shot) this.controlTank.hit(0.1 * this.tick * 0.05);
     if (this.input.k) this.controlTank.levelUP();
 
