@@ -77,6 +77,6 @@ function sendUpdates(){
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
 
-server.listen(3000,() => {
-  console.log('Socket IO server listening on port 3000');
+app.listen(process.env.PORT || 3000, () => {
+    console.log("잠깐, 지금 서버를 연거야?");
 });
