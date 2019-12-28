@@ -2,7 +2,7 @@
   "name": "diep.io-tankMaker",
   "version": "1.0.0",
   "description": "Copyright © 2019-2020\r # diep.io-tankMaker\r ## Description ℹ️\r This repo is Diep.io's Clone Version.",
-  "main": "server/server.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Diep-clone/diep.io-tankMaker/issues"
   },
-  "homepage": "https://github.com/Diep-clone/diep.io-tankMaker#readme"
+  "homepage": "https://github.com/Diep-clone/diep.io-tankMaker#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
