@@ -52,8 +52,24 @@ function System(){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.controlTank = this.createObject(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
+  this.controlTank;// = this.createObject(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
+
+  socket.emit('login');
+
+  socket.on('spawnTank',(data) => {
+    this.controlTank = this.createObject(this.tankList[data.type]);
+    this.controlTank.setPosition(data.x,data.y);
+    this.controlTank.setName(data.name);
+  });
+
+  socket.on('objectList', (data) => {
+    this.objectList.forEach(function (){
+
+    });
+  });
+
   this.showTankLevel = this.createUiObject(Text);
+
   this.showUpgradeTank = [
     this.createUiObject(Button),
     this.createUiObject(Button),
@@ -66,10 +82,12 @@ function System(){ // 게임의 전체 진행 담당
   this.uiSet = function (){
     let whz = this.drawObject.getCanvasSize();
 
-    this.showTankLevel.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
-    this.showTankLevel.setText(this.controlTank.lv);
-    this.showTankLevel.setSize(20);
 
+    if (this.controlTank){
+      this.showTankLevel.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
+      this.showTankLevel.setText(this.controlTank.name);
+      this.showTankLevel.setSize(20);
+    }
 /*
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
     this.showUpgradeTank[0].setColor(new RGB(166,248,244));
@@ -92,8 +110,11 @@ function System(){ // 게임의 전체 진행 담당
 
     socket.emit('input',this.input);
 
-    if (this.input.shot) this.controlTank.hit(0.1 * this.tick * 0.05);
-    if (this.input.k) this.controlTank.levelUP();
+    if (this.controlTank){
+      if (this.input.shot) this.controlTank.hit(0.1 * this.tick * 0.05);
+      if (this.input.k) this.controlTank.levelUP();
+      this.drawObject.cameraSet(this.controlTank);
+    }
 
     this.uiSet();
 
@@ -103,7 +124,7 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
-    this.drawObject.cameraSet(this.controlTank);
+
     this.drawObject.backgroundDraw();
     this.drawObject.objectDraw(this.objectList);
     this.drawObject.uiDraw(this.uiObjectList);

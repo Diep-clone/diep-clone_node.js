@@ -52,6 +52,9 @@ function Tank(){
       this.guns[i].animate(e);
     }
   }
+  this.setName = function (name){
+    this.name = name;
+  }
   this.changeTank = function (type){
     let t = new type();
     this.guns = t.guns;

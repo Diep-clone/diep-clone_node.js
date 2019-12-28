@@ -9,9 +9,15 @@ function DrawObject(){ // 그리기 담당
 
   this.backgroundColor = new RGB(205,205,205);
 
+  this.mapSize = {x:0,y:0};
+
+  socket.on('mapSize',(data) => {
+    this.mapSize = data;
+  });
+
   this.camera = {
-    x:0,
-    y:0,
+    x:-100,
+    y:-100,
     z:1,
     uiz:1
   };
@@ -50,26 +56,28 @@ function DrawObject(){ // 그리기 담당
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
     this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
-    this.ctx.fillStyle = this.backgroundColor.getRGBValue();
     this.ctx.globalAlpha = 1;
+
+
+    this.ctx.fillStyle = this.backgroundColor.getDarkRGB(0.1).getRGBValue();
     this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
 
-    this.ctx.globalAlpha = 0.1;
-    this.ctx.fillStyle = "#000000";
-    this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+    this.ctx.fillStyle = this.backgroundColor.getRGBValue();
+    this.ctx.fillRect((-this.mapSize.x-this.camera.x)*this.camera.z,(-this.mapSize.y-this.camera.y)*this.camera.z,this.mapSize.x*2*this.camera.z,this.mapSize.y*2*this.camera.z);
+
 
     this.ctx.beginPath(); // 격자 그리기
-    for (let i=-this.camera.x % (12.9 * this.camera.z);i<=this.canvas.width;i+=12.9 * this.camera.z){
+    for (let i=-this.camera.x % 12.9 * this.camera.z;i<=this.canvas.width;i+=12.9 * this.camera.z){
         this.ctx.moveTo(i,0);
         this.ctx.lineTo(i,this.canvas.height);
     }
-    for (let i=-this.camera.y % (12.9 * this.camera.z);i<=this.canvas.height;i+=12.9 * this.camera.z){
+    for (let i=-this.camera.y % 12.9 * this.camera.z;i<=this.canvas.height;i+=12.9 * this.camera.z){
         this.ctx.moveTo(0,i);
         this.ctx.lineTo(this.canvas.width,i);
     }
     this.ctx.strokeStyle = "black";
     this.ctx.globalAlpha = 0.1;
-    this.ctx.lineWidth = 0.5;
+    this.ctx.lineWidth = 0.4;
     this.ctx.stroke();
   }
 
