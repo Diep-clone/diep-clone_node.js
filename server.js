@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
     dy:0,
     radius:13,
     rotate:0,
-    name:"d",
+    name:"",
     target:{
       x:0,
       y:0
@@ -78,7 +78,12 @@ io.on('connection', (socket) => {
     currentPlayer.rotate = Math.atan2((currentPlayer.target.y-currentPlayer.y),(currentPlayer.target.x-currentPlayer.x));
   });
 
+  socket.on('input', (data) => {
+    currentPlayer.moveRotate = data.moveRotate;
+  });
+
   socket.on('disconnect', () => {
+    console.log('안녕 잘가!!!');
     mapSize.x-= 322.5;
     mapSize.y-= 322.5;
     users[index] = null;
@@ -88,11 +93,22 @@ io.on('connection', (socket) => {
 });
 
 function moveloop(){
-
+  users.forEach((u) => {
+    if (u){
+      if (u.moveRotate != null){
+        u.dx+=Math.cos(u.moveRotate) * 1;
+        u.dy+=Math.sin(u.moveRotate) * 1;
+      }
+      u.x+=u.dx;
+      u.y+=u.dy;
+      u.dx*=0.8;
+      u.dy*=0.8;
+    }
+  });
 }
 
 function sendUpdates(){
-  users.forEach( function (u){
+  users.forEach((u) => {
     if (u){
       sockets[u.id].emit('objectList',users);
     }

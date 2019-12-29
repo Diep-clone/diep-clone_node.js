@@ -35,6 +35,11 @@ function System(){ // 게임의 전체 진행 담당
   this.input = {
     isMouseOverUi: false,
     shot: 0,
+    moveRotate: null,
+    w: false,
+    a: false,
+    s: false,
+    d: false,
     k: false,
     target: {
       x:0,
@@ -188,7 +193,6 @@ function System(){ // 게임의 전체 진행 담당
     let camera = this.drawObject.getCameraSet();
 
     if (this.controlTank) {
-      //this.controlTank.setRotate(Math.atan2((y+(camera.y-this.controlTank.y)*camera.z),(x+(camera.x-this.controlTank.x)*camera.z)));
       this.controlTank.setRotate(Math.atan2(y/camera.z+camera.y-this.controlTank.y,x/camera.z+camera.x-this.controlTank.x));
     }
     socket.emit('mousemove',{x:x/camera.z+camera.x,y:y/camera.z+camera.y});
@@ -231,6 +235,18 @@ function System(){ // 게임의 전체 진행 담당
     switch (e.keyCode){
       case 32: // Space키
       break;
+      case 87: // W키
+        this.input.moveRotate = -Math.PI / 2;
+      break;
+      case 65: // A키
+        this.input.moveRotate = Math.PI;
+      break;
+      case 83: // S키
+        this.input.moveRotate = Math.PI / 2;
+      break;
+      case 68: // D키
+        this.input.moveRotate = 0;
+      break;
       case 75: // K키
         //this.input.k = true;
       break;
@@ -242,11 +258,24 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
+    socket.emit('input',this.input);
   }.bind(this);
 
   window.onkeyup = function (e){
     switch (e.keyCode){
       case 32: // Space키
+      break;
+      case 87: // W키
+        this.input.moveRotate = null;
+      break;
+      case 65: // A키
+        this.input.moveRotate = null;
+      break;
+      case 83: // S키
+        this.input.moveRotate = null;
+      break;
+      case 68: // D키
+        this.input.moveRotate = null;
       break;
       case 75: // K키
         //this.input.k = false;
@@ -258,5 +287,6 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
+    socket.emit('input',this.input);
   }.bind(this);
 }
