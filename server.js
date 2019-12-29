@@ -11,7 +11,7 @@ var sockets = {};
 
 var mapSize = {x: 0,y: 0};
 
-app.use(express.static(__dirname + '/static'));
+app.use(express.static(__dirname + '/..'));
 
 function randomRange (x,y){
   if (x>y){
