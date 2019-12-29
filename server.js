@@ -1,18 +1,18 @@
 'use strict';
 
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
 
 app.listen(process.env.PORT || 3000, () => {
     console.log("잠깐, 지금 서버를 연거야?");
 });
-var io = require('socket.io')(server);
+const io = require('socket.io')(server);
 
-var users = [];
-var sockets = {};
+let users = [];
+let sockets = {};
 
-var mapSize = {x: 0,y: 0};
+let mapSize = {x: 0,y: 0};
 
 app.use(express.static(__dirname + '/static'));
 
