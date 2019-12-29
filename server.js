@@ -11,8 +11,9 @@ let sockets = {};
 
 let mapSize = {x: 0,y: 0};
 
+app.use(express.static(__dirname + '/static'));
 app.get('/', (req, res) => {
-return res.render('index.html');
+  res.sendFile(__dirname + '/index.html');
 })
 
 function randomRange (x,y){
@@ -79,6 +80,6 @@ function sendUpdates(){
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
 
-app.listen(process.env.PORT || 3000, () => {
+server.listen(process.env.PORT || 3000, () => {
     console.log("잠깐, 지금 서버를 연거야?");
 });
