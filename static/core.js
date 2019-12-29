@@ -1,7 +1,7 @@
 function System(){ // 게임의 전체 진행 담당
   "use strict";
 
-  this.objectList = [];
+  this.objectList = {tank:{}};
   this.uiObjectList = [];
 
   this.tankList = [
@@ -40,9 +40,10 @@ function System(){ // 게임의 전체 진행 담당
 
   this.drawObject = new DrawObject();
 
-  this.createObject = function (type){
+  this.createTankObject = function (id,type){
     let obj = new type();
-    this.objectList.push(obj);
+    this.objectList.tank[id]=obj;
+    this.objectList.tank[id].setId(id);
     return obj;
   }
 
@@ -52,20 +53,55 @@ function System(){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.controlTank;// = this.createObject(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
+  this.removeObject = function (id,type){
+    switch (type){
+      case "tank":
+        this.objectList.tank[id] = null;
+      break;
+      default:
+      break;
+    }
+  }
+
+  this.controlTank;
 
   socket.emit('login');
 
-  socket.on('spawnTank',(data) => {
-    this.controlTank = this.createObject(this.tankList[data.type]);
+  socket.on('spawn',(data) => {
+    this.controlTank = this.createTankObject(data.id,this.tankList[data.type]);
     this.controlTank.setPosition(data.x,data.y);
     this.controlTank.setName(data.name);
   });
 
-  socket.on('objectList', (data) => {
-    this.objectList.forEach(function (obj){
+  socket.on('objectList', (tankList) => {
+    for (let key in tankList){ // 탱크 지정
+      if (tankList[key]){
+        if (this.objectList.tank[tankList[key].id]){
+          let objTank = this.objectList.tank[tankList[key].id];
+          objTank.setPosition(tankList[key].x,tankList[key].y);
+          objTank.setRadius(tankList[key].radius);
+          objTank.setRotate(tankList[key].rotate);
+        }
+        else{
+          let objTank = this.createTankObject(tankList[key].id,this.tankList[tankList[key].type]);
+          objTank.setPosition(tankList[key].x,tankList[key].y);
+          objTank.setName(tankList[key].name);
+          objTank.setRadius(tankList[key].radius);
+          objTank.setRotate(tankList[key].rotate);
+        }
+      }
+    }
+  });
 
-    });
+  socket.on('objectDead', (type,data) => {
+    switch(type){
+      case "tank":
+      console.log(data.id,this.objectList.tank);
+      this.objectList.tank[data.id].dead();
+      break;
+      default:
+      break;
+    }
   });
 
   this.showTankLevel = this.createUiObject(Text);
@@ -108,25 +144,20 @@ function System(){ // 게임의 전체 진행 담당
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
-    socket.emit('input',this.input);
-
     if (this.controlTank){
-      if (this.input.shot) this.controlTank.hit(0.1 * this.tick * 0.05);
-      if (this.input.k) this.controlTank.levelUP();
       this.drawObject.cameraSet(this.controlTank);
     }
 
     this.uiSet();
 
-    for (let i=0;i<this.objectList.length;i++){
-      if (this.objectList[i]){
-        this.objectList[i].animate(null,this.tick);
+    for (let key in this.objectList.tank){
+      if (this.objectList.tank[key]){
+        this.objectList.tank[key].animate(null,this.tick);
       }
     }
 
-
     this.drawObject.backgroundDraw();
-    this.drawObject.objectDraw(this.objectList);
+    this.drawObject.objectDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);
 
     requestAnimationFrame(this.loop.bind(this));
@@ -182,7 +213,6 @@ function System(){ // 게임의 전체 진행 담당
   window.onkeydown = function(e){
     switch (e.keyCode){
       case 32: // Space키
-        this.input.shot = true;
       break;
       case 75: // K키
         //this.input.k = true;
@@ -190,7 +220,7 @@ function System(){ // 게임의 전체 진행 담당
       case 79: // O키
       break;
       case 220: // \키
-        this.controlTank.changeTank(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
+        //this.controlTank.changeTank(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
       break;
       default:
       break;
@@ -200,7 +230,6 @@ function System(){ // 게임의 전체 진행 담당
   window.onkeyup = function (e){
     switch (e.keyCode){
       case 32: // Space키
-        this.input.shot = false;
       break;
       case 75: // K키
         //this.input.k = false;

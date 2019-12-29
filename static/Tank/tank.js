@@ -2,16 +2,11 @@ function Tank(){
   "use strict";
 
   HealthShowObject.apply(this, arguments);
-  this.stats = [0,0,0,0,0,0,0,0];
-  this.maxStats = [7,7,7,7,7,7,7,7];
-  this.statCount = 0;
   this.tankType = null;
   this.guns = [];
   this.color = new RGB(0,176,225);
   this.gunColor = new RGB(153,153,153);
   this.name = "";
-  this.lv = 1;
-  this.score = 0;
   this.isDead = false;
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
@@ -25,7 +20,7 @@ function Tank(){
     if (this.isDead || this.health<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
-        object_list[this.id] = null;
+        system.removeObject(this.id,'tank');
         return;
       }
       else{
@@ -47,7 +42,7 @@ function Tank(){
     }
     this.r= Math.max(this.r - 0.2 * tick * 0.05,0);
 
-    this.rotate += 0.02 * tick * 0.05;
+    //this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].animate(e);
     }
@@ -60,6 +55,9 @@ function Tank(){
     this.guns = t.guns;
     this.tankType = t.tankType;
     this.upgradeTanks = t.upgradeTanks;
+  }
+  this.dead = function(){
+    this.isDead = true;
   }
   this.hit = function(time){
     this.hitTime+=time;

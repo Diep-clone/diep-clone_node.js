@@ -27,10 +27,17 @@ function randomRange (x,y){
 
 io.on('connection', (socket) => {
 
+  mapSize.x+= 322.5;
+  mapSize.y+= 322.5;
+
+  let index;
+
   let currentPlayer = {
     id:socket.id,
-    x:randomRange(-mapSize.x/2,mapSize.x/2),
-    y:randomRange(-mapSize.y/2,mapSize.y/2),
+    x:0,
+    y:0,
+    radius:13,
+    rotate:0,
     name:"d",
     target:{
       x:0,
@@ -44,25 +51,29 @@ io.on('connection', (socket) => {
 
     sockets[socket.id] = socket;
 
-    mapSize.x+= 322.5;
-    mapSize.y+= 322.5;
+    currentPlayer.x = randomRange(-mapSize.x/2,mapSize.x/2);
+    currentPlayer.y = randomRange(-mapSize.y/2,mapSize.y/2);
+
+    index = users.length;
     users.push(currentPlayer);
-    socket.emit('spawnTank', currentPlayer);
+
+    socket.emit('spawn', currentPlayer);
     io.emit('mapSize', mapSize);
   });
 
   socket.on('ping!', () => {
-    console.log("ping!");
     socket.emit('pong!');
   });
 
   socket.on('input', (data) => {
-    currentPlayer.target = data.target;
+
   });
 
   socket.on('disconnect', () => {
     mapSize.x-= 322.5;
     mapSize.y-= 322.5;
+    users[index] = null;
+    io.emit('objectDead','tank',currentPlayer);
     io.emit('mapSize', mapSize);
   });
 });
@@ -73,7 +84,9 @@ function moveloop(){
 
 function sendUpdates(){
   users.forEach( function (u){
-    sockets[u.id].emit('objectList',users);
+    if (u){
+      sockets[u.id].emit('objectList',users);
+    }
   })
 }
 

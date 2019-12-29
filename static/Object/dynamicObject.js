@@ -4,8 +4,8 @@ function DynamicObject(){
   this.x=0;
   this.y=0;
   this.dx=0;
-  this.radius = 13.0;
   this.dy=0;
+  this.radius = 13.0;
   this.rotate=0;
   this.maxHealth=10;
   this.health=10;
@@ -14,6 +14,19 @@ function DynamicObject(){
   this.setPosition = function(x,y){
     this.x = x;
     this.y = y;
+  }
+  this.setRotate = function(rotate){
+    this.rotate = rotate;
+  }
+  this.setRadius = function(radius){
+    this.radius = radius;
+  }
+  this.setHealth = function(hp,mhp){
+    this.health = hp;
+    this.maxHealth = mhp;
+  }
+  this.setId = function(id){
+    this.id = id;
   }
 }
 

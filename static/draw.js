@@ -18,7 +18,7 @@ function DrawObject(){ // 그리기 담당
   this.camera = {
     x:-100,
     y:-100,
-    z:1,
+    z:2,
     uiz:1
   };
 
@@ -42,7 +42,7 @@ function DrawObject(){ // 그리기 담당
 
     this.camera.uiz = this.camera.z;
 
-    this.camera.z *= 1.78; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야
+    this.camera.z *= 1; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야
 
     if (tank){
       //this.camera.x = tank.x - 100;
@@ -82,9 +82,9 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.objectDraw = function (obj){
-    for (let i=0;i<obj.length;i++){
-      if (obj[i]){
-        obj[i].draw(this.ctx,this.camera);
+    for (let key in obj){
+      if (obj[key]){
+        obj[key].draw(this.ctx,this.camera);
       }
     }
   }
