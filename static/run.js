@@ -1,4 +1,4 @@
-var socket = io("https://diep-io-copy.herokuapp.com/");
+var socket = io();
 
 var system = new System();
 
