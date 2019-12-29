@@ -49,18 +49,24 @@ io.on('connection', (socket) => {
   };
 
   socket.on('login', (player) => {
-    console.log("someone is coming!");
+    if (sockets[socket.id]){
+      console.log('넌 뭐야 저리가!!!');
+      return false;
+    }
+    else{
+      console.log('누군가가 들어왔다!!!');
 
-    sockets[socket.id] = socket;
+      sockets[socket.id] = socket;
 
-    currentPlayer.x = randomRange(-mapSize.x/2,mapSize.x/2);
-    currentPlayer.y = randomRange(-mapSize.y/2,mapSize.y/2);
+      currentPlayer.x = randomRange(-mapSize.x/2,mapSize.x/2);
+      currentPlayer.y = randomRange(-mapSize.y/2,mapSize.y/2);
 
-    index = users.length;
-    users.push(currentPlayer);
+      index = users.length;
+      users.push(currentPlayer);
 
-    socket.emit('spawn', currentPlayer);
-    io.emit('mapSize', mapSize);
+      socket.emit('spawn', currentPlayer);
+      io.emit('mapSize', mapSize);
+    }
   });
 
   socket.on('ping!', () => {
