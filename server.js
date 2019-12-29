@@ -36,6 +36,8 @@ io.on('connection', (socket) => {
     id:socket.id,
     x:0,
     y:0,
+    dx:0,
+    dy:0,
     radius:13,
     rotate:0,
     name:"d",
@@ -65,8 +67,9 @@ io.on('connection', (socket) => {
     socket.emit('pong!');
   });
 
-  socket.on('input', (data) => {
-
+  socket.on('mousemove', (data) => {
+    currentPlayer.target = data;
+    currentPlayer.rotate = Math.atan2((currentPlayer.target.y-currentPlayer.y),(currentPlayer.target.x-currentPlayer.x));
   });
 
   socket.on('disconnect', () => {

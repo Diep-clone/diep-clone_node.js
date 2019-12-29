@@ -35,7 +35,11 @@ function System(){ // 게임의 전체 진행 담당
   this.input = {
     isMouseOverUi: false,
     shot: 0,
-    k: false
+    k: false,
+    target: {
+      x:0,
+      y:0
+    }
   };
 
   this.drawObject = new DrawObject();
@@ -78,9 +82,14 @@ function System(){ // 게임의 전체 진행 담당
       if (tankList[key]){
         if (this.objectList.tank[tankList[key].id]){
           let objTank = this.objectList.tank[tankList[key].id];
-          objTank.setPosition(tankList[key].x,tankList[key].y);
           objTank.setRadius(tankList[key].radius);
-          objTank.setRotate(tankList[key].rotate);
+          if (objTank.id == this.controlTank.id){
+            objTank.setPosition(tankList[key].x,tankList[key].y);
+          }
+          else{
+            objTank.setPosition(tankList[key].x,tankList[key].y);
+            objTank.setRotate(tankList[key].rotate);
+          }
         }
         else{
           let objTank = this.createTankObject(tankList[key].id,this.tankList[tankList[key].type]);
@@ -96,7 +105,6 @@ function System(){ // 게임의 전체 진행 담당
   socket.on('objectDead', (type,data) => {
     switch(type){
       case "tank":
-      console.log(data.id,this.objectList.tank);
       this.objectList.tank[data.id].dead();
       break;
       default:
@@ -168,6 +176,7 @@ function System(){ // 게임의 전체 진행 담당
     let x = e.clientX * window.devicePixelRatio;
     let y = e.clientY * window.devicePixelRatio;
 
+    this.input.target = {x:x,y:y};
     this.input.isMouseOverUi = false;
 
     for (let i=0;i<this.uiObjectList.length;i++){
@@ -175,6 +184,14 @@ function System(){ // 게임의 전체 진행 담당
         this.input.isMouseOverUi = true;
       }
     }
+
+    let camera = this.drawObject.getCameraSet();
+
+    if (this.controlTank) {
+      //this.controlTank.setRotate(Math.atan2((y+(camera.y-this.controlTank.y)*camera.z),(x+(camera.x-this.controlTank.x)*camera.z)));
+      this.controlTank.setRotate(Math.atan2(y/camera.z+camera.y-this.controlTank.y,x/camera.z+camera.x-this.controlTank.x));
+    }
+    socket.emit('mousemove',{x:x/camera.z+camera.x,y:y/camera.z+camera.y});
 
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");

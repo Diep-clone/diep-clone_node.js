@@ -95,7 +95,7 @@ function Tank(){
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,((this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x)),((this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y)));
+    ctx.drawImage(this.canvas,((this.x + this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x)),((this.y + this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y)));
   }
 }
 Tank.prototype = new HealthShowObject();

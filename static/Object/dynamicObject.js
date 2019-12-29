@@ -15,6 +15,10 @@ function DynamicObject(){
     this.x = x;
     this.y = y;
   }
+  this.setDPosition = function(x,y){
+    this.dx = x;
+    this.dy = y;
+  }
   this.setRotate = function(rotate){
     this.rotate = rotate;
   }

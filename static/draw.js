@@ -16,14 +16,18 @@ function DrawObject(){ // 그리기 담당
   });
 
   this.camera = {
-    x:-100,
-    y:-100,
+    x:0,
+    y:0,
     z:2,
     uiz:1
   };
 
   this.getCanvasSize = function (){
     return [this.canvas.width,this.canvas.height,this.camera.uiz];
+  }
+
+  this.getCameraSet = function (){
+    return this.camera;
   }
 
   this.resize = function (){
@@ -34,6 +38,11 @@ function DrawObject(){ // 그리기 담당
 
   this.setCursor = function (style){
     this.canvas.style.cursor = style;
+  }
+
+  this.testDrawCircle = function (x,y){
+    this.ctx.fillStyle = "#000000";
+    this.ctx.fillRect(x,y,10,10);
   }
 
   this.cameraSet = function (tank){
