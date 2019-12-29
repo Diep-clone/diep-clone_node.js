@@ -41,8 +41,8 @@ io.on('connection', (socket) => {
 
     sockets[socket.id] = socket;
 
-    //mapSize.x+= 322.5;
-    //mapSize.y+= 322.5;
+    mapSize.x+= 322.5;
+    mapSize.y+= 322.5;
     users.push(currentPlayer);
     socket.emit('spawnTank', currentPlayer);
     io.emit('mapSize', mapSize);
@@ -58,8 +58,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    //mapSize.x-= 322.5;
-    //mapSize.y-= 322.5;
+    mapSize.x-= 322.5;
+    mapSize.y-= 322.5;
     io.emit('mapSize', mapSize);
   });
 });
