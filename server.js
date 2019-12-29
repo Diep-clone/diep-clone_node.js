@@ -4,6 +4,9 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 
+app.listen(process.env.PORT || 3000, () => {
+    console.log("잠깐, 지금 서버를 연거야?");
+});
 var io = require('socket.io')(server);
 
 var users = [];
@@ -76,7 +79,3 @@ function sendUpdates(){
 
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log("잠깐, 지금 서버를 연거야?");
-});
