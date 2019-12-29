@@ -16,7 +16,6 @@ let mapSize = {x: 0,y: 0};
 
 app.get('/', (req, res) => {
 return res.render('index.html');
-
 })
 
 function randomRange (x,y){
