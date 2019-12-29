@@ -27,7 +27,7 @@ function randomRange (x,y){
 
 io.on('connection', (socket) => {
 
-  var currentPlayer = {
+  let currentPlayer = {
     id:socket.id,
     x:randomRange(-mapSize.x/2,mapSize.x/2),
     y:randomRange(-mapSize.y/2,mapSize.y/2),
