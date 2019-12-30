@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
 function moveloop(){
   users.forEach((u) => {
     if (u){
-      if (!isNaN(u.moveRotate)){
+      if (u.moveRotate!=null && !isNaN(u.moveRotate)){
         u.dx+=Math.cos(u.moveRotate) * 0.2;
         u.dy+=Math.sin(u.moveRotate) * 0.2;
       }
