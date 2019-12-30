@@ -126,12 +126,7 @@ function moveloop(){
           new C(new V(users[i].x,users[i].y),users[i].radius),response);
 
           if (collided){
-            users[i].isCollision = true;
             u.isCollision = true;
-          }
-          else{
-            users[i].isCollision = false;
-            u.isCollision = false;
           }
         }
       }

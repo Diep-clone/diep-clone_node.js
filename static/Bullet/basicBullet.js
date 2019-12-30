@@ -4,7 +4,6 @@ function BasicBullet(tank,sx,sy){
   DynamicObject.apply(this, arguments);
   this.color = new RGB(0,176,225);
   this.owner = tank;
-  this.time = 3000;
   this.isDead = false;
   this.canvas = document.createElement("canvas");
   this.ctx = canvas.getContext("2d");
@@ -13,7 +12,7 @@ function BasicBullet(tank,sx,sy){
     if (this.isDead || this.health<0 || this.time<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
-        object_list[this.id] = null;
+        system.removeObject(this.id,'bullet');
         return;
       }
       else{

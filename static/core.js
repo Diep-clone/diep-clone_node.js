@@ -1,7 +1,7 @@
 function System(){ // 게임의 전체 진행 담당
   "use strict";
 
-  this.objectList = {tank:{}};
+  this.objectList = {tank:{},bullet:{}};
   this.uiObjectList = [];
 
   this.tankList = [
@@ -60,6 +60,13 @@ function System(){ // 게임의 전체 진행 담당
     return obj;
   }
 
+  this.createBulletObject = function (id,type){
+    let obj = new basicBullet();
+    this.objectList.bullet[id]=obj;
+    this.ojbectList.bullet[id].setId(id);
+    return obj;
+  }
+
   this.createUiObject = function (type){
     let obj = new type();
     this.uiObjectList.push(obj);
@@ -70,6 +77,9 @@ function System(){ // 게임의 전체 진행 담당
     switch (type){
       case "tank":
         this.objectList.tank[id] = null;
+      break;
+      case "bullet":
+        this.objectList.bullet[id] = null;
       break;
       default:
       break;
@@ -197,6 +207,7 @@ function System(){ // 게임의 전체 진행 담당
     }
 
     this.drawObject.backgroundDraw();
+    this.drawObject.objectDraw(this.objectList.bullet);
     this.drawObject.objectDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);
 
