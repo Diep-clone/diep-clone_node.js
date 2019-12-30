@@ -176,7 +176,13 @@ function System(){ // 게임의 전체 진행 담당
       this.controlTank.setRotate(Math.atan2(y/camera.z+camera.y-this.controlTank.y,x/camera.z+camera.x-this.controlTank.x));
     }
 
-    socket.emit('mousemove',{target:{x:this.input.target.x/camera.z+camera.x,y:this.input.target.y/camera.z+camera.y},rotate:this.controlTank.rotate});
+    socket.emit('mousemove',{
+      target:{
+        x:this.input.target.x/camera.z+camera.x,
+        y:this.input.target.y/camera.z+camera.y
+      },
+      rotate:this.controlTank.rotate
+    });
 
     this.drawObject.backgroundDraw();
     this.drawObject.objectDraw(this.objectList.tank);
