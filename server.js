@@ -85,7 +85,9 @@ io.on('connection', (socket) => {
 
   socket.on('input', (data) => {
     currentPlayer.moveRotate = data.moveRotate;
-    currentPlayer.isCollision = data.shot>0;
+    if (data.shot>0){
+
+    }
     if (data.changeTank){
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
     }
@@ -123,17 +125,17 @@ function moveloop(){
       }
 
       if (u.moveRotate!=null && !isNaN(u.moveRotate)){ // playerMove
-        u.dx+=Math.cos(u.moveRotate) * 0.2;
-        u.dy+=Math.sin(u.moveRotate) * 0.2;
+        u.dx+=Math.cos(u.moveRotate) * 0.07;
+        u.dy+=Math.sin(u.moveRotate) * 0.07;
       }
       u.x+=u.dx;
       u.y+=u.dy;
-      u.dx*=0.95;
-      u.dy*=0.95;
-      if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
-      if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
-      if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
-      if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
+      u.dx*=0.98;
+      u.dy*=0.98;
+      if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6,u.dx=0;
+      if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6,u.dx=0;
+      if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6,u.dy=0;
+      if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6,u.dy=0;
     }
   });
 }
