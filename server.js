@@ -96,8 +96,8 @@ function moveloop(){
   users.forEach((u) => {
     if (u){
       if (u.moveRotate != null){
-        u.dx+=Math.cos(u.moveRotate) * 0.8;
-        u.dy+=Math.sin(u.moveRotate) * 0.8;
+        u.dx+=Math.cos(u.moveRotate) * 0.4;
+        u.dy+=Math.sin(u.moveRotate) * 0.4;
       }
       u.x+=u.dx;
       u.y+=u.dy;
