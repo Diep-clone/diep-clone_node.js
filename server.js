@@ -118,6 +118,7 @@ function moveloop(){
   users.forEach((u) => {
     if (u){
       let playerCircle = new C(new V(u.x,u.y),u.radius);
+      u.isCollision = false;
       for (let i=0;i<users.length;i++){
         if (users[i] && u!=users[i]){
           let response = new SAT.Response();
