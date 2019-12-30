@@ -111,7 +111,9 @@ function System(){ // 게임의 전체 진행 담당
   socket.on('objectDead', (type,data) => {
     switch(type){
       case "tank":
-      this.objectList.tank[data.id].dead();
+        if (this.objectList.tank[data.id]){
+          this.objectList.tank[data.id].dead();
+        }
       break;
       default:
       break;
