@@ -74,8 +74,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('mousemove', (data) => {
-    currentPlayer.target = data;
-    currentPlayer.rotate = Math.atan2((currentPlayer.target.y-currentPlayer.y),(currentPlayer.target.x-currentPlayer.x));
+    currentPlayer.target = data.target;
+    currentPlayer.rotate = data.rotate;
   });
 
   socket.on('input', (data) => {

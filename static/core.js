@@ -170,6 +170,12 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
+    if (this.controlTank) {
+      this.controlTank.setRotate(Math.atan2(y/camera.z+camera.y-this.controlTank.y,x/camera.z+camera.x-this.controlTank.x));
+    }
+
+    socket.emit('mousemove',{target:{x:x/camera.z+camera.x,y:y/camera.z+camera.y},rotate:this.controlTank.rotate});
+
     this.drawObject.backgroundDraw();
     this.drawObject.objectDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);
@@ -192,11 +198,6 @@ function System(){ // 게임의 전체 진행 담당
     }
 
     let camera = this.drawObject.getCameraSet();
-
-    if (this.controlTank) {
-      this.controlTank.setRotate(Math.atan2(y/camera.z+camera.y-this.controlTank.y,x/camera.z+camera.x-this.controlTank.x));
-    }
-    socket.emit('mousemove',{x:x/camera.z+camera.x,y:y/camera.z+camera.y});
 
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");
