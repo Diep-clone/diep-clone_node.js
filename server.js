@@ -96,13 +96,13 @@ function moveloop(){
   users.forEach((u) => {
     if (u){
       if (u.moveRotate != null){
-        u.dx+=Math.cos(u.moveRotate) * 1;
-        u.dy+=Math.sin(u.moveRotate) * 1;
+        u.dx+=Math.cos(u.moveRotate) * 0.8;
+        u.dy+=Math.sin(u.moveRotate) * 0.8;
       }
       u.x+=u.dx;
       u.y+=u.dy;
-      u.dx*=0.8;
-      u.dy*=0.8;
+      u.dx*=0.9;
+      u.dy*=0.9;
     }
   });
 }
