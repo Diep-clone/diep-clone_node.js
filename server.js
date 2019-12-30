@@ -107,7 +107,7 @@ io.on('connection', (socket) => {
 function bulletSet(x,y,rotate,type){
   switch(type){
     case 0:
-
+      
     break;
     default:
     break;
