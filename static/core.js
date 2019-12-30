@@ -37,6 +37,8 @@ function System(){ // 게임의 전체 진행 담당
     shot: 0,
     moveRotate: null,
     moveVector: new Vector(0,0),
+    space: false,
+    leftMouse: false,
     w: false,
     a: false,
     s: false,
@@ -89,11 +91,15 @@ function System(){ // 게임의 전체 진행 담당
         if (this.objectList.tank[tankList[key].id]){
           let objTank = this.objectList.tank[tankList[key].id];
           objTank.setRadius(tankList[key].radius);
+          objTank.setPosition(tankList[key].x,tankList[key].y);
+          console.log(tankList[key].isCollision);
+          if (tankList[key].isCollision)
+            objTank.hit(0.1 * this.tick * 0.05);
           if (objTank.id == this.controlTank.id){
-            objTank.setPosition(tankList[key].x,tankList[key].y);
+
           }
           else{
-            objTank.setPosition(tankList[key].x,tankList[key].y);
+
             objTank.setRotate(tankList[key].rotate);
           }
         }
@@ -219,12 +225,15 @@ function System(){ // 게임의 전체 진행 담당
 
   this.setMoveRotate = function (){
     this.input.moveRotate = (this.input.moveVector.mag()>0)?Math.atan2(this.input.moveVector.y,this.input.moveVector.x):null;
-    socket.emit('input',this.input);
   }
 
   window.onmousedown = function (e){
     switch (e.button){
       case 0: // 좌클릭
+      if (!this.input.leftMouse){
+        this.input.shot++;
+        this.input.leftMouse = true;
+      }
       break;
       case 1: // 마우스 휠 클릭
       break;
@@ -233,11 +242,16 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
+    socket.emit('input',this.input);
   }.bind(this);
 
   window.onmouseup = function (e){
     switch (e.button){
       case 0: // 좌클릭
+      if (this.input.leftMouse){
+        this.input.shot--;
+        this.input.leftMouse = false;
+      }
       break;
       case 1: // 마우스 휠 클릭
       break;
@@ -246,11 +260,16 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
+    socket.emit('input',this.input);
   }.bind(this);
 
   window.onkeydown = function(e){
     switch (e.keyCode){
       case 32: // Space키
+      if (!this.input.space){
+        this.input.shot++;
+        this.input.space = true;
+      }
       break;
       case 38: // 위쪽 방향키
       case 87: // W키
@@ -292,11 +311,16 @@ function System(){ // 게임의 전체 진행 담당
       break;
     }
     this.setMoveRotate();
+    socket.emit('input',this.input);
   }.bind(this);
 
   window.onkeyup = function (e){
     switch (e.keyCode){
       case 32: // Space키
+        if (this.input.space){
+          this.input.shot--;
+          this.input.space = false;
+        }
       break;
       case 38: // 위쪽 방향키
       case 87: // W키
@@ -337,5 +361,6 @@ function System(){ // 게임의 전체 진행 담당
       break;
     }
     this.setMoveRotate();
+    socket.emit('input',this.input);
   }.bind(this);
 }

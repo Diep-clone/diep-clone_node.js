@@ -3,13 +3,17 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-
+const SAT = require('sat');
 const io = require('socket.io')(server);
+
+let V = SAT.Vector;
+let C = SAT.Circle;
 
 let users = [];
 let sockets = {};
 
 let mapSize = {x: 0,y: 0};
+let tankLength = 11;
 
 app.use(express.static(__dirname + '/static'));
 app.get('/', (req, res) => {
@@ -45,7 +49,8 @@ io.on('connection', (socket) => {
       x:0,
       y:0
     },
-    type:0
+    type:0,
+    isCollision:false,
   };
 
   socket.on('login', (player) => {
@@ -80,6 +85,7 @@ io.on('connection', (socket) => {
 
   socket.on('input', (data) => {
     currentPlayer.moveRotate = data.moveRotate;
+    currentPlayer.isCollision = data.shot>0;
   });
 
   socket.on('disconnect', () => {
@@ -95,7 +101,16 @@ io.on('connection', (socket) => {
 function moveloop(){
   users.forEach((u) => {
     if (u){
-      if (u.moveRotate!=null && !isNaN(u.moveRotate)){
+      let playerCircle = new C(new V(u.x,u.y),u.radius);
+      for (let i=0;i<users.length;i++){
+        if (users[i]){
+          let response = new SAT.Response();
+          let collided = SAT.testCircleCircle(playerCircle,
+          new C(new V(users[i].x,users[i].y),users[i].radius),response);
+        }
+      }
+
+      if (u.moveRotate!=null && !isNaN(u.moveRotate)){ // playerMove
         u.dx+=Math.cos(u.moveRotate) * 0.2;
         u.dy+=Math.sin(u.moveRotate) * 0.2;
       }
