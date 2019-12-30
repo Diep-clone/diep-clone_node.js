@@ -103,6 +103,10 @@ function moveloop(){
       u.y+=u.dy;
       u.dx*=0.95;
       u.dy*=0.95;
+      if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
+      if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
+      if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
+      if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
     }
   });
 }
