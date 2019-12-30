@@ -93,6 +93,7 @@ function System(){ // 게임의 전체 진행 담당
           let objTank = this.objectList.tank[tankList[key].id];
           objTank.setRadius(tankList[key].radius);
           objTank.setPosition(tankList[key].x,tankList[key].y);
+          objTank.setDPosition(tankList[key].dx,tankList[key].dy);
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != this.controlTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
@@ -184,7 +185,7 @@ function System(){ // 게임의 전체 진행 담당
     let camera = this.drawObject.getCameraSet();
 
     if (this.controlTank) {
-      this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y,this.input.target.x/camera.z+camera.x-this.controlTank.x));
+      this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y-this.controlTank.dy,this.input.target.x/camera.z+camera.x-this.controlTank.x-this.controlTank.dx));
 
       socket.emit('mousemove',{
         target:{

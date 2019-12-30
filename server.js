@@ -10,6 +10,7 @@ let V = SAT.Vector;
 let C = SAT.Circle;
 
 let users = [];
+let bullets = [];
 let sockets = {};
 
 let mapSize = {x: 0,y: 0};
@@ -102,6 +103,16 @@ io.on('connection', (socket) => {
     io.emit('mapSize', mapSize);
   });
 });
+
+function bulletSet(x,y,rotate,type){
+  switch(type){
+    case 0:
+
+    break;
+    default:
+    break;
+  }
+}
 
 function moveloop(){
   users.forEach((u) => {
