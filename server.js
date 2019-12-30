@@ -106,10 +106,19 @@ function moveloop(){
     if (u){
       let playerCircle = new C(new V(u.x,u.y),u.radius);
       for (let i=0;i<users.length;i++){
-        if (users[i]){
+        if (users[i] && u!=users[i]){
           let response = new SAT.Response();
           let collided = SAT.testCircleCircle(playerCircle,
           new C(new V(users[i].x,users[i].y),users[i].radius),response);
+
+          if (collided){
+            users[i].isCollision = true;
+            u.isCollision = true;
+          }
+          else{
+            users[i].isCollision = false;
+            u.isCollision = false;
+          }
         }
       }
 
