@@ -172,17 +172,19 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
-    if (this.controlTank) {
-      this.controlTank.setRotate(Math.atan2(y/camera.z+camera.y-this.controlTank.y,x/camera.z+camera.x-this.controlTank.x));
-    }
+    let camera = this.drawObject.getCameraSet();
 
-    socket.emit('mousemove',{
-      target:{
-        x:this.input.target.x/camera.z+camera.x,
-        y:this.input.target.y/camera.z+camera.y
-      },
-      rotate:this.controlTank.rotate
-    });
+    if (this.controlTank) {
+      this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y,this.input.target.x/camera.z+camera.x-this.controlTank.x));
+
+      socket.emit('mousemove',{
+        target:{
+          x:this.input.target.x/camera.z+camera.x,
+          y:this.input.target.y/camera.z+camera.y
+        },
+        rotate:this.controlTank.rotate
+      });
+    }
 
     this.drawObject.backgroundDraw();
     this.drawObject.objectDraw(this.objectList.tank);
@@ -205,7 +207,7 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
-    let camera = this.drawObject.getCameraSet();
+
 
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");
