@@ -33,7 +33,7 @@ function DrawObject(){ // 그리기 담당
   this.resize = function (){
     this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
-    this.ctx.imageSmoothingEnabled = false;
+    //this.ctx.imageSmoothingEnabled = false;
   }
 
   this.setCursor = function (style){

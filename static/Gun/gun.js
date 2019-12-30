@@ -7,7 +7,7 @@ function Gun(paths,dir){
   this.addRotate = dir;
 
   this.animate = function (e) {
-    
+
   }
 
   this.setParentCanvasSize = function (tank,camera){
@@ -19,6 +19,8 @@ function Gun(paths,dir){
     for (let i=0;i<this.point.length;i++){
       let x = Math.floor(this.point[i][0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx);
       let y = Math.floor(this.point[i][0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.sin(rotate+this.addRotate)*camera.z*radius+yy);
+      //let x = this.point[i][0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;
+      //let y = this.point[i][0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[i][1]*Math.sin(rotate+this.addRotate)*camera.z*radius+yy;
 
       if (x<0){
         tank.canvasSize.x += -x;
@@ -44,6 +46,8 @@ function Gun(paths,dir){
     let radius = tank.radius;
     let xx = Math.floor(tank.canvasPos.x);
     let yy = Math.floor(tank.canvasPos.y);
+    //let xx = tank.canvasPos.x;
+    //let yy = tank.canvasPos.y;
 
     ctx.beginPath();
     let x = this.point[0][0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius+this.point[0][1]*Math.cos(rotate+this.addRotate)*camera.z*radius+xx;

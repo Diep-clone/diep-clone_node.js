@@ -90,12 +90,18 @@ function Tank(){
     this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
     this.ctx.beginPath();
     this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
+    //this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();
     this.ctx.stroke();
     this.ctx.closePath();
 
+    ctx.save();
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,((this.x + this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x)),((this.y + this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y)));
+    let x = ((this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x));
+    let y = ((this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
+    ctx.drawImage(this.canvas,x,y);
+    //ctx.drawImage(this.canvas,((this.x + this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y + this.dy - camera.y) * camera.z-this.canvasPos.y));
+    ctx.restore();
   }
 }
 Tank.prototype = new HealthShowObject();
