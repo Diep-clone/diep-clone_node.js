@@ -36,6 +36,7 @@ function System(){ // 게임의 전체 진행 담당
     isMouseOverUi: false,
     shot: 0,
     moveRotate: null,
+    moveVector: new Vector(0,0),
     w: false,
     a: false,
     s: false,
@@ -205,6 +206,11 @@ function System(){ // 게임의 전체 진행 담당
     }
   }.bind(this);
 
+  this.setMoveRotate = function (){
+    this.input.moveRotate = (this.input.moveVector.mag()>0)?Math.atan2(this.input.moveVector.y,this.input.moveVector.x):null;
+    socket.emit('input',this.input);
+  }
+
   window.onmousedown = function (e){
     switch (e.button){
       case 0: // 좌클릭
@@ -235,17 +241,33 @@ function System(){ // 게임의 전체 진행 담당
     switch (e.keyCode){
       case 32: // Space키
       break;
+      case 38: // 위쪽 방향키
       case 87: // W키
-        this.input.moveRotate = -Math.PI / 2;
+        if (!this.input.w){
+          this.input.moveVector.y-=1;
+          this.input.w=true;
+        }
       break;
+      case 37: // 왼쪽 방향키
       case 65: // A키
-        this.input.moveRotate = Math.PI;
+        if (!this.input.a){
+          this.input.moveVector.x-=1;
+          this.input.a=true;
+        }
       break;
+      case 40: // 아래쪽 방향키
       case 83: // S키
-        this.input.moveRotate = Math.PI / 2;
+        if (!this.input.s){
+          this.input.moveVector.y+=1;
+          this.input.s=true;
+        }
       break;
+      case 39: // 오른쪽 방향키
       case 68: // D키
-        this.input.moveRotate = 0;
+        if (!this.input.d){
+          this.input.moveVector.x+=1;
+          this.input.d=true;
+        }
       break;
       case 75: // K키
         //this.input.k = true;
@@ -258,24 +280,40 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
-    socket.emit('input',this.input);
+    this.setMoveRotate();
   }.bind(this);
 
   window.onkeyup = function (e){
     switch (e.keyCode){
       case 32: // Space키
       break;
+      case 38: // 위쪽 방향키
       case 87: // W키
-        this.input.moveRotate = null;
+        if (this.input.w){
+          this.input.moveVector.y+=1;
+          this.input.w=false;
+        }
       break;
+      case 37: // 왼쪽 방향키
       case 65: // A키
-        this.input.moveRotate = null;
+        if (this.input.a){
+          this.input.moveVector.x+=1;
+          this.input.a=false;
+        }
       break;
+      case 40: // 아래쪽 방향키
       case 83: // S키
-        this.input.moveRotate = null;
+        if (this.input.s){
+          this.input.moveVector.y-=1;
+          this.input.s=false;
+        }
       break;
+      case 39: // 오른쪽 방향키
       case 68: // D키
-        this.input.moveRotate = null;
+        if (this.input.d){
+          this.input.moveVector.x-=1;
+          this.input.d=false;
+        }
       break;
       case 75: // K키
         //this.input.k = false;
@@ -287,6 +325,6 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
-    socket.emit('input',this.input);
+    this.setMoveRotate();
   }.bind(this);
 }
