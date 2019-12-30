@@ -143,10 +143,10 @@ function moveloop(){
       u.y+=u.dy;
       u.dx*=0.98;
       u.dy*=0.98;
-      if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6,u.dx=0;
-      if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6,u.dx=0;
-      if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6,u.dy=0;
-      if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6,u.dy=0;
+      if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
+      if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
+      if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
+      if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
     }
   });
 }
