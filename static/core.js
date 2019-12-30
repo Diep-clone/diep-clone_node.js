@@ -44,6 +44,7 @@ function System(){ // 게임의 전체 진행 담당
     s: false,
     d: false,
     k: false,
+    changeTank: false,
     target: {
       x:0,
       y:0
@@ -92,7 +93,9 @@ function System(){ // 게임의 전체 진행 담당
           let objTank = this.objectList.tank[tankList[key].id];
           objTank.setRadius(tankList[key].radius);
           objTank.setPosition(tankList[key].x,tankList[key].y);
-          console.log(tankList[key].isCollision);
+          let tankType = new this.tankList[tankList[key].type]().tankType;
+          if (tankType != this.controlTank.tankType)
+            objTank.changeTank(this.tankList[tankList[key].type]);
           if (tankList[key].isCollision)
             objTank.hit(0.1 * this.tick * 0.05);
           if (objTank.id == this.controlTank.id){
@@ -264,39 +267,40 @@ function System(){ // 게임의 전체 진행 담당
   }.bind(this);
 
   window.onkeydown = function(e){
+    let g = false;
     switch (e.keyCode){
       case 32: // Space키
       if (!this.input.space){
         this.input.shot++;
-        this.input.space = true;
+        g = this.input.space = true;
       }
       break;
       case 38: // 위쪽 방향키
       case 87: // W키
         if (!this.input.w){
           this.input.moveVector.y-=1;
-          this.input.w=true;
+          g = this.input.w=true;
         }
       break;
       case 37: // 왼쪽 방향키
       case 65: // A키
         if (!this.input.a){
           this.input.moveVector.x-=1;
-          this.input.a=true;
+          g = this.input.a=true;
         }
       break;
       case 40: // 아래쪽 방향키
       case 83: // S키
         if (!this.input.s){
           this.input.moveVector.y+=1;
-          this.input.s=true;
+          g = this.input.s=true;
         }
       break;
       case 39: // 오른쪽 방향키
       case 68: // D키
         if (!this.input.d){
           this.input.moveVector.x+=1;
-          this.input.d=true;
+          g = this.input.d=true;
         }
       break;
       case 75: // K키
@@ -305,13 +309,15 @@ function System(){ // 게임의 전체 진행 담당
       case 79: // O키
       break;
       case 220: // \키
-        //this.controlTank.changeTank(this.tankList[Math.floor(Math.random()*(this.tankList.length-1))]);
+        if (!this.input.changeTank){
+          g = this.input.changeTank = true;
+        }
       break;
       default:
       break;
     }
     this.setMoveRotate();
-    socket.emit('input',this.input);
+    if (g) socket.emit('input',this.input);
   }.bind(this);
 
   window.onkeyup = function (e){
@@ -356,6 +362,9 @@ function System(){ // 게임의 전체 진행 담당
       case 79: // O키
       break;
       case 220: // \키
+        if (this.input.changeTank){
+          this.input.changeTank = false;
+        }
       break;
       default:
       break;

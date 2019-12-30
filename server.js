@@ -86,6 +86,9 @@ io.on('connection', (socket) => {
   socket.on('input', (data) => {
     currentPlayer.moveRotate = data.moveRotate;
     currentPlayer.isCollision = data.shot>0;
+    if (data.changeTank){
+      currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
+    }
   });
 
   socket.on('disconnect', () => {
