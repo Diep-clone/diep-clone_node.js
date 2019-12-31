@@ -107,6 +107,7 @@ function System(){ // 게임의 전체 진행 담당
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != this.controlTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
+          console.log(tankList[key].isCollision);
           if (tankList[key].isCollision)
             objTank.hit(0.1 * this.tick * 0.05);
           if (objTank.id == this.controlTank.id){

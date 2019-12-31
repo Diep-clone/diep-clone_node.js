@@ -6,6 +6,10 @@ const server = require('http').createServer(app);
 const SAT = require('sat');
 const io = require('socket.io')(server);
 
+const quadtree = require('simple-quadtree');
+
+let tree;
+
 let V = SAT.Vector;
 let C = SAT.Circle;
 
@@ -20,6 +24,16 @@ app.use(express.static(__dirname + '/static'));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 })
+
+function findIndex(arr,id){
+  let len = arr.length;
+
+  while (len--){
+    if (arr[len].id === id)
+      return len;
+  }
+  return -1;
+}
 
 function randomRange (x,y){
   if (x>y){
@@ -41,6 +55,8 @@ io.on('connection', (socket) => {
     id:socket.id,
     x:0,
     y:0,
+    w:10,
+    h:10,
     dx:0,
     dy:0,
     radius:13,
@@ -66,6 +82,8 @@ io.on('connection', (socket) => {
 
       currentPlayer.x = randomRange(-mapSize.x/2,mapSize.x/2);
       currentPlayer.y = randomRange(-mapSize.y/2,mapSize.y/2);
+
+      tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
       index = users.length;
       users.push(currentPlayer);
@@ -98,7 +116,12 @@ io.on('connection', (socket) => {
     console.log('안녕 잘가!!!');
     mapSize.x-= 322.5;
     mapSize.y-= 322.5;
-    users[index] = null;
+
+    tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
+
+    if (findIndex(users,currentPlayer.id) > -1){
+      users.splice(findIndex(users,currentPlayer.id),1);
+    }
     io.emit('objectDead','tank',currentPlayer);
     io.emit('mapSize', mapSize);
   });
@@ -107,43 +130,71 @@ io.on('connection', (socket) => {
 function bulletSet(x,y,rotate,type){
   switch(type){
     case 0:
-      
+
     break;
     default:
     break;
   }
 }
 
+function movePlayer(u){
+  if (u.moveRotate!=null && !isNaN(u.moveRotate)){ // playerMove
+    u.dx+=Math.cos(u.moveRotate) * 0.07;
+    u.dy+=Math.sin(u.moveRotate) * 0.07;
+  }
+  u.x+=u.dx;
+  u.y+=u.dy;
+  u.dx*=0.98;
+  u.dy*=0.98;
+  if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
+  if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
+  if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
+  if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
+}
+
+function tickPlayer(currentPlayer){
+  movePlayer(currentPlayer);
+
+  function check(user){
+    if (user.id !== currentPlayer.id){
+      let response = new SAT.Response();
+      let collided = SAT.testCircleCircle(playerCircle,
+      new C(new V(user.x,user.y),user.radius),response);
+
+      if (collided){
+        user.isCollision = true;
+        response.aUser = currentPlayer;
+        response.bUser = {
+          id: user.id,
+          name: user.name,
+          x: user.x,
+          y: user.y,
+        }
+        playerCollisions.push(response);
+      }
+    }
+  }
+
+  function collisionCheck(collision){
+    collision.aUser.isCollision = true;
+  }
+
+  var playerCircle = new C(new V(currentPlayer.x,currentPlayer.y),currentPlayer.radius);
+
+  currentPlayer.isCollision = false;
+
+  tree.clear();
+  users.forEach(tree.put);
+  var playerCollisions = [];
+
+  var otherUsers = tree.get(currentPlayer,check);
+
+  playerCollisions.forEach(collisionCheck);
+}
+
 function moveloop(){
   users.forEach((u) => {
-    if (u){
-      let playerCircle = new C(new V(u.x,u.y),u.radius);
-      u.isCollision = false;
-      for (let i=0;i<users.length;i++){
-        if (users[i] && u!=users[i]){
-          let response = new SAT.Response();
-          let collided = SAT.testCircleCircle(playerCircle,
-          new C(new V(users[i].x,users[i].y),users[i].radius),response);
-
-          if (collided){
-            u.isCollision = true;
-          }
-        }
-      }
-
-      if (u.moveRotate!=null && !isNaN(u.moveRotate)){ // playerMove
-        u.dx+=Math.cos(u.moveRotate) * 0.07;
-        u.dy+=Math.sin(u.moveRotate) * 0.07;
-      }
-      u.x+=u.dx;
-      u.y+=u.dy;
-      u.dx*=0.98;
-      u.dy*=0.98;
-      if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
-      if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
-      if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
-      if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
-    }
+    tickPlayer(u);
   });
 }
 
