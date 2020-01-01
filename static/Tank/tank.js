@@ -46,8 +46,8 @@ function Tank(){
       this.guns[i].animate();
     }
 
-    this.x+=this.dx;
-    this.y+=this.dy;
+    //this.x+=this.dx;
+    //this.y+=this.dy;
   }
   this.setName = function (name){
     this.name = name;

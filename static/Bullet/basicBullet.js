@@ -19,10 +19,11 @@ function BasicBullet(){
       else{
         this.opacity -= 0.1 * tick * 0.05;
         this.radius += 0.3 * tick * 0.05;
+        this.x+=this.dx;
+        this.y+=this.dy;
       }
     }
-    this.x+=this.dx;
-    this.y+=this.dy;
+
   }
   this.dead = function(){
     this.isDead = true;
@@ -51,7 +52,7 @@ function BasicBullet(){
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,(this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
+    ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
   }
 }
 BasicBullet.prototype = new DynamicObject();
