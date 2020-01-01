@@ -162,7 +162,6 @@ function tickPlayer(currentPlayer){
       new C(new V(user.x,user.y),user.radius),response);
 
       if (collided){
-        user.isCollision = true;
         response.aUser = currentPlayer;
         response.bUser = {
           id: user.id,
@@ -173,10 +172,11 @@ function tickPlayer(currentPlayer){
         playerCollisions.push(response);
       }
     }
+
+    return true;
   }
 
   function collisionCheck(collision){
-    console.log("collision");
     collision.aUser.isCollision = true;
   }
 
