@@ -44,6 +44,28 @@ function randomRange (x,y){
   return Math.random() * (y-x) + x;
 }
 
+function setGun(user){
+  switch(user.type){
+    case 0:
+      user.gun = [{
+        bulletType:1,
+        speed:1,
+        damage:1,
+        health:1,
+        radius:1,
+        coolTime:1,
+        shotTime:0,
+        shotPTime:0,
+        autoShot:false,
+        pos:{x:0,y:1.8},
+        dir:{rotate:null,distance:0}
+      }];
+    break;
+    default:
+    break;
+  }
+}
+
 io.on('connection', (socket) => {
 
   mapSize.x+= 322.5;
@@ -55,17 +77,37 @@ io.on('connection', (socket) => {
     id:socket.id,
     x:0,
     y:0,
-    w:13,
-    h:13,
+    w:10,
+    h:10,
     dx:0,
     dy:0,
     radius:13,
     rotate:0,
     name:"",
+    mouse:{
+      left: false,
+      right: false
+    },
     target:{
       x:0,
       y:0
     },
+    guns:[],/*
+    {
+      bulletType:int,
+      speed:%,
+      damage:%,
+      health:%,
+      radius:%,
+      coolTime:%,
+      shotTime:0.0f,
+      shotPTime:%,
+      autoShot:true/false,
+      pos:{x:%,y:%},
+      dir:{rotate:pi,distance:%}
+    }
+    */
+    stats:[0,0,0,0,0,0,0,0],
     type:0,
     isCollision:false,
   };
@@ -104,11 +146,10 @@ io.on('connection', (socket) => {
 
   socket.on('input', (data) => {
     currentPlayer.moveRotate = data.moveRotate;
-    if (data.shot>0){
-
-    }
+    currentPlayer.mouse.left = data.shot>0;
     if (data.changeTank){
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
+      setGun(currentPlayer);
     }
   });
 
@@ -127,16 +168,6 @@ io.on('connection', (socket) => {
   });
 });
 
-function bulletSet(x,y,rotate,type){
-  switch(type){
-    case 0:
-
-    break;
-    default:
-    break;
-  }
-}
-
 function movePlayer(u){
   if (u.moveRotate!=null && !isNaN(u.moveRotate)){ // playerMove
     u.dx+=Math.cos(u.moveRotate) * 0.07;
@@ -152,8 +183,29 @@ function movePlayer(u){
   if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
 }
 
+function bulletSet(user){
+  for (let i=0;i<user.gun.length;i++){
+    if ((user.mouse.left || user.gun[i].autoShot) && user.gun[i].coolTime == 0){
+      bullets.push({
+        type: user.gun[i].bulletType,
+        x: user.x + Math.cos(user.rotate-Math.PI/2) * user.gun[i].pos.x + Math.cos(user.rotate) * user.gun[i].pos.y,
+        y: user.y + Math.sin(user.rotate-Math.PI/2) * user.gun[i].pos.x + Math.sin(user.rotate) * user.gun[i].pos.y,
+        rotate: user.gun[i].dir.rotate===null?user.rotate:user.gun[i].dir.rotate,
+        dx: Math.cos(this.rotate) * 1,
+        dy: Math.sin(this.rotate) * 1,
+        speed: 0,
+        health: 8,
+        damage: 7,
+        radius: 7
+      });
+      user.gun[i].coolTime = 0.6 * user.gun[i].shotTime;
+    }
+  }
+}
+
 function tickPlayer(currentPlayer){
   movePlayer(currentPlayer);
+  bulletSet(currentPlayer);
 
   function check(user){
     if (user.id !== currentPlayer.id){
@@ -201,7 +253,7 @@ function moveloop(){
 
 function sendUpdates(){
   users.forEach((u) => {
-    sockets[u.id].emit('objectList',users);
+    sockets[u.id].emit('objectList',users,bullets);
   })
 }
 
