@@ -55,8 +55,8 @@ io.on('connection', (socket) => {
     id:socket.id,
     x:0,
     y:0,
-    w:10,
-    h:10,
+    w:13,
+    h:13,
     dx:0,
     dy:0,
     radius:13,
@@ -176,6 +176,7 @@ function tickPlayer(currentPlayer){
   }
 
   function collisionCheck(collision){
+    console.log("collision");
     collision.aUser.isCollision = true;
   }
 
@@ -200,9 +201,7 @@ function moveloop(){
 
 function sendUpdates(){
   users.forEach((u) => {
-    if (u){
-      sockets[u.id].emit('objectList',users);
-    }
+    sockets[u.id].emit('objectList',users);
   })
 }
 
