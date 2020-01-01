@@ -175,15 +175,15 @@ io.on('connection', (socket) => {
 function moveObject(obj){
   obj.x+=obj.dx;
   obj.y+=obj.dy;
-  obj.dx*=0.98;
-  obj.dy*=0.98;
+  obj.dx*=0.97;
+  obj.dy*=0.97;
 }
 
 function moveBullet(b){
   switch(b.type){
     case 1:
-      b.dx+=Math.cos(b.rotate) * 0.07;
-      b.dy+=Math.sin(b.rotate) * 0.07;
+      b.dx+=Math.cos(b.rotate) * 0.08;
+      b.dy+=Math.sin(b.rotate) * 0.08;
     break;
     default:
     break;

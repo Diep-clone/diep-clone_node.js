@@ -23,7 +23,6 @@ function BasicBullet(){
         this.y+=this.dy;
       }
     }
-
   }
   this.dead = function(){
     this.isDead = true;
