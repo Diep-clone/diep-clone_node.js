@@ -16,7 +16,7 @@ function Tank(){
   this.r = 0;
   this.w = 0;
 
-  this.animate = function(e,tick){
+  this.animate = function(tick){
     if (this.isDead || this.health<0){
       if (this.opacity <= 0.1){
         this.opacity = 0;
@@ -42,10 +42,12 @@ function Tank(){
     }
     this.r= Math.max(this.r - 0.2 * tick * 0.05,0);
 
-    //this.rotate += 0.02 * tick * 0.05;
     for (let i=0;i<this.guns.length;i++){
-      this.guns[i].animate(e);
+      this.guns[i].animate();
     }
+
+    this.x+=this.dx;
+    this.y+=this.dy;
   }
   this.setName = function (name){
     this.name = name;
@@ -95,13 +97,9 @@ function Tank(){
     this.ctx.stroke();
     this.ctx.closePath();
 
-    ctx.save();
     ctx.globalAlpha = this.opacity;
-    let x = ((this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x));
-    let y = ((this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
-    ctx.drawImage(this.canvas,x,y);
+    ctx.drawImage(this.canvas,(this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
     //ctx.drawImage(this.canvas,((this.x + this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y + this.dy - camera.y) * camera.z-this.canvasPos.y));
-    ctx.restore();
   }
 }
 Tank.prototype = new HealthShowObject();

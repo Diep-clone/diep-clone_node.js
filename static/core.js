@@ -61,9 +61,9 @@ function System(){ // 게임의 전체 진행 담당
   }
 
   this.createBulletObject = function (id,type){
-    let obj = new basicBullet();
+    let obj = new type();
     this.objectList.bullet[id]=obj;
-    this.ojbectList.bullet[id].setId(id);
+    this.objectList.bullet[id].setId(id);
     return obj;
   }
 
@@ -96,7 +96,7 @@ function System(){ // 게임의 전체 진행 담당
     this.controlTank.setName(data.name);
   });
 
-  socket.on('objectList', (tankList) => {
+  socket.on('objectList', (tankList,bulletList) => {
     for (let key in tankList){ // 탱크 지정
       if (tankList[key]){
         if (this.objectList.tank[tankList[key].id]){
@@ -109,11 +109,7 @@ function System(){ // 게임의 전체 진행 담당
             objTank.changeTank(this.tankList[tankList[key].type]);
           if (tankList[key].isCollision)
             objTank.hit(0.1 * this.tick * 0.05);
-          if (objTank.id == this.controlTank.id){
-
-          }
-          else{
-
+          if (objTank.id !== this.controlTank.id){
             objTank.setRotate(tankList[key].rotate);
           }
         }
@@ -126,6 +122,23 @@ function System(){ // 게임의 전체 진행 담당
         }
       }
     }
+    for (let key in bulletList){ // 총알 지정
+      if (bulletList[key]){
+        if (this.objectList.bullet[bulletList[key].id]){
+          let objBullet = this.objectList.bullet[bulletList[key].id];
+          objBullet.setRadius(bulletList[key].radius);
+          objBullet.setPosition(bulletList[key].x,bulletList[key].y);
+          objBullet.setDPosition(bulletList[key].dx,bulletList[key].dy);
+          objBullet.setRotate(bulletList[key].rotate);
+        }
+        else{
+          let objBullet = this.createBulletObject(bulletList[key].id,BasicBullet,bulletList[key].owner);
+          objBullet.setPosition(bulletList[key].x,bulletList[key].y);
+          objBullet.setRadius(bulletList[key].radius);
+          objBullet.setRotate(bulletList[key].rotate);
+        }
+      }
+    }
   });
 
   socket.on('objectDead', (type,data) => {
@@ -135,6 +148,10 @@ function System(){ // 게임의 전체 진행 담당
           this.objectList.tank[data.id].dead();
         }
       break;
+      case "bullet":
+        if (this.objectList.bullet[data.id]){
+          this.objectList.bullet[data.id].dead();
+        }
       default:
       break;
     }
@@ -188,7 +205,13 @@ function System(){ // 게임의 전체 진행 담당
 
     for (let key in this.objectList.tank){
       if (this.objectList.tank[key]){
-        this.objectList.tank[key].animate(null,this.tick);
+        this.objectList.tank[key].animate(this.tick);
+      }
+    }
+
+    for (let key in this.objectList.bullet){
+      if (this.objectList.bullet[key]){
+        this.objectList.bullet[key].animate(this.tick);
       }
     }
 

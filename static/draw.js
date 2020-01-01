@@ -56,8 +56,8 @@ function DrawObject(){ // 그리기 담당
     if (tank){
       //this.camera.x = tank.x - 100;
       //this.camera.y = tank.y - 100;
-      this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);
-      this.camera.y=(tank.y-this.canvas.height/2/this.camera.z);
+      this.camera.x=(tank.x-tank.dx-this.canvas.width/2/this.camera.z);
+      this.camera.y=(tank.y-tank.dy-this.canvas.height/2/this.camera.z);
     }
   }
 

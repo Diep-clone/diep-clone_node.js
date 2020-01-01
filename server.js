@@ -15,6 +15,7 @@ let C = SAT.Circle;
 
 let users = [];
 let bullets = [];
+let bulletId = 0;
 let sockets = {};
 
 let mapSize = {x: 0,y: 0};
@@ -47,7 +48,7 @@ function randomRange (x,y){
 function setGun(user){
   switch(user.type){
     case 0:
-      user.gun = [{
+      user.guns = [{
         bulletType:1,
         speed:1,
         damage:1,
@@ -57,6 +58,7 @@ function setGun(user){
         shotTime:0,
         shotPTime:0,
         autoShot:false,
+        life:3,
         pos:{x:0,y:1.8},
         dir:{rotate:null,distance:0}
       }];
@@ -103,6 +105,7 @@ io.on('connection', (socket) => {
       shotTime:0.0f,
       shotPTime:%,
       autoShot:true/false,
+      life:int,
       pos:{x:%,y:%},
       dir:{rotate:pi,distance:%}
     }
@@ -124,6 +127,7 @@ io.on('connection', (socket) => {
 
       currentPlayer.x = randomRange(-mapSize.x/2,mapSize.x/2);
       currentPlayer.y = randomRange(-mapSize.y/2,mapSize.y/2);
+      setGun(currentPlayer);
 
       tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
@@ -168,15 +172,31 @@ io.on('connection', (socket) => {
   });
 });
 
+function moveObject(obj){
+  obj.x+=obj.dx;
+  obj.y+=obj.dy;
+  obj.dx*=0.98;
+  obj.dy*=0.98;
+}
+
+function moveBullet(b){
+  switch(b.type){
+    case 1:
+      b.dx+=Math.cos(b.rotate) * 0.07;
+      b.dy+=Math.sin(b.rotate) * 0.07;
+    break;
+    default:
+    break;
+  }
+  moveObject(b);
+}
+
 function movePlayer(u){
   if (u.moveRotate!=null && !isNaN(u.moveRotate)){ // playerMove
     u.dx+=Math.cos(u.moveRotate) * 0.07;
     u.dy+=Math.sin(u.moveRotate) * 0.07;
   }
-  u.x+=u.dx;
-  u.y+=u.dy;
-  u.dx*=0.98;
-  u.dy*=0.98;
+  moveObject(u);
   if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
   if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
   if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
@@ -184,22 +204,27 @@ function movePlayer(u){
 }
 
 function bulletSet(user){
-  for (let i=0;i<user.gun.length;i++){
-    if ((user.mouse.left || user.gun[i].autoShot) && user.gun[i].coolTime == 0){
+  for (let i=0;i<user.guns.length;i++){
+    if ((user.mouse.left || user.guns[i].autoShot) && user.guns[i].shotTime < 0){
+      let rotate = user.guns[i].dir.rotate===null?user.rotate:user.guns[i].dir.rotate;
       bullets.push({
-        type: user.gun[i].bulletType,
-        x: user.x + Math.cos(user.rotate-Math.PI/2) * user.gun[i].pos.x + Math.cos(user.rotate) * user.gun[i].pos.y,
-        y: user.y + Math.sin(user.rotate-Math.PI/2) * user.gun[i].pos.x + Math.sin(user.rotate) * user.gun[i].pos.y,
-        rotate: user.gun[i].dir.rotate===null?user.rotate:user.gun[i].dir.rotate,
-        dx: Math.cos(this.rotate) * 1,
-        dy: Math.sin(this.rotate) * 1,
-        speed: 0,
-        health: 8,
-        damage: 7,
-        radius: 7
+        type: user.guns[i].bulletType,
+        id: bulletId++,
+        owner: user.id,
+        x: user.x + Math.cos(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.cos(user.rotate) * user.guns[i].pos.y * user.radius,
+        y: user.y + Math.sin(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.sin(user.rotate) * user.guns[i].pos.y * user.radius,
+        rotate: rotate,
+        dx: Math.cos(rotate) * 4 * user.guns[i].speed,
+        dy: Math.sin(rotate) * 4 * user.guns[i].speed,
+        speed: user.guns[i].speed,
+        health: 8 * user.guns[i].health,
+        damage: 7 * user.guns[i].damage,
+        radius: 5.5 * user.guns[i].radius,
+        time: 1000 * user.guns[i].life
       });
-      user.gun[i].coolTime = 0.6 * user.gun[i].shotTime;
+      user.guns[i].shotTime = (0.6 - 0.04 * user.stats[6]) * user.guns[i].coolTime * 1000;
     }
+    if (user.guns[i].shotTime >= 0) user.guns[i].shotTime -= 1000/60;
   }
 }
 
@@ -245,10 +270,27 @@ function tickPlayer(currentPlayer){
   playerCollisions.forEach(collisionCheck);
 }
 
+function tickBullet(currentBullet){
+  moveBullet(currentBullet);
+
+  currentBullet.time -= 1000/60;
+
+  if (currentBullet.time <= 0){
+    if (findIndex(bullets,currentBullet.id) > -1){
+      bullets.splice(findIndex(bullets,currentBullet.id),1);
+    }
+    io.emit('objectDead','bullet',currentBullet);
+  }
+
+}
+
 function moveloop(){
   users.forEach((u) => {
     tickPlayer(u);
   });
+  bullets.forEach((b) => {
+    tickBullet(b);
+  })
 }
 
 function sendUpdates(){
