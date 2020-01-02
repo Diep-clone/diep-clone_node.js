@@ -216,7 +216,7 @@ function bulletSet(user){
         rotate: rotate,
         dx: Math.cos(rotate) * 4 * user.guns[i].speed,
         dy: Math.sin(rotate) * 4 * user.guns[i].speed,
-        speed: user.guns[i].speed,
+        speed: 0.8 * user.guns[i].speed,
         health: 8 * user.guns[i].health,
         damage: 7 * user.guns[i].damage,
         radius: 5.5 * user.guns[i].radius,
