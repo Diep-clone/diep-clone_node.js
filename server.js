@@ -182,8 +182,8 @@ function moveObject(obj){
 function moveBullet(b){
   switch(b.type){
     case 1:
-      b.dx+=Math.cos(b.rotate) * 0.08;
-      b.dy+=Math.sin(b.rotate) * 0.08;
+      b.dx+=Math.cos(b.rotate) * 0.07 * b.speed;
+      b.dy+=Math.sin(b.rotate) * 0.07 * b.speed;
     break;
     default:
     break;
@@ -216,7 +216,7 @@ function bulletSet(user){
         rotate: rotate,
         dx: Math.cos(rotate) * 4 * user.guns[i].speed,
         dy: Math.sin(rotate) * 4 * user.guns[i].speed,
-        speed: 0.5 * user.guns[i].speed,
+        speed: 0.8 * user.guns[i].speed,
         health: 8 * user.guns[i].health,
         damage: 7 * user.guns[i].damage,
         radius: 5.5 * user.guns[i].radius,
