@@ -60,7 +60,7 @@ function setGun(user){
         autoShot:false,
         life:3,
         pos:{x:0,y:1.8},
-        dir:{rotate:null,distance:0}
+        dir:{rotate:null,rotateDistance:Math.PI/72,distance:0}
       }];
     break;
     default:
@@ -216,7 +216,7 @@ function bulletSet(user){
         rotate: rotate,
         dx: Math.cos(rotate) * 4 * user.guns[i].speed,
         dy: Math.sin(rotate) * 4 * user.guns[i].speed,
-        speed: 0.8 * user.guns[i].speed,
+        speed: 0.5 * user.guns[i].speed,
         health: 8 * user.guns[i].health,
         damage: 7 * user.guns[i].damage,
         radius: 5.5 * user.guns[i].radius,
