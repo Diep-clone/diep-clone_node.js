@@ -19,8 +19,6 @@ function BasicBullet(){
       else{
         this.opacity -= 0.1 * tick * 0.05;
         this.radius += 0.3 * tick * 0.05;
-        this.x+=this.dx;
-        this.y+=this.dy;
       }
     }
   }

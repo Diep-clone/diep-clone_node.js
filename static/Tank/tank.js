@@ -110,7 +110,7 @@ function Basic(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0)
+    new Gun([[0,0],[0.42,0],[0.42,1.88],[-0.42,1.88],[-0.42, 0]],0)
   ];
   this.tankType = "Basic";
 }

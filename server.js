@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
     h:10,
     dx:0,
     dy:0,
-    radius:13,
+    radius:13.5,
     rotate:0,
     name:"",
     mouse:{
@@ -233,19 +233,14 @@ function tickPlayer(currentPlayer){
   bulletSet(currentPlayer);
 
   function check(user){
-    if (user.id !== currentPlayer.id){
+    if (user.bulletType || user.id !== currentPlayer.id){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(playerCircle,
       new C(new V(user.x,user.y),user.radius),response);
 
       if (collided){
         response.aUser = currentPlayer;
-        response.bUser = {
-          id: user.id,
-          name: user.name,
-          x: user.x,
-          y: user.y,
-        }
+        response.bUser = user;
         playerCollisions.push(response);
       }
     }
@@ -254,7 +249,14 @@ function tickPlayer(currentPlayer){
   }
 
   function collisionCheck(collision){
+    let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
+
     collision.aUser.isCollision = true;
+/*
+    collision.aUser.dx+=Math.cos(dir) * 1;
+    collision.aUser.dy+=Math.sin(dir) * 1;
+    collision.bUser.dx-=Math.cos(dir) * 1;
+    collision.bUser.dy-=Math.sin(dir) * 1;*/
   }
 
   var playerCircle = new C(new V(currentPlayer.x,currentPlayer.y),currentPlayer.radius);
@@ -263,6 +265,7 @@ function tickPlayer(currentPlayer){
 
   tree.clear();
   users.forEach(tree.put);
+  bullets.forEach(tree.put);
   var playerCollisions = [];
 
   var otherUsers = tree.get(currentPlayer,check);

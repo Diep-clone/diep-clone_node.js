@@ -76,9 +76,11 @@ function System(){ // 게임의 전체 진행 담당
   this.removeObject = function (id,type){
     switch (type){
       case "tank":
+        //delete this.objectList.tank.id;
         this.objectList.tank[id] = null;
       break;
       case "bullet":
+        //delete this.objectList.bullet.id;
         this.objectList.bullet[id] = null;
       break;
       default:
@@ -217,8 +219,8 @@ function System(){ // 게임의 전체 진행 담당
 
     if (this.controlTank) {
 
-      this.drawObject.cameraSet(this.controlTank);
-      
+      //this.drawObject.cameraSet(this.controlTank);
+
       this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y-this.controlTank.dy,this.input.target.x/camera.z+camera.x-this.controlTank.x-this.controlTank.dx));
 
       socket.emit('mousemove',{
@@ -239,6 +241,8 @@ function System(){ // 게임의 전체 진행 담당
   }
   this.loop();
 
+  this.lastPos = {x:0,y:0};
+
   window.onmousemove = function (e){
     let x = e.clientX * window.devicePixelRatio;
     let y = e.clientY * window.devicePixelRatio;
@@ -252,7 +256,9 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
-
+    if (this.input.leftMouse){
+      this.drawObject.cameraMove(this.lastPos.x-x,this.lastPos.y-y);
+    }
 
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");
@@ -260,6 +266,9 @@ function System(){ // 게임의 전체 진행 담당
     else{
       this.drawObject.setCursor("default");
     }
+
+    this.lastPos.x = x;
+    this.lastPos.y = y;
   }.bind(this);
 
   this.setMoveRotate = function (){

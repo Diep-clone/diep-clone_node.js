@@ -4,6 +4,9 @@ function DrawObject(){ // 그리기 담당
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d");
 
+  this.dCanvas = document.createElement("canvas");
+  this.dCtx = this.dCanvas.getContext("2d");
+
   this.uiCanvas = document.createElement("canvas");
   this.uiCtx = this.uiCanvas.getContext("2d");
 
@@ -31,8 +34,8 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.resize = function (){
-    this.canvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
-    this.canvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
+    this.canvas.width=this.dCanvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
+    this.canvas.height=this.dCanvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
     //this.ctx.imageSmoothingEnabled = false;
   }
 
@@ -43,6 +46,11 @@ function DrawObject(){ // 그리기 담당
   this.testDrawCircle = function (x,y){
     this.ctx.fillStyle = "#000000";
     this.ctx.fillRect(x,y,10,10);
+  }
+
+  this.cameraMove = function (x,y){
+    this.camera.x += x / this.camera.z;
+    this.camera.y += y / this.camera.z;
   }
 
   this.cameraSet = function (tank){
@@ -63,6 +71,7 @@ function DrawObject(){ // 그리기 담당
 
   this.backgroundDraw = function (){
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+    this.dCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
     this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
     this.ctx.globalAlpha = 1;
@@ -94,8 +103,13 @@ function DrawObject(){ // 그리기 담당
     for (let key in obj){
       if (obj[key]){
         obj[key].draw(this.ctx,this.camera);
+        if (obj[key].drawHPBar){
+          obj[key].drawHPBar(this.dCtx,this.camera);
+        }
       }
     }
+    this.ctx.globalAlpha = 1;
+    this.ctx.drawImage(this.dCanvas,0,0);
   }
 
   this.uiDraw = function (ui){
@@ -103,9 +117,7 @@ function DrawObject(){ // 그리기 담당
     this.uiCtx.lineJoin = "round";
 
     for (let i=0;i<ui.length;i++){
-      if (ui[i]){
-        ui[i].draw(this.uiCtx,this.camera.uiz);
-      }
+      ui[i].draw(this.uiCtx,this.camera.uiz);
     }
 
     this.ctx.globalAlpha = 0.82;
