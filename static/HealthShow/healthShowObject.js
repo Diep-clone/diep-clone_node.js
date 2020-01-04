@@ -5,7 +5,7 @@ function HealthShowObject(){
   this.drawHPBar = function(ctx,camera){
     let healthPercent = this.health/this.maxHealth;
 
-    if (helathPercent<1){
+    if (healthPercent<1){
       ctx.beginPath();
       ctx.moveTo((this.x - this.dx - camera.x + this.radius) * camera.z,(this.y - this.dy - camera.y + this.radius * 5 / 3) * camera.z);
 
