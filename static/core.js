@@ -43,6 +43,7 @@ function System(){ // 게임의 전체 진행 담당
     a: false,
     s: false,
     d: false,
+    o: false,
     k: false,
     changeTank: false,
     target: {
@@ -110,7 +111,7 @@ function System(){ // 게임의 전체 진행 담당
           if (tankType != this.controlTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
           if (tankList[key].isCollision)
-            objTank.hit(0.1 * this.tick * 0.05);
+            objTank.hit();
           if (objTank.id !== this.controlTank.id){
             objTank.setRotate(tankList[key].rotate);
           }
@@ -129,6 +130,7 @@ function System(){ // 게임의 전체 진행 담당
         if (this.objectList.bullet[bulletList[key].id]){
           let objBullet = this.objectList.bullet[bulletList[key].id];
           objBullet.setRadius(bulletList[key].radius);
+          console.log(bulletList[key].x,bulletList[key].y);
           objBullet.setPosition(bulletList[key].x,bulletList[key].y);
           objBullet.setDPosition(bulletList[key].dx,bulletList[key].dy);
           objBullet.setRotate(bulletList[key].rotate);
@@ -352,6 +354,9 @@ function System(){ // 게임의 전체 진행 담당
         //this.input.k = true;
       break;
       case 79: // O키
+      if (!this.input.o){
+        g = this.input.o = true;
+      }
       break;
       case 220: // \키
         if (!this.input.changeTank){
@@ -405,6 +410,9 @@ function System(){ // 게임의 전체 진행 담당
         //this.input.k = false;
       break;
       case 79: // O키
+        if (this.input.o){
+          this.input.o = false;
+        }
       break;
       case 220: // \키
         if (this.input.changeTank){

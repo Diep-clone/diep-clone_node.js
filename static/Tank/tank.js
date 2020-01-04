@@ -18,19 +18,18 @@ function Tank(){
 
   this.animate = function(tick){
     if (this.isDead || this.health<0){
-      if (this.opacity <= 0.1){
-        this.opacity = 0;
+      if (this.opacity == 0){
         system.removeObject(this.id,'tank');
         return;
       }
-      else{
-        this.opacity -= 0.1 * tick * 0.05;
+      else if (this.opacity > 0){
+        this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
         this.radius += 0.3 * tick * 0.05;
       }
     }
     if (this.hitTime>0){ // hit effect
       this.hitTime -= 0.1 * tick * 0.05;
-      this.w= 0.9 * tick * 0.05;
+      this.w= 1;
     }
     else{
       this.hitTime = 0;
@@ -61,8 +60,9 @@ function Tank(){
   this.dead = function(){
     this.isDead = true;
   }
-  this.hit = function(time){
-    this.hitTime+=time;
+  this.hit = function(){
+    console.log(this.id);
+    this.hitTime=0.4;
   }
   this.setCanvasSize = function(camera){
     this.canvasSize.x = ((this.radius * 2) * camera.z);

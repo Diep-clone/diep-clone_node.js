@@ -151,6 +151,12 @@ io.on('connection', (socket) => {
   socket.on('input', (data) => {
     currentPlayer.moveRotate = data.moveRotate;
     currentPlayer.mouse.left = data.shot>0;
+    if (data.o){
+      if (findIndex(users,currentPlayer.id) > -1){
+        users.splice(findIndex(users,currentPlayer.id),1);
+        io.emit('objectDead','tank',currentPlayer);
+      }
+    }
     if (data.changeTank){
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
       setGun(currentPlayer);
@@ -166,8 +172,8 @@ io.on('connection', (socket) => {
 
     if (findIndex(users,currentPlayer.id) > -1){
       users.splice(findIndex(users,currentPlayer.id),1);
+      io.emit('objectDead','tank',currentPlayer);
     }
-    io.emit('objectDead','tank',currentPlayer);
     io.emit('mapSize', mapSize);
   });
 });
@@ -213,6 +219,8 @@ function bulletSet(user){
         owner: user.id,
         x: user.x + Math.cos(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.cos(user.rotate) * user.guns[i].pos.y * user.radius,
         y: user.y + Math.sin(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.sin(user.rotate) * user.guns[i].pos.y * user.radius,
+        w: 10,
+        h: 10,
         rotate: rotate,
         dx: Math.cos(rotate) * 4 * user.guns[i].speed,
         dy: Math.sin(rotate) * 4 * user.guns[i].speed,
@@ -233,7 +241,7 @@ function tickPlayer(currentPlayer){
   bulletSet(currentPlayer);
 
   function check(user){
-    if (user.bulletType || user.id !== currentPlayer.id){
+    if ((!user.owner || user.owner !== currentPlayer.id) && user.id !== currentPlayer.id){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(playerCircle,
       new C(new V(user.x,user.y),user.radius),response);
@@ -252,11 +260,11 @@ function tickPlayer(currentPlayer){
     let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
 
     collision.aUser.isCollision = true;
-/*
+
     collision.aUser.dx+=Math.cos(dir) * 1;
     collision.aUser.dy+=Math.sin(dir) * 1;
     collision.bUser.dx-=Math.cos(dir) * 1;
-    collision.bUser.dy-=Math.sin(dir) * 1;*/
+    collision.bUser.dy-=Math.sin(dir) * 1;
   }
 
   var playerCircle = new C(new V(currentPlayer.x,currentPlayer.y),currentPlayer.radius);
@@ -281,10 +289,9 @@ function tickBullet(currentBullet){
   if (currentBullet.time <= 0){
     if (findIndex(bullets,currentBullet.id) > -1){
       bullets.splice(findIndex(bullets,currentBullet.id),1);
+      io.emit('objectDead','bullet',currentBullet);
     }
-    io.emit('objectDead','bullet',currentBullet);
   }
-
 }
 
 function moveloop(){
@@ -297,9 +304,9 @@ function moveloop(){
 }
 
 function sendUpdates(){
-  users.forEach((u) => {
-    sockets[u.id].emit('objectList',users,bullets);
-  })
+  for (let key in sockets){
+    sockets[key].emit('objectList',users,bullets);
+  }
 }
 
 setInterval(moveloop,1000/60);
