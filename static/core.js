@@ -219,7 +219,7 @@ function System(){ // 게임의 전체 진행 담당
 
     if (this.controlTank) {
 
-      //this.drawObject.cameraSet(this.controlTank);
+      this.drawObject.cameraSet(this.controlTank);
 
       this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y-this.controlTank.dy,this.input.target.x/camera.z+camera.x-this.controlTank.x-this.controlTank.dx));
 
