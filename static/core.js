@@ -107,11 +107,12 @@ function System(){ // 게임의 전체 진행 담당
           objTank.setRadius(tankList[key].radius);
           objTank.setPosition(tankList[key].x,tankList[key].y);
           objTank.setDPosition(tankList[key].dx,tankList[key].dy);
+          objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != this.controlTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
-          if (tankList[key].isCollision)
-            objTank.hit();
+          /*if (tankList[key].isCollision)
+            objTank.hit();*/
           if (objTank.id !== this.controlTank.id){
             objTank.setRotate(tankList[key].rotate);
           }
@@ -122,6 +123,7 @@ function System(){ // 게임의 전체 진행 담당
           objTank.setName(tankList[key].name);
           objTank.setRadius(tankList[key].radius);
           objTank.setRotate(tankList[key].rotate);
+          objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
         }
       }
     }
@@ -130,7 +132,6 @@ function System(){ // 게임의 전체 진행 담당
         if (this.objectList.bullet[bulletList[key].id]){
           let objBullet = this.objectList.bullet[bulletList[key].id];
           objBullet.setRadius(bulletList[key].radius);
-          console.log(bulletList[key].x,bulletList[key].y);
           objBullet.setPosition(bulletList[key].x,bulletList[key].y);
           objBullet.setDPosition(bulletList[key].dx,bulletList[key].dy);
           objBullet.setRotate(bulletList[key].rotate);
