@@ -152,9 +152,9 @@ function System(){ // 게임의 전체 진행 담당
         }
       break;
       case "bullet":
-        if (this.objectList.bullet[data.id]){
+        /*if (this.objectList.bullet[data.id]){
           this.objectList.bullet[data.id].hit();
-        }
+        }*/
       default:
       break;
     }
