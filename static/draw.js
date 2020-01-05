@@ -52,8 +52,9 @@ function DrawObject(){ // 그리기 담당
 
   this.im = {x:0,y:0};
 
-  this.cameraMove = function (target){
-    this.im = target;
+  this.cameraMove = function (x,y){
+    this.camera.x += x / this.camera.z;
+    this.camera.y += y / this.camera.z;
   }
 
   this.cameraSet = function (tank){
@@ -70,8 +71,8 @@ function DrawObject(){ // 그리기 담당
       this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);
       this.camera.y=(tank.y-this.canvas.height/2/this.camera.z);
     }
-    /*this.camera.x=(this.im.x-this.canvas.width/2/this.camera.z);
-    this.camera.y=(this.im.y-this.canvas.height/2/this.camera.z);*/
+    //this.camera.x=(this.im.x-this.canvas.width/2/this.camera.z);
+    //this.camera.y=(this.im.y-this.canvas.height/2/this.camera.z);
   }
 
   this.backgroundDraw = function (){

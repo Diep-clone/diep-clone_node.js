@@ -67,9 +67,9 @@ function Tank(){
     this.canvasSize.x = ((this.radius * 2) * camera.z);
     this.canvasSize.y = ((this.radius * 2) * camera.z);
     this.canvasPos = {x:(this.radius * camera.z),y:(this.radius * camera.z)};
-    for (let i=0;i<this.guns.length;i++){
+    /*for (let i=0;i<this.guns.length;i++){
       this.guns[i].setParentCanvasSize(this,camera);
-    }
+    }*/
     this.canvas.width = this.canvasSize.x + 4 * camera.z + 6;
     this.canvas.height = this.canvasSize.y + 4 * camera.z + 6;
     this.canvasPos.x += 2 * camera.z + 3;
@@ -83,22 +83,23 @@ function Tank(){
 
     this.ctx.strokeStyle = this.gunColor.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 총구 그리기
     this.ctx.fillStyle = this.gunColor.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
-    for (let i=0;i<this.guns.length;i++){
+    /*for (let i=0;i<this.guns.length;i++){
       this.guns[i].drawGun(this,this.ctx,camera);
-    }
+    }*/
 
     this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
     this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
     this.ctx.beginPath();
-    this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
-    //this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
+    //this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
+    this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();
     this.ctx.stroke();
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,(this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
-    //ctx.drawImage(this.canvas,((this.x + this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y + this.dy - camera.y) * camera.z-this.canvasPos.y));
+    console.log(ctx.imageSmoothingEnabled);
+    //ctx.drawImage(this.canvas,(this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
+    ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
   }
 }
 Tank.prototype = new HealthShowObject();

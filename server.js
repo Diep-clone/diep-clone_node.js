@@ -110,9 +110,8 @@ io.on('connection', (socket) => { // 접속.
       }
     }
     if (data.changeTank){
-      console.log(currentPlayer.health);
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
-      setGun(currentPlayer);
+      userUtil.setUserGun(currentPlayer);
     }
   });
 

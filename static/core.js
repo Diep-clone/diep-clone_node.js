@@ -270,6 +270,10 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
+    /*if (this.input.leftMouse){
+      this.drawObject.cameraMove(this.lastPos.x-this.input.target.x,this.lastPos.y-this.input.target.y);
+    }*/
+
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");
     }
@@ -308,8 +312,8 @@ function System(){ // 게임의 전체 진행 담당
         x:this.input.target.x/camera.z+camera.x,
         y:this.input.target.y/camera.z+camera.y
       });
-    }*/
-
+    }
+*/
     socket.emit('input',this.input);
   }.bind(this);
 
