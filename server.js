@@ -6,6 +6,11 @@ const server = require('http').createServer(app);
 const SAT = require('sat');
 const io = require('socket.io')(server);
 
+const util = require('./lib/librarys');
+const objUtil = require('./lib/objectSet');
+const userUtil = require('./lib/userSet');
+const bulletUtil = require('./lib/bulletSet');
+
 const quadtree = require('simple-quadtree');
 
 let tree;
@@ -15,7 +20,6 @@ let C = SAT.Circle;
 
 let users = []; // 유저 목록. 탱크의 정보와 똑같다.
 let bullets = []; // 총알 목록.
-let bulletId = 0; // 총알 고유 아이디.
 let sockets = {}; // 유저 접속 목록.
 
 let mapSize = {x: 0,y: 0}; // 맵 크기.
@@ -26,48 +30,6 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 })
 
-function findIndex(arr,id){ // 배열에서 id 가 똑같은 인덱스 찾기
-  let len = arr.length;
-
-  while (len--){
-    if (arr[len].id === id)
-      return len;
-  }
-  return -1;
-}
-
-function randomRange (x,y){ // x~y 사이의 랜덤 난수 생성.
-  if (x>y){
-    let im = x;
-    x=y;
-    y=im;
-  }
-  return Math.random() * (y-x) + x;
-}
-
-function setGun(user){ // 유저 총구 설정.
-  switch(user.type){
-    case 0:
-      user.guns = [{
-        bulletType:1,
-        speed:1,
-        damage:1,
-        health:1,
-        radius:1,
-        coolTime:1,
-        shotTime:0,
-        shotPTime:0,
-        autoShot:false,
-        life:3,
-        pos:{x:0,y:1.8},
-        dir:{rotate:null,rotateDistance:Math.PI/72,distance:0}
-      }];
-    break;
-    default:
-    break;
-  }
-}
-
 io.on('connection', (socket) => { // 접속.
 
   mapSize.x+= 322.5;
@@ -77,9 +39,9 @@ io.on('connection', (socket) => { // 접속.
 
   let index;
 
-  let currentPlayer = { // 현재 플레이 객체 생성.
+  let currentPlayer = { // 현재 플레이어 객체 생성.
     objType: 'tank',
-    id:socket.id,
+    id:socket.id, // 플레이어의 소켓 id
     x:0,
     y:0,
     w:10,
@@ -90,7 +52,7 @@ io.on('connection', (socket) => { // 접속.
     maxHealth:48,
     lastHealth:48,
     damage:20,
-    radius:13.5,
+    radius:13,
     rotate:0,
     name:"",
     mouse:{
@@ -101,22 +63,7 @@ io.on('connection', (socket) => { // 접속.
       x:0,
       y:0
     },
-    guns:[],/*
-    {
-      bulletType:int,
-      speed:%,
-      damage:%,
-      health:%,
-      radius:%,
-      coolTime:%,
-      shotTime:0.0f,
-      shotPTime:%,
-      autoShot:true/false,
-      life:int,
-      pos:{x:%,y:%},
-      dir:{rotate:pi,distance:%}
-    }
-    */
+    guns:[],
     stats:[0,0,0,0,0,0,0,0],
     type:0,
     isCollision:false,
@@ -132,9 +79,9 @@ io.on('connection', (socket) => { // 접속.
 
       sockets[socket.id] = socket;
 
-      currentPlayer.x = randomRange(-mapSize.x/2,mapSize.x/2);
-      currentPlayer.y = randomRange(-mapSize.y/2,mapSize.y/2);
-      setGun(currentPlayer);
+      currentPlayer.x = util.randomRange(-mapSize.x/2,mapSize.x/2);
+      currentPlayer.y = util.randomRange(-mapSize.y/2,mapSize.y/2);
+      userUtil.setUserGun(currentPlayer);
 
       index = users.length;
       users.push(currentPlayer);
@@ -157,8 +104,8 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.moveRotate = data.moveRotate;
     currentPlayer.mouse.left = data.shot>0;
     if (data.o){
-      if (findIndex(users,currentPlayer.id) > -1){
-        users.splice(findIndex(users,currentPlayer.id),1);
+      if (util.findIndex(users,currentPlayer.id) > -1){
+        users.splice(util.findIndex(users,currentPlayer.id),1);
         io.emit('objectDead',currentPlayer);
       }
     }
@@ -176,79 +123,17 @@ io.on('connection', (socket) => { // 접속.
 
     tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
-    if (findIndex(users,currentPlayer.id) > -1){
-      users.splice(findIndex(users,currentPlayer.id),1);
+    if (util.findIndex(users,currentPlayer.id) > -1){
+      users.splice(util.findIndex(users,currentPlayer.id),1);
       io.emit('objectDead',currentPlayer);
     }
-    io.emit('mapSize', mapSize);
+    io.emit('mapSize', mapSize); // 여기 tab 스페이스 바 크기 어떻게 설정해요?
   });
 });
 
-function moveObject(obj){ // 오브젝트의 움직임
-  obj.x+=obj.dx;
-  obj.y+=obj.dy;
-  obj.dx*=0.97;
-  obj.dy*=0.97;
-}
-
-function moveBullet(b){ // 총알의 움직임
-  switch(b.type){
-    case 1:
-      b.dx+=Math.cos(b.rotate) * 0.07 * b.speed;
-      b.dy+=Math.sin(b.rotate) * 0.07 * b.speed;
-    break;
-    default:
-    break;
-  }
-  moveObject(b);
-}
-
-function movePlayer(u){ // 유저(탱크)의 움직임
-  if (u.moveRotate!=null && !isNaN(u.moveRotate)){
-    u.dx+=Math.cos(u.moveRotate) * 0.07;
-    u.dy+=Math.sin(u.moveRotate) * 0.07;
-  }
-  moveObject(u);
-  if (u.x>mapSize.x+51.6) u.x=mapSize.x+51.6;
-  if (u.x<-mapSize.x-51.6) u.x=-mapSize.x-51.6;
-  if (u.y>mapSize.y+51.6) u.y=mapSize.y+51.6;
-  if (u.y<-mapSize.y-51.6) u.y=-mapSize.y-51.6;
-}
-
-function bulletSet(user){ // 유저의 총알 발사
-  for (let i=0;i<user.guns.length;i++){
-    if ((user.mouse.left || user.guns[i].autoShot) && user.guns[i].shotTime < 0){
-      let rotate = user.guns[i].dir.rotate===null?user.rotate:user.guns[i].dir.rotate;
-      bullets.push({
-        type: user.guns[i].bulletType,
-        objType: 'bullet',
-        id: bulletId++,
-        owner: user.id,
-        x: user.x + Math.cos(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.cos(user.rotate) * user.guns[i].pos.y * user.radius,
-        y: user.y + Math.sin(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.sin(user.rotate) * user.guns[i].pos.y * user.radius,
-        w: 10,
-        h: 10,
-        rotate: rotate,
-        dx: Math.cos(rotate) * 4 * user.guns[i].speed,
-        dy: Math.sin(rotate) * 4 * user.guns[i].speed,
-        speed: 0.8 * user.guns[i].speed,
-        health: 8 * user.guns[i].health,
-        maxHealth: 8 * user.guns[i].health,
-        lastHealth: 8 * user.guns[i].health,
-        damage: 7 * user.guns[i].damage,
-        radius: 5.5 * user.guns[i].radius,
-        time: 1000 * user.guns[i].life,
-        isCollision: false
-      });
-      user.guns[i].shotTime = (0.6 - 0.04 * user.stats[6]) * user.guns[i].coolTime * 1000;
-    }
-    if (user.guns[i].shotTime >= 0) user.guns[i].shotTime -= 1000/60;
-  }
-}
-
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
-  movePlayer(currentPlayer);
-  bulletSet(currentPlayer);
+  userUtil.moveUser(currentPlayer,mapSize);
+  bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer));
 
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
 
@@ -308,7 +193,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  moveBullet(currentBullet);
+  bulletUtil.moveBullet(currentBullet);
 
   currentBullet.lastHealth = currentBullet.health;
 
@@ -369,26 +254,6 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   currentBullet.time -= 1000/60; // 수명
 }
 
-function isDeadPlayer(obj){ // 죽었는가?
-  obj.isCollision = false;
-  if (obj.health <= 0){
-    if (findIndex(users,obj.id) > -1){
-      users.splice(findIndex(users,obj.id),1);
-      io.emit('objectDead',obj);
-    }
-  }
-}
-
-function isDeadBullet(obj){ // 죽었는가?
-  obj.isCollision = false;
-  if (obj.time <= 0 || obj.health <= 0){
-    if (findIndex(bullets,obj.id) > -1){
-      bullets.splice(findIndex(bullets,obj.id),1);
-      io.emit('objectDead',obj);
-    }
-  }
-}
-
 function moveloop(){
   users.forEach((u) => {
     tickPlayer(u);
@@ -397,10 +262,12 @@ function moveloop(){
     tickBullet(b);
   });
   users.forEach((u)=>{
-    isDeadPlayer(u);
+    if (userUtil.isDeadPlayer(u,users))
+      io.emit('objectDead',u);
   });
   bullets.forEach((b)=>{
-    isDeadBullet(b);
+    if (bulletUtil.isDeadBullet(b,bullets))
+      io.emit('objectDead',b);
   });
 }
 

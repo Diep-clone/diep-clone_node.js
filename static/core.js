@@ -190,7 +190,6 @@ function System(){ // 게임의 전체 진행 담당
   this.uiSet = function (){
     let whz = this.drawObject.getCanvasSize();
 
-
     if (this.controlTank){
       this.showTankLevel.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
       this.showTankLevel.setText(this.controlTank.name);
@@ -215,8 +214,6 @@ function System(){ // 게임의 전체 진행 담당
   this.loop = function (){
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
-
-
 
     this.uiSet();
 
@@ -273,10 +270,6 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
-    /*if (this.input.leftMouse){
-      this.drawObject.cameraMove(this.lastPos.x-x,this.lastPos.y-y);
-    }*/
-
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");
     }
@@ -293,6 +286,8 @@ function System(){ // 게임의 전체 진행 담당
   }
 
   window.onmousedown = function (e){
+    let camera = this.drawObject.getCameraSet();
+
     switch (e.button){
       case 0: // 좌클릭
       if (!this.input.leftMouse){
@@ -307,6 +302,14 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
+/*
+    if (this.input.leftMouse){
+      this.drawObject.cameraMove({
+        x:this.input.target.x/camera.z+camera.x,
+        y:this.input.target.y/camera.z+camera.y
+      });
+    }*/
+
     socket.emit('input',this.input);
   }.bind(this);
 
