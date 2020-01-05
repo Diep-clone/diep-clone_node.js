@@ -78,6 +78,7 @@ io.on('connection', (socket) => { // 접속.
   let index;
 
   let currentPlayer = { // 현재 플레이 객체 생성.
+    objType: 'tank',
     id:socket.id,
     x:0,
     y:0,
@@ -158,7 +159,7 @@ io.on('connection', (socket) => { // 접속.
     if (data.o){
       if (findIndex(users,currentPlayer.id) > -1){
         users.splice(findIndex(users,currentPlayer.id),1);
-        io.emit('objectDead','tank',currentPlayer);
+        io.emit('objectDead',currentPlayer);
       }
     }
     if (data.changeTank){
@@ -177,7 +178,7 @@ io.on('connection', (socket) => { // 접속.
 
     if (findIndex(users,currentPlayer.id) > -1){
       users.splice(findIndex(users,currentPlayer.id),1);
-      io.emit('objectDead','tank',currentPlayer);
+      io.emit('objectDead',currentPlayer);
     }
     io.emit('mapSize', mapSize);
   });
@@ -220,6 +221,7 @@ function bulletSet(user){ // 유저의 총알 발사
       let rotate = user.guns[i].dir.rotate===null?user.rotate:user.guns[i].dir.rotate;
       bullets.push({
         type: user.guns[i].bulletType,
+        objType: 'bullet',
         id: bulletId++,
         owner: user.id,
         x: user.x + Math.cos(user.rotate-Math.PI/2) * user.guns[i].pos.x * user.radius + Math.cos(user.rotate) * user.guns[i].pos.y * user.radius,
@@ -271,8 +273,13 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
     collision.aUser.isCollision = collision.bUser.isCollision = true; // 두 오브젝트를 둘 다 충돌됨으로 설정해 한 프레임에 두번 충돌하게 하지 않는다.
 
+    io.emit('objectHit',collision.aUser);
+    io.emit('objectHit',collision.bUser);
+
     collision.aUser.dx+=Math.cos(dir) * 1;
     collision.aUser.dy+=Math.sin(dir) * 1;
+    collision.bUser.dx-=Math.cos(dir) * 1;
+    collision.bUser.dy-=Math.sin(dir) * 1;
 
     if (collision.bUser.lastHealth-collision.aUser.damage<=0){
       collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
@@ -326,8 +333,13 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 
     collision.aUser.isCollision = collision.bUser.isCollision = true;
 
+    io.emit('objectHit',collision.aUser);
+    io.emit('objectHit',collision.bUser);
+
     collision.aUser.dx+=Math.cos(dir) * 1;
     collision.aUser.dy+=Math.sin(dir) * 1;
+    collision.bUser.dx-=Math.cos(dir) * 1;
+    collision.bUser.dy-=Math.sin(dir) * 1;
 
     if (collision.bUser.lastHealth-collision.aUser.damage<=0){
       collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
@@ -362,7 +374,7 @@ function isDeadPlayer(obj){ // 죽었는가?
   if (obj.health <= 0){
     if (findIndex(users,obj.id) > -1){
       users.splice(findIndex(users,obj.id),1);
-      io.emit('objectDead','tank',obj);
+      io.emit('objectDead',obj);
     }
   }
 }
@@ -372,7 +384,7 @@ function isDeadBullet(obj){ // 죽었는가?
   if (obj.time <= 0 || obj.health <= 0){
     if (findIndex(bullets,obj.id) > -1){
       bullets.splice(findIndex(bullets,obj.id),1);
-      io.emit('objectDead','bullet',obj);
+      io.emit('objectDead',obj);
     }
   }
 }

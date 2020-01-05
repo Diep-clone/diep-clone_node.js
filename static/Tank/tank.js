@@ -61,8 +61,7 @@ function Tank(){
     this.isDead = true;
   }
   this.hit = function(){
-    console.log(this.id);
-    this.hitTime=0.4;
+    this.hitTime=0.2;
   }
   this.setCanvasSize = function(camera){
     this.canvasSize.x = ((this.radius * 2) * camera.z);

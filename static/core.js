@@ -111,8 +111,6 @@ function System(){ // 게임의 전체 진행 담당
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != this.controlTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
-          /*if (tankList[key].isCollision)
-            objTank.hit();*/
           if (objTank.id !== this.controlTank.id){
             objTank.setRotate(tankList[key].rotate);
           }
@@ -146,8 +144,24 @@ function System(){ // 게임의 전체 진행 담당
     }
   });
 
-  socket.on('objectDead', (type,data) => {
-    switch(type){
+  socket.on('objectHit', (data) => { // 피격 효과 전달
+    switch(data.objType){
+      case "tank":
+        if (this.objectList.tank[data.id]){
+          this.objectList.tank[data.id].hit();
+        }
+      break;
+      case "bullet":
+        if (this.objectList.bullet[data.id]){
+          this.objectList.bullet[data.id].hit();
+        }
+      default:
+      break;
+    }
+  })
+
+  socket.on('objectDead', (data) => { // 죽었다는 신호 전달
+    switch(data.objType){
       case "tank":
         if (this.objectList.tank[data.id]){
           this.objectList.tank[data.id].dead();
@@ -259,9 +273,9 @@ function System(){ // 게임의 전체 진행 담당
       }
     }
 
-    if (this.input.leftMouse){
+    /*if (this.input.leftMouse){
       this.drawObject.cameraMove(this.lastPos.x-x,this.lastPos.y-y);
-    }
+    }*/
 
     if (this.input.isMouseOverUi){
       this.drawObject.setCursor("pointer");
