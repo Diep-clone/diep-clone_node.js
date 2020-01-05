@@ -70,10 +70,10 @@ function Tank(){
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].setParentCanvasSize(this,camera);
     }
-    this.canvas.width = this.canvasSize.x + 4 * camera.z + 6;
-    this.canvas.height = this.canvasSize.y + 4 * camera.z + 6;
-    this.canvasPos.x += 2 * camera.z + 3;
-    this.canvasPos.y += 2 * camera.z + 3;
+    this.canvas.width = this.canvasSize.x + 4 * camera.z + 4;
+    this.canvas.height = this.canvasSize.y + 4 * camera.z + 4;
+    this.canvasPos.x += 2 * camera.z + 2;
+    this.canvasPos.y += 2 * camera.z + 2;
     this.ctx.lineWidth = 2 * camera.z;
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
@@ -90,15 +90,14 @@ function Tank(){
     this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
     this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
     this.ctx.beginPath();
-    //this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
-    this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
+    this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
+    //this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
     this.ctx.fill();
     this.ctx.stroke();
     this.ctx.closePath();
 
     ctx.globalAlpha = this.opacity;
-    console.log(ctx.imageSmoothingEnabled);
-    //ctx.drawImage(this.canvas,(this.x - this.dx - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - this.dy - camera.y) * camera.z-Math.floor(this.canvasPos.y));
+    //ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
     ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
   }
 }
@@ -122,8 +121,8 @@ function Twin(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.9,0],[0.9,1.9],[0.1,1.9],[0.1, 0]],0),
-    new Gun([[0,0],[-0.1,0],[-0.1,1.9],[-0.9,1.9],[-0.9, 0]],0)
+    new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],0),
+    new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],0)
   ];
   this.tankType = "Twin";
 }
@@ -137,7 +136,7 @@ function Triplet(){
   this.guns=[
     new Gun([[0,0],[0.9,0],[0.9,1.6],[0.1,1.6],[0.1, 0]],0),
     new Gun([[0,0],[-0.1,0],[-0.1,1.6],[-0.9,1.6],[-0.9, 0]],0),
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0)
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0)
   ];
   this.tankType = "Triplet";
 }
@@ -149,9 +148,9 @@ function TripleShot(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0),
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],-Math.PI / 4),
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],Math.PI / 4)
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],-Math.PI / 4),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI / 4)
   ];
   this.tankType = "TripleShot";
 }
@@ -163,10 +162,10 @@ function QuadTank(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0),
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],-Math.PI / 2),
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],Math.PI / 2),
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],Math.PI)
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],-Math.PI / 2),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI / 2),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI)
   ];
   this.tankType = "QuadTank";
 }
@@ -221,7 +220,7 @@ function FlankGuard(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
     new Gun([[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI)
   ];
   this.tankType = "FlankGuard";

@@ -45,16 +45,11 @@ function DrawObject(){ // 그리기 담당
     this.canvas.style.cursor = style;
   }
 
-  this.testDrawCircle = function (x,y){
-    this.ctx.fillStyle = "#000000";
-    this.ctx.fillRect(x,y,10,10);
-  }
-
   this.im = {x:0,y:0};
 
   this.cameraMove = function (x,y){
-    this.camera.x += x / this.camera.z;
-    this.camera.y += y / this.camera.z;
+    this.camera.x += x / this.camera.z / 3;
+    this.camera.y += y / this.camera.z / 3;
   }
 
   this.cameraSet = function (tank){
@@ -119,9 +114,6 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.uiDraw = function (ui){
-    this.uiCtx.lineCap = "round";
-    this.uiCtx.lineJoin = "round";
-
     for (let i=0;i<ui.length;i++){
       ui[i].draw(this.uiCtx,this.camera.uiz);
     }

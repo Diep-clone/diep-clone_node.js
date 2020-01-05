@@ -269,8 +269,8 @@ function System(){ // 게임의 전체 진행 담당
         this.input.isMouseOverUi = true;
       }
     }
-
-    /*if (this.input.leftMouse){
+/*
+    if (this.input.leftMouse){
       this.drawObject.cameraMove(this.lastPos.x-this.input.target.x,this.lastPos.y-this.input.target.y);
     }*/
 
