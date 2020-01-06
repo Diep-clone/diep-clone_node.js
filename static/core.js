@@ -109,7 +109,7 @@ function System(){ // 게임의 전체 진행 담당
           objTank.setDPosition(tankList[key].dx,tankList[key].dy);
           objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
           let tankType = new this.tankList[tankList[key].type]().tankType;
-          if (tankType != this.controlTank.tankType)
+          if (tankType != objTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
           if (objTank.id !== this.controlTank.id){
             objTank.setRotate(tankList[key].rotate);
@@ -122,6 +122,7 @@ function System(){ // 게임의 전체 진행 담당
           objTank.setRadius(tankList[key].radius);
           objTank.setRotate(tankList[key].rotate);
           objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
+          objTank.setColor(new RGB(241,78,84));
         }
       }
     }
@@ -139,6 +140,9 @@ function System(){ // 게임의 전체 진행 담당
           objBullet.setPosition(bulletList[key].x,bulletList[key].y);
           objBullet.setRadius(bulletList[key].radius);
           objBullet.setRotate(bulletList[key].rotate);
+          if (bulletList[key].owner !== this.controlTank.id){
+            objBullet.setColor(new RGB(241,78,84));
+          }
         }
       }
     }

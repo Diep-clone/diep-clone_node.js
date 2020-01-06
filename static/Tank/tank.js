@@ -51,6 +51,9 @@ function Tank(){
   this.setName = function (name){
     this.name = name;
   }
+  this.setColor = function (color){
+    this.color = color;
+  }
   this.changeTank = function (type){
     let t = new type();
     this.guns = t.guns;

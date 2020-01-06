@@ -21,6 +21,9 @@ function BasicBullet(){
       }
     }
   }
+  this.setColor = function (color){
+    this.color = color;
+  }
   this.dead = function(){
     this.isDead = true;
   }
