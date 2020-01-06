@@ -102,7 +102,7 @@ io.on('connection', (socket) => { // 접속.
 
   socket.on('input', (data) => { // 입력 정보
     currentPlayer.moveRotate = data.moveRotate;
-    currentPlayer.mouse.left = data.shot>0;
+    currentPlayer.mouse.left = data.shot>0 || data.autoE;
     if (data.o){
       if (util.findIndex(users,currentPlayer.id) > -1){
         users.splice(util.findIndex(users,currentPlayer.id),1);
