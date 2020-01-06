@@ -2,10 +2,10 @@ function DrawObject(){ // 그리기 담당
   "use strict";
 
   this.canvas = document.getElementById("canvas");
-  this.ctx = canvas.getContext("2d");
+  this.ctx = canvas.getContext("2d", {alpha:false});
 
   this.dCanvas = document.createElement("canvas");
-  this.dCtx = this.dCanvas.getContext("2d", {alpha:false});
+  this.dCtx = this.dCanvas.getContext("2d");
 
   this.uiCanvas = document.createElement("canvas");
   this.uiCtx = this.uiCanvas.getContext("2d");
