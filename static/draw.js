@@ -5,7 +5,7 @@ function DrawObject(){ // 그리기 담당
   this.ctx = canvas.getContext("2d");
 
   this.dCanvas = document.createElement("canvas");
-  this.dCtx = this.dCanvas.getContext("2d");
+  this.dCtx = this.dCanvas.getContext("2d", {alpha:false});
 
   this.uiCanvas = document.createElement("canvas");
   this.uiCtx = this.uiCanvas.getContext("2d");
