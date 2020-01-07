@@ -11,13 +11,11 @@ function BasicBullet(){
   this.canvasPos = {x:0,y:0};
   this.animate = function(tick){
     if (this.isDead || this.health<0 || this.time<0){
-      if (this.opacity == 0){
+      this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
+      this.radius += 0.3 * tick * 0.05;
+      if (this.opacity === 0){
         system.removeObject(this.id,'bullet');
         return;
-      }
-      else if (this.opacity > 0){
-        this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
-        this.radius += 0.3 * tick * 0.05;
       }
     }
   }
@@ -40,6 +38,7 @@ function BasicBullet(){
     this.ctx.lineJoin = "round";
   }
   this.draw = function(ctx,camera){
+    /*
     this.setCanvasSize(camera);
 
     this.ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
@@ -52,6 +51,19 @@ function BasicBullet(){
 
     ctx.globalAlpha = this.opacity;
     ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-this.canvasPos.x,(this.y - camera.y) * camera.z-this.canvasPos.y);
+    */
+    ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
+    ctx.fillStyle = this.color.getRGBValue();
+    ctx.lineWidth = 4 * camera.z;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.arc((this.x - camera.x) * camera.z,(this.y - camera.y) * camera.z,(this.radius - 1) * camera.z,0,Math.PI * 2);
+    ctx.globalAlpha = this.opacity;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fill();
+    ctx.closePath();
   }
 }
 BasicBullet.prototype = new DynamicObject();
