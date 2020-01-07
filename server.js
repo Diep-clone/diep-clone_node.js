@@ -23,7 +23,7 @@ let bullets = []; // 총알 목록.
 let sockets = {}; // 유저 접속 목록.
 
 let mapSize = {x: 0,y: 0}; // 맵 크기.
-let tankLength = 11; // 탱크의 목록 길이. 지금은 Basic 부터 Destroyer 까지 총 11개다.
+let tankLength = 13; // 탱크의 목록 길이. 지금은 Basic 부터 Destroyer 까지 총 11개다.
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
@@ -52,7 +52,7 @@ io.on('connection', (socket) => { // 접속.
     maxHealth:48,
     lastHealth:48,
     damage:20,
-    radius:13,
+    radius:12.8,
     rotate:0,
     name:"",
     mouse:{
@@ -63,10 +63,11 @@ io.on('connection', (socket) => { // 접속.
       x:0,
       y:0
     },
+    sight:1,
     guns:[],
     stats:[0,0,0,0,0,0,0,0],
     type:0,
-    isCollision:false,
+    isCollision:false
   };
 
   socket.on('login', (player) => { // 탱크 생성.
@@ -112,6 +113,7 @@ io.on('connection', (socket) => { // 접속.
     if (data.changeTank){
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
       userUtil.setUserGun(currentPlayer);
+      socket.emit('sight',userUtil.setUserSight(currentPlayer));
     }
   });
 

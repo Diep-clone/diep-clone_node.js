@@ -14,8 +14,14 @@ function DrawObject(){ // 그리기 담당
 
   this.mapSize = {x:0,y:0};
 
+  this.sight = 1;
+
   socket.on('mapSize',(data) => {
     this.mapSize = data;
+  });
+
+  socket.on('sight',(data) => {
+    this.sight = data;
   });
 
   this.camera = {
@@ -59,6 +65,8 @@ function DrawObject(){ // 그리기 담당
     this.camera.uiz = this.camera.z;
 
     this.camera.z *= 1.78; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야 *1.229 는 75레벨 탱크의 시야
+
+    this.camera.z /= this.sight;
 
     if (tank){
       //this.camera.x = tank.x - 100;

@@ -15,7 +15,9 @@ function System(){ // 게임의 전체 진행 담당
     MachineGun,
     FlankGuard,
     TriAngle,
-    Destroyer
+    Destroyer,
+    Overseer,
+    Overload
   ];
 
   this.colorList = [
