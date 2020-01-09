@@ -333,7 +333,7 @@ function ArenaCloser(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.42,0],[0.42,1.6],[-0.42,1.6],[-0.42, 0]],0)
+    new Gun([[0,0],[0.42,0],[0.42,1.5],[-0.42,1.5],[-0.42, 0]],0)
   ];
   this.tankType = "ArenaCloser";
 }
