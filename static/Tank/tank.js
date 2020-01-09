@@ -211,7 +211,7 @@ function MachineGun(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.4,0],[0.8,1.9],[-0.8,1.9],[-0.4, 0]],0)
+    new Gun([[0,0],[0.4,0],[0.8,1.88],[-0.8,1.88],[-0.4, 0]],0)
   ];
   this.tankType = "MachineGun";
 }
@@ -236,7 +236,7 @@ function TriAngle(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.4,0],[0.4,1.9],[-0.4,1.9],[-0.4, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
     new Gun([[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI / 6 * 5),
     new Gun([[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],-Math.PI / 6 * 5)
   ];
@@ -250,7 +250,7 @@ function Destroyer(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    new Gun([[0,0],[0.7,0],[0.7,1.9],[-0.7,1.9],[-0.7, 0]],0)
+    new Gun([[0,0],[0.7,0],[0.7,1.88],[-0.7,1.88],[-0.7, 0]],0)
   ];
   this.tankType = "Destroyer";
 }
@@ -284,3 +284,522 @@ function Overload(){
 }
 Overload.prototype = new Tank();
 Overload.prototype.constructor = Overload;
+
+
+function TwinFlank(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],0),
+    new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],0),
+    new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],Math.PI),
+    new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],Math.PI)
+  ];
+  this.tankType = "TwinFlank";
+}
+TwinFlank.prototype = new Tank();
+TwinFlank.prototype.constructor = TwinFlank;
+
+
+function PentaShot(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.42,0],[0.42,1.6],[-0.42,1.6],[-0.42, 0]],Math.PI/4),
+    new Gun([[0,0],[0.42,0],[0.42,1.6],[-0.42,1.6],[-0.42, 0]],-Math.PI/4),
+    new Gun([[0,0],[0.42,0],[0.42,1.9],[-0.42,1.9],[-0.42, 0]],Math.PI/8),
+    new Gun([[0,0],[0.42,0],[0.42,1.9],[-0.42,1.9],[-0.42, 0]],-Math.PI/8),
+    new Gun([[0,0],[0.42,0],[0.42,2.25],[-0.42,2.25],[-0.42, 0]],0)
+  ];
+  this.tankType = "PentaShot";
+}
+PentaShot.prototype = new Tank();
+PentaShot.prototype.constructor = PentaShot;
+
+
+function Assasin(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.42,0],[0.42,2.45],[-0.42,2.45],[-0.42, 0]],0)
+  ];
+  this.tankType = "Assasin";
+}
+Assasin.prototype = new Tank();
+Assasin.prototype.constructor = Assasin;
+
+
+function ArenaCloser(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.42,0],[0.42,1.6],[-0.42,1.6],[-0.42, 0]],0)
+  ];
+  this.tankType = "ArenaCloser";
+}
+ArenaCloser.prototype = new Tank();
+ArenaCloser.prototype.constructor = ArenaCloser;
+
+
+function Necromanser(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[];
+  this.tankType = "Necromanser";
+}
+Necromanser.prototype = new Tank();
+Necromanser.prototype.constructor = Necromanser;
+
+
+function TripleTwin(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],0),
+    new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],0),
+    new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],Math.PI/3*2),
+    new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],Math.PI/3*2),
+    new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],-Math.PI/3*2),
+    new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],-Math.PI/3*2)
+  ];
+  this.tankType = "TripleTwin";
+}
+TripleTwin.prototype = new Tank();
+TripleTwin.prototype.constructor = TripleTwin;
+
+
+function Hunter(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.38,0],[0.38,2.23],[-0.38,2.23],[-0.54, 0]],0),
+    new Gun([[0,0],[0.54,0],[0.54,1.91],[-0.54,1.91],[-0.54, 0]],0)
+  ];
+  this.tankType = "Hunter";
+}
+Hunter.prototype = new Tank();
+Hunter.prototype.constructor = Hunter;
+
+
+function Gunner(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.87,0],[0.87,1.3],[0.47,1.3],[0.47, 0]],0),
+    new Gun([[0,0],[-0.87,0],[-0.87,1.3],[-0.47,1.3],[-0.47, 0]],0),
+    new Gun([[0,0],[0.55,0],[0.55,1.73],[0.15,1.73],[0.15, 0]],0),
+    new Gun([[0,0],[-0.55,0],[-0.55,1.73],[-0.15,1.73],[-0.15, 0]],0)
+  ];
+  this.tankType = "Gunner";
+}
+Gunner.prototype = new Tank();
+Gunner.prototype.constructor = Gunner;
+
+
+function Stalker(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Stalker";
+}
+Stalker.prototype = new Tank();
+Stalker.prototype.constructor = Stalker;
+
+
+function Ranger(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.42,0],[0.42,2.47],[-0.42,2.47],[-0.42, 0]],0),
+    new Gun([[0.8,0],[0.4,1.3],[-0.4,1.3],[-0.8,0]],0)
+  ];
+  this.tankType = "Ranger";
+}
+Ranger.prototype = new Tank();
+Ranger.prototype.constructor = Ranger;
+
+
+function Booster(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.4,1.45],[-0.4,1.45],[-0.4, 0]],Math.PI / 4 * 3),
+    new Gun([[0,0],[0.4,0],[0.4,1.45],[-0.4,1.45],[-0.4, 0]],-Math.PI / 4 * 3),
+    new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],Math.PI / 6 * 5),
+    new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],-Math.PI / 6 * 5)
+  ];
+  this.tankType = "Booster";
+}
+Booster.prototype = new Tank();
+Booster.prototype.constructor = Booster;
+
+
+function Fighter(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],Math.PI / 6 * 5),
+    new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],-Math.PI / 6 * 5),
+    new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],Math.PI / 2),
+    new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],-Math.PI / 2)
+  ];
+  this.tankType = "Fighter";
+}
+Fighter.prototype = new Tank();
+Fighter.prototype.constructor = Fighter;
+
+
+function Hybrid(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Hybrid";
+}
+Hybrid.prototype = new Tank();
+Hybrid.prototype.constructor = Hybrid;
+
+
+function Manager(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Manager";
+}
+Manager.prototype = new Tank();
+Manager.prototype.constructor = Manager;
+
+
+function MotherShip(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "MotherShip";
+}
+MotherShip.prototype = new Tank();
+MotherShip.prototype.constructor = MotherShip;
+
+
+function Predator(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Predator";
+}
+Predator.prototype = new Tank();
+Predator.prototype.constructor = Predator;
+
+
+function Sprayer(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.38,0],[0.38,2.25],[-0.38,2.25],[-0.38, 0]],0),
+    new Gun([[0,0],[0.4,0],[0.8,1.88],[-0.8,1.88],[-0.4, 0]],0)
+  ];
+  this.tankType = "Sprayer";
+}
+Sprayer.prototype = new Tank();
+Sprayer.prototype.constructor = Sprayer;
+
+
+function Trapper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0.43,1.2],[0.73,1.6],[-0.73,1.6],[-0.43,1.2]],0),
+    new Gun([[0.43,0],[0.43,1.2],[-0.43,1.2],[-0.43,0]],0)
+  ];
+  this.tankType = "Trapper";
+}
+Trapper.prototype = new Tank();
+Trapper.prototype.constructor = Trapper;
+
+
+function GunnerTrapper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "GunnerTrapper";
+}
+GunnerTrapper.prototype = new Tank();
+GunnerTrapper.prototype.constructor = GunnerTrapper;
+
+
+function OverTrapper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "OverTrapper";
+}
+OverTrapper.prototype = new Tank();
+OverTrapper.prototype.constructor = OverTrapper;
+
+
+function MegaTrapper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "MegaTrapper";
+}
+MegaTrapper.prototype = new Tank();
+MegaTrapper.prototype.constructor = MegaTrapper;
+
+
+function TriTrapper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "TriTrapper";
+}
+TriTrapper.prototype = new Tank();
+TriTrapper.prototype.constructor = TriTrapper;
+
+
+function Smasher(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Smasher";
+}
+Smasher.prototype = new Tank();
+Smasher.prototype.constructor = Smasher;
+
+
+function Landmine(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Landmine";
+}
+Landmine.prototype = new Tank();
+Landmine.prototype.constructor = Landmine;
+
+
+function AutoGunner(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "AutoGunner";
+}
+AutoGunner.prototype = new Tank();
+AutoGunner.prototype.constructor = AutoGunner;
+
+
+function Auto5(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Auto5";
+}
+Auto5.prototype = new Tank();
+Auto5.prototype.constructor = Auto5;
+
+
+function Auto3(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Auto3";
+}
+Auto3.prototype = new Tank();
+Auto3.prototype.constructor = Auto3;
+
+
+function SpreadShot(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.29,0],[0.29,1.32],[-0.29,1.32],[-0.29, 0]],Math.PI/12*5),
+    new Gun([[0,0],[0.29,0],[0.29,1.32],[-0.29,1.32],[-0.29, 0]],-Math.PI/12*5),
+    new Gun([[0,0],[0.29,0],[0.29,1.44],[-0.29,1.44],[-0.29, 0]],Math.PI/12*4),
+    new Gun([[0,0],[0.29,0],[0.29,1.44],[-0.29,1.44],[-0.29, 0]],-Math.PI/12*4),
+    new Gun([[0,0],[0.29,0],[0.29,1.56],[-0.29,1.56],[-0.29, 0]],Math.PI/12*3),
+    new Gun([[0,0],[0.29,0],[0.29,1.56],[-0.29,1.56],[-0.29, 0]],-Math.PI/12*3),
+    new Gun([[0,0],[0.29,0],[0.29,1.68],[-0.29,1.68],[-0.29, 0]],Math.PI/12*2),
+    new Gun([[0,0],[0.29,0],[0.29,1.68],[-0.29,1.68],[-0.29, 0]],-Math.PI/12*2),
+    new Gun([[0,0],[0.29,0],[0.29,1.8],[-0.29,1.8],[-0.29, 0]],Math.PI/12),
+    new Gun([[0,0],[0.29,0],[0.29,1.8],[-0.29,1.8],[-0.29, 0]],-Math.PI/12),
+    new Gun([[0,0],[0.42,0],[0.42,1.88],[-0.42,1.88],[-0.42, 0]],0)
+  ];
+  this.tankType = "SpreadShot";
+}
+SpreadShot.prototype = new Tank();
+SpreadShot.prototype.constructor = SpreadShot;
+
+
+function Streamliner(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.42,0],[0.42,2.25],[-0.42,2.25],[-0.42, 0]],0),
+    new Gun([[0,0],[0.42,0],[0.42,2.04],[-0.42,2.04],[-0.42, 0]],0),
+    new Gun([[0,0],[0.42,0],[0.42,1.83],[-0.42,1.83],[-0.42, 0]],0),
+    new Gun([[0,0],[0.42,0],[0.42,1.62],[-0.42,1.62],[-0.42, 0]],0),
+    new Gun([[0,0],[0.42,0],[0.42,1.41],[-0.42,1.41],[-0.42, 0]],0)
+  ];
+  this.tankType = "Streamliner";
+}
+Streamliner.prototype = new Tank();
+Streamliner.prototype.constructor = Streamliner;
+
+
+function AutoTrapper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "AutoTrapper";
+}
+AutoTrapper.prototype = new Tank();
+AutoTrapper.prototype.constructor = AutoTrapper;
+
+
+function BasicDominator(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "BasicDominator";
+}
+BasicDominator.prototype = new Tank();
+BasicDominator.prototype.constructor = BasicDominator;
+
+
+function GunnerDominator(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "GunnerDominator";
+}
+GunnerDominator.prototype = new Tank();
+GunnerDominator.prototype.constructor = GunnerDominator;
+
+
+function TrapperDominator(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "TrapperDominator";
+}
+TrapperDominator.prototype = new Tank();
+TrapperDominator.prototype.constructor = TrapperDominator;
+
+
+function BattleShip(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "BattleShip";
+}
+BattleShip.prototype = new Tank();
+BattleShip.prototype.constructor = BattleShip;
+
+
+function Annihilator(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.95,0],[0.95,1.88],[-0.95,1.88],[-0.95, 0]],0)
+  ];
+  this.tankType = "Annihilator";
+}
+Annihilator.prototype = new Tank();
+Annihilator.prototype.constructor = Annihilator;
+
+
+function AutoSmasher(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "AutoSmasher";
+}
+AutoSmasher.prototype = new Tank();
+AutoSmasher.prototype.constructor = AutoSmasher;
+
+
+function Spike(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Spike";
+}
+Spike.prototype = new Tank();
+Spike.prototype.constructor = Spike;
+
+
+function Factory(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Factory";
+}
+Factory.prototype = new Tank();
+Factory.prototype.constructor = Factory;
+
+
+function Skimmer(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Skimmer";
+}
+Skimmer.prototype = new Tank();
+Skimmer.prototype.constructor = Skimmer;
+
+
+function Rocketeer(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+
+  ];
+  this.tankType = "Rocketeer";
+}
+Rocketeer.prototype = new Tank();
+Rocketeer.prototype.constructor = Rocketeer;

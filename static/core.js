@@ -5,19 +5,59 @@ function System(){ // 게임의 전체 진행 담당
   this.uiObjectList = [];
 
   this.tankList = [
-    Basic,
-    Twin,
-    Triplet,
-    TripleShot,
-    QuadTank,
-    OctoTank,
-    Sniper,
-    MachineGun,
-    FlankGuard,
-    TriAngle,
-    Destroyer,
-    Overseer,
-    Overload
+    Basic, //// 구현 완료
+    Twin, ////
+    Triplet, ////
+    TripleShot, ////
+    QuadTank, ////
+    OctoTank, ////
+    Sniper, ////
+    MachineGun, ////
+    FlankGuard, ////
+    TriAngle, ////
+    Destroyer, ////
+    Overseer,/// 디자인만 완료
+    Overload,///
+    TwinFlank,///
+    PentaShot,///
+    Assasin,///
+    ArenaCloser,///
+    Necromanser,// 구현 안됨
+    TripleTwin,///
+    Hunter,///
+    Gunner,///
+    Stalker,//
+    Ranger,///
+    Booster,///
+    Fighter,///
+    Hybrid,//
+    Manager,//
+    MotherShip,//
+    Predator,//
+    Sprayer,///
+    Trapper,///
+    GunnerTrapper,//
+    OverTrapper,//
+    MegaTrapper,//
+    TriTrapper,//
+    Smasher,//
+    Landmine,//
+    AutoGunner,//
+    Auto5,//
+    Auto3,//
+    SpreadShot,///
+    Streamliner,///
+    AutoTrapper,//
+    BasicDominator,//
+    GunnerDominator,//
+    TrapperDominator,//
+    BattleShip,//
+    Annihilator,///
+    AutoSmasher,//
+    Spike,//
+    Factory,//
+    Skimmer,//
+    Rocketeer//
   ];
 
   this.colorList = [

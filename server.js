@@ -23,7 +23,7 @@ let bullets = []; // 총알 목록.
 let sockets = {}; // 유저 접속 목록.
 
 let mapSize = {x: 0,y: 0}; // 맵 크기.
-let tankLength = 13; // 탱크의 목록 길이. 지금은 Basic 부터 Destroyer 까지 총 11개다.
+let tankLength = 53; // 탱크의 목록 길이. 지금은 Basic 부터 Destroyer 까지 총 11개다.
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
