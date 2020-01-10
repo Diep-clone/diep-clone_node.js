@@ -68,11 +68,9 @@ function DrawObject(){ // 그리기 담당
     if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900; // 화면 크기에 따른 줌값 조정
     else this.camera.z=this.canvas.width/1600;
 
-    this.camera.uiz = this.camera.z;
+    this.camera.uiz = this.camera.z; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야 *1.229 는 75레벨 탱크의 시야
 
-    this.camera.z *= 1.78; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야 *1.229 는 75레벨 탱크의 시야
-
-    this.camera.z /= this.sight;
+    this.camera.z *= this.sight;
 
     if (tank){
       //this.camera.x = tank.x - 100;

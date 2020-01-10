@@ -7,6 +7,7 @@ function Tank(){
   this.color = new RGB(0,176,225);
   this.gunColor = new RGB(153,153,153);
   this.name = "";
+  this.level;
   this.isDead = false;
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
@@ -52,6 +53,9 @@ function Tank(){
   this.setColor = function (color){
     this.color = color;
   }
+  this.setLevel = function (lv){
+    this.level = lv;
+  }
   this.changeTank = function (type){
     let t = new type();
     this.guns = t.guns;
@@ -65,8 +69,8 @@ function Tank(){
     this.hitTime=0.2;
   }
   this.setCanvasSize = function(camera){
-    let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
-    let yy = ((this.y - this.dy - camera.y) * camera.z) - Math.floor((this.y - this.dy - camera.y) * camera.z);
+    let xx = ((this.x - this.dx - this.radius - camera.x) * camera.z) - Math.floor((this.x - this.dx - this.radius - camera.x) * camera.z);
+    let yy = ((this.y - this.dy - this.radius - camera.y) * camera.z) - Math.floor((this.y - this.dy - this.radius - camera.y) * camera.z);
     this.canvasSize.x = ((this.radius * 2) * camera.z);
     this.canvasSize.y = ((this.radius * 2) * camera.z);
     this.canvasPos = {x:(this.radius * camera.z + xx),y:(this.radius * camera.z + yy)};
@@ -103,7 +107,7 @@ function Tank(){
     ctx.globalAlpha = this.opacity;
     //ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
     ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
-    //ctx.putImageData(this.ctx.getImageData(0,0,this.canvas.width,this.canvas.height),((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
+    //ctx.drawImage(this.canvas,(Math.floor((this.x - this.dx - camera.x) * camera.z)-this.canvasPos.x),(Math.floor((this.y - this.dy - camera.y) * camera.z)-this.canvasPos.y));
   }
 }
 Tank.prototype = new HealthShowObject();

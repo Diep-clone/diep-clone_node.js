@@ -48,6 +48,7 @@ io.on('connection', (socket) => { // 접속.
     h:10,
     dx:0,
     dy:0,
+    level:1,
     health:48,
     maxHealth:48,
     lastHealth:48,
@@ -63,7 +64,7 @@ io.on('connection', (socket) => { // 접속.
       x:0,
       y:0
     },
-    sight:1,
+    sight:1.78,
     guns:[],
     stats:[0,0,0,0,0,0,0,0],
     type:0,
@@ -87,6 +88,8 @@ io.on('connection', (socket) => { // 접속.
       index = users.length;
       users.push(currentPlayer);
 
+      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+      socket.emit('sight',userUtil.setUserSight(currentPlayer));
       socket.emit('spawn', currentPlayer);
       io.emit('mapSize', mapSize);
     }
@@ -101,6 +104,19 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.rotate = data.rotate;
   });
 
+  //연구 목적 소켓
+  socket.on('changeRadius', (data) => {
+    currentPlayer.radius = Math.round(data*100)/100;
+  });
+
+  socket.on('changeLevel', (data) => {
+    currentPlayer.level = Math.min(data,45);
+    currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+    socket.emit('sight',userUtil.setUserSight(currentPlayer));
+  });
+
+  // ------------끝-------------
+
   socket.on('input', (data) => { // 입력 정보
     currentPlayer.moveRotate = data.moveRotate;
     currentPlayer.mouse.left = data.shot>0 || data.autoE;
@@ -113,6 +129,7 @@ io.on('connection', (socket) => { // 접속.
     if (data.changeTank){
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
       userUtil.setUserGun(currentPlayer);
+      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
       socket.emit('sight',userUtil.setUserSight(currentPlayer));
     }
   });
