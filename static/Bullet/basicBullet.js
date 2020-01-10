@@ -11,7 +11,7 @@ function BasicBullet(){
   this.canvasPos = {x:0,y:0};
   this.animate = function(tick){
     if (this.isDead || this.health<0 || this.time<0){
-      this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
+      this.opacity = Math.max(this.opacity - 0.2 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity === 0){
         system.removeObject(this.id,'bullet');

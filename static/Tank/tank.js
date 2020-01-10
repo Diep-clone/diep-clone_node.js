@@ -18,13 +18,11 @@ function Tank(){
 
   this.animate = function(tick){
     if (this.isDead || this.health<0){
+      this.opacity = Math.max(this.opacity - 0.2 * tick * 0.05, 0);
+      this.radius += 0.4 * tick * 0.05;
       if (this.opacity == 0){
         system.removeObject(this.id,'tank');
         return;
-      }
-      else if (this.opacity > 0){
-        this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
-        this.radius += 0.3 * tick * 0.05;
       }
     }
     if (this.hitTime>0){ // hit effect
@@ -67,9 +65,11 @@ function Tank(){
     this.hitTime=0.2;
   }
   this.setCanvasSize = function(camera){
+    let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
+    let yy = ((this.y - this.dy - camera.y) * camera.z) - Math.floor((this.y - this.dy - camera.y) * camera.z);
     this.canvasSize.x = ((this.radius * 2) * camera.z);
     this.canvasSize.y = ((this.radius * 2) * camera.z);
-    this.canvasPos = {x:(this.radius * camera.z),y:(this.radius * camera.z)};
+    this.canvasPos = {x:(this.radius * camera.z + xx),y:(this.radius * camera.z + yy)};
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].setParentCanvasSize(this,camera);
     }
@@ -80,6 +80,7 @@ function Tank(){
     this.ctx.lineWidth = 2 * camera.z;
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
+    this.ctx.imageSmoothingEnabled = false;
   }
   this.draw = function(ctx,camera){
     this.setCanvasSize(camera);
@@ -102,6 +103,7 @@ function Tank(){
     ctx.globalAlpha = this.opacity;
     //ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
     ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
+    //ctx.putImageData(this.ctx.getImageData(0,0,this.canvas.width,this.canvas.height),((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
   }
 }
 Tank.prototype = new HealthShowObject();

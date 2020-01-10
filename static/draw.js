@@ -4,6 +4,9 @@ function DrawObject(){ // 그리기 담당
   this.canvas = document.getElementById("canvas");
   this.ctx = canvas.getContext("2d", {alpha:false});
 
+  this.objCanvas = document.createElement("canvas");
+  this.objCtx = this.objCanvas.getContext("2d");
+
   this.dCanvas = document.createElement("canvas");
   this.dCtx = this.dCanvas.getContext("2d");
 
@@ -40,11 +43,14 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.resize = function (){
-    this.canvas.width=this.dCanvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
-    this.canvas.height=this.dCanvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
+    this.canvas.width=this.objCanvas.width=this.dCanvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
+    this.canvas.height=this.objCanvas.height=this.dCanvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
     this.dCtx.lineCap = this.uiCtx.lineCap = "round";
     this.dCtx.lineJoin = this.uiCtx.lineJoin = "round";
-    //this.ctx.imageSmoothingEnabled = false;
+    this.ctx.imageSmoothingEnabled = false;
+    this.objCtx.imageSmoothingEnabled = false;
+    this.dCtx.imageSmoothingEnabled = false;
+    this.uiCtx.imageSmoothingEnabled = false;
   }
 
   this.setCursor = function (style){
@@ -79,7 +85,7 @@ function DrawObject(){ // 그리기 담당
   }
 
   this.backgroundDraw = function (){
-    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+    this.objCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
     this.dCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
     this.uiCtx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
@@ -111,13 +117,14 @@ function DrawObject(){ // 그리기 담당
   this.objectDraw = function (obj){
     for (let key in obj){
       if (obj[key]){
-        obj[key].draw(this.ctx,this.camera);
+        obj[key].draw(this.objCtx,this.camera);
         if (obj[key].drawHPBar){
           obj[key].drawHPBar(this.dCtx,this.camera);
         }
       }
     }
     this.ctx.globalAlpha = 1;
+    this.ctx.drawImage(this.objCanvas,0,0);
     this.ctx.drawImage(this.dCanvas,0,0);
   }
 
