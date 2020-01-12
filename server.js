@@ -106,7 +106,7 @@ io.on('connection', (socket) => { // 접속.
 
   //연구 목적 소켓
   socket.on('changeRadius', (data) => {
-    currentPlayer.radius = Math.round(data*100)/100;
+    currentPlayer.radius = Math.max(Math.round(data*100)/100,1);
   });
 
   socket.on('changeLevel', (data) => {
