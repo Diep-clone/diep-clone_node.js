@@ -69,8 +69,8 @@ function Tank(){
     this.hitTime=0.2;
   }
   this.setCanvasSize = function(camera){
-    let xx = ((this.x - this.dx - this.radius - camera.x) * camera.z) - Math.floor((this.x - this.dx - this.radius - camera.x) * camera.z);
-    let yy = ((this.y - this.dy - this.radius - camera.y) * camera.z) - Math.floor((this.y - this.dy - this.radius - camera.y) * camera.z);
+    let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
+    let yy = ((this.y - this.dy - camera.y) * camera.z) - Math.floor((this.y - this.dy - camera.y) * camera.z);
     this.canvasSize.x = ((this.radius * 2) * camera.z);
     this.canvasSize.y = ((this.radius * 2) * camera.z);
     this.canvasPos = {x:(this.radius * camera.z + xx),y:(this.radius * camera.z + yy)};
@@ -87,27 +87,49 @@ function Tank(){
     this.ctx.imageSmoothingEnabled = false;
   }
   this.draw = function(ctx,camera){
-    this.setCanvasSize(camera);
-
-    this.ctx.strokeStyle = this.gunColor.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 총구 그리기
-    this.ctx.fillStyle = this.gunColor.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
-    for (let i=0;i<this.guns.length;i++){
-      this.guns[i].drawGun(this,this.ctx,camera);
+    if (this.opacity>=1){
+      this.canvasPos = {x:(this.x - this.dx - camera.x) * camera.z,y:(this.y - this.dy - camera.y) * camera.z};
+      ctx.lineWidth = 2 * camera.z;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = this.gunColor.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 총구 그리기
+      ctx.fillStyle = this.gunColor.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
+      for (let i=0;i<this.guns.length;i++){
+        this.guns[i].drawGun(this,ctx,camera);
+      }
+      ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
+      ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
+      ctx.beginPath();
+      ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
     }
+    else{
+      this.setCanvasSize(camera);
 
-    this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
-    this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
-    this.ctx.beginPath();
-    //this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
-    this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
-    this.ctx.fill();
-    this.ctx.stroke();
-    this.ctx.closePath();
+      this.ctx.strokeStyle = this.gunColor.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 총구 그리기
+      this.ctx.fillStyle = this.gunColor.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
+      for (let i=0;i<this.guns.length;i++){
+        this.guns[i].drawGun(this,this.ctx,camera);
+      }
 
-    ctx.globalAlpha = this.opacity;
-    //ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
-    ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
-    //ctx.drawImage(this.canvas,(Math.floor((this.x - this.dx - camera.x) * camera.z)-this.canvasPos.x),(Math.floor((this.y - this.dy - camera.y) * camera.z)-this.canvasPos.y));
+      this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
+      this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
+      this.ctx.beginPath();
+      //this.ctx.arc(Math.floor(this.canvasPos.x),Math.floor(this.canvasPos.y),this.radius * camera.z,0,Math.PI * 2);
+      this.ctx.arc(this.canvasPos.x,this.canvasPos.y,this.radius * camera.z,0,Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.stroke();
+      this.ctx.closePath();
+
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      //ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
+      ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
+      //ctx.drawImage(this.canvas,(Math.floor((this.x - this.dx - camera.x) * camera.z)-this.canvasPos.x),(Math.floor((this.y - this.dy - camera.y) * camera.z)-this.canvasPos.y));
+      ctx.restore();
+    }
   }
 }
 Tank.prototype = new HealthShowObject();

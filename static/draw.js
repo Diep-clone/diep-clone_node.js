@@ -115,14 +115,14 @@ function DrawObject(){ // 그리기 담당
   this.objectDraw = function (obj){
     for (let key in obj){
       if (obj[key]){
-        obj[key].draw(this.objCtx,this.camera);
+        obj[key].draw(this.ctx,this.camera);
         if (obj[key].drawHPBar){
           obj[key].drawHPBar(this.dCtx,this.camera);
         }
       }
     }
     this.ctx.globalAlpha = 1;
-    this.ctx.drawImage(this.objCanvas,0,0);
+    //this.ctx.drawImage(this.objCanvas,0,0);
     this.ctx.drawImage(this.dCanvas,0,0);
   }
 
