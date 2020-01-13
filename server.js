@@ -67,7 +67,8 @@ io.on('connection', (socket) => { // 접속.
     sight:1.78,
     guns:[],
     stats:[0,0,0,0,0,0,0,0],
-    type:0,
+    bulletCount:0,
+    type:12,
     isCollision:false
   };
 
@@ -156,7 +157,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
 
   function check(obj){ // 충돌했는가?
-    if ((!obj.owner || obj.owner !== currentPlayer.id) && obj.id !== currentPlayer.id && currentPlayer.isCollision == false && obj.isCollision == false){
+    if ((!obj.owner || obj.owner !== currentPlayer.id) && obj.id !== currentPlayer.id && (currentPlayer.isCollision === false || obj.isCollision === false)){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(playerCircle,
       new C(new V(obj.x,obj.y),obj.radius),response);
@@ -216,7 +217,10 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
-    if ((!obj.owner || obj.owner !== currentBullet.owner) && obj.id !== currentBullet.owner && obj.id !== currentBullet.id && currentBullet.isCollision == false && obj.isCollision == false){
+    if ((!obj.owner || obj.owner !== currentBullet.owner || (obj.type === 2 && currentBullet.type === 2))
+    && obj.id !== currentBullet.owner
+    && obj.id !== currentBullet.id
+    && (currentBullet.isCollision === false || obj.isCollision === false)){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(bulletCircle,
       new C(new V(obj.x,obj.y),obj.radius),response);
@@ -244,17 +248,19 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
     collision.bUser.dx-=Math.cos(dir) * 1;
     collision.bUser.dy-=Math.sin(dir) * 1;
 
-    if (collision.bUser.lastHealth-collision.aUser.damage<=0){
-      collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
-    }
-    else{
-      collision.aUser.health-=collision.bUser.damage;
-    }
-    if (collision.aUser.lastHealth-collision.bUser.damage<=0){
-      collision.bUser.health-=collision.aUser.damage*(collision.aUser.lastHealth/collision.bUser.damage);
-    }
-    else{
-      collision.bUser.health-=collision.aUser.damage;
+    if (collision.aUser.owner !== collision.bUser.owner){
+      if (collision.bUser.lastHealth-collision.aUser.damage<=0){
+        collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
+      }
+      else{
+        collision.aUser.health-=collision.bUser.damage;
+      }
+      if (collision.aUser.lastHealth-collision.bUser.damage<=0){
+        collision.bUser.health-=collision.aUser.damage*(collision.aUser.lastHealth/collision.bUser.damage);
+      }
+      else{
+        collision.bUser.health-=collision.aUser.damage;
+      }
     }
   }
 
@@ -269,7 +275,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 
   bulletCollisions.forEach(collisionCheck);
 
-  currentBullet.time -= 1000/60; // 수명
+  if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
 }
 
 function moveloop(){

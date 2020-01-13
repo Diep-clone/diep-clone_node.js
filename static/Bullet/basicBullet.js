@@ -3,7 +3,6 @@ function BasicBullet(){
 
   DynamicObject.apply(this, arguments);
   this.color = new RGB(0,176,225);
-  this.owner;
   this.isDead = false;
   this.canvas = document.createElement("canvas");
   this.ctx = this.canvas.getContext("2d");
