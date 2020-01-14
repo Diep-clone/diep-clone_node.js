@@ -69,7 +69,8 @@ io.on('connection', (socket) => { // 접속.
     stats:[0,0,0,0,0,0,0,0],
     bulletCount:0,
     type:12,
-    isCollision:false
+    isCollision:false,
+    isDead:false
   };
 
   socket.on('login', (player) => { // 탱크 생성.
@@ -123,6 +124,7 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.mouse.left = data.shot>0 || data.autoE;
     if (data.o){
       if (util.findIndex(users,currentPlayer.id) > -1){
+        currentPlayer.isDead=true;
         users.splice(util.findIndex(users,currentPlayer.id),1);
         io.emit('objectDead',currentPlayer);
       }
@@ -143,6 +145,7 @@ io.on('connection', (socket) => { // 접속.
     tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
     if (util.findIndex(users,currentPlayer.id) > -1){
+      currentPlayer.isDead=true;
       users.splice(util.findIndex(users,currentPlayer.id),1);
       io.emit('objectDead',currentPlayer);
     }
@@ -286,8 +289,9 @@ function moveloop(){
     tickBullet(b);
   });
   users.forEach((u)=>{
-    if (userUtil.isDeadPlayer(u,users))
+    if (userUtil.isDeadPlayer(u,users)){
       io.emit('objectDead',u);
+    }
   });
   bullets.forEach((b)=>{
     if (bulletUtil.isDeadBullet(b,bullets))

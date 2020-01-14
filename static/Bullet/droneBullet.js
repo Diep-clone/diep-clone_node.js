@@ -61,10 +61,10 @@ function DroneBullet(){
       this.ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
       this.ctx.fillStyle = this.color.getRGBValue();
       this.ctx.beginPath();
-      this.ctx.moveTo((this.x - camera.x + Math.cos(this.rotate) * this.radius * 3) * camera.z,(this.y - camera.y + Math.sin(this.rotate) * this.radius * 3) * camera.z);
-      this.ctx.lineTo((this.x - camera.x + Math.cos(this.rotate + Math.PI / 6 * 5) * this.radius * 3) * camera.z,(this.y - camera.y + Math.sin(this.rotate + Math.PI / 6 * 5) * this.radius * 3) * camera.z);
-      this.ctx.lineTo((this.x - camera.x + Math.cos(this.rotate - Math.PI / 6 * 5) * this.radius * 3) * camera.z,(this.y - camera.y + Math.sin(this.rotate - Math.PI / 6 * 5) * this.radius * 3) * camera.z);
-      this.ctx.lineTo((this.x - camera.x + Math.cos(this.rotate) * this.radius * 3) * camera.z,(this.y - camera.y + Math.sin(this.rotate) * this.radius * 3) * camera.z);
+      this.ctx.moveTo(this.canvasPos.x + Math.cos(this.rotate) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.rotate) * this.radius * 2 * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.rotate + Math.PI / 3 * 2) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.rotate + Math.PI / 3 * 2) * this.radius * 2 * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.rotate - Math.PI / 3 * 2) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.rotate - Math.PI / 3 * 2) * this.radius * 2 * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.rotate) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.rotate) * this.radius * 2 * camera.z);
       this.ctx.fill();
       this.ctx.stroke();
       this.ctx.closePath();
