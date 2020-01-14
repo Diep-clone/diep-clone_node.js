@@ -49,7 +49,7 @@ io.on('connection', (socket) => { // 접속.
     dx:0,
     dy:0,
     level:1,
-    health:48,
+    health:1,
     maxHealth:48,
     lastHealth:48,
     damage:20,
@@ -70,6 +70,7 @@ io.on('connection', (socket) => { // 접속.
     bulletCount:0,
     type:12,
     isCollision:false,
+    hitTime:Date.now(),
     isDead:false
   };
 
@@ -156,6 +157,8 @@ io.on('connection', (socket) => { // 접속.
 
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   userUtil.moveUser(currentPlayer,mapSize);
+  objUtil.healObject(currentPlayer);
+
   bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer));
 
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
@@ -183,6 +186,9 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
     io.emit('objectHit',collision.aUser);
     io.emit('objectHit',collision.bUser);
+
+    collision.aUser.hitTime = Date.now();
+    collision.bUser.hitTime = Date.now();
 
     collision.aUser.dx+=Math.cos(dir) * 1;
     collision.aUser.dy+=Math.sin(dir) * 1;
@@ -246,6 +252,9 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 
     io.emit('objectHit',collision.aUser);
     io.emit('objectHit',collision.bUser);
+
+    collision.aUser.hitTime = Date.now();
+    collision.bUser.hitTime = Date.now();
 
     collision.aUser.dx+=Math.cos(dir) * 1;
     collision.aUser.dy+=Math.sin(dir) * 1;
