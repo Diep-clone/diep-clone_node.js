@@ -78,10 +78,12 @@ function System(){ // 게임의 전체 진행 담당
     ctrl: false,
     isMouseOverUi: false,
     shot: 0,
+    rShot: 0,
     moveRotate: null,
     moveVector: new Vector(0,0),
     space: false,
     leftMouse: false,
+    rightMouse: false,
     w: false,
     a: false,
     s: false,
@@ -369,6 +371,10 @@ function System(){ // 게임의 전체 진행 담당
       case 1: // 마우스 휠 클릭
       break;
       case 2: // 우클릭
+      if (!this.input.rightMouse){
+        this.input.rShot++;
+        this.input.rightMouse = true;
+      }
       break;
       default:
       break;
@@ -382,6 +388,12 @@ function System(){ // 게임의 전체 진행 담당
     }
 */
     socket.emit('input',this.input);
+
+    return false;
+  }.bind(this);
+
+  window.oncontextmenu = function (e){
+    return false;
   }.bind(this);
 
   window.onmouseup = function (e){
@@ -395,6 +407,10 @@ function System(){ // 게임의 전체 진행 담당
       case 1: // 마우스 휠 클릭
       break;
       case 2: // 우클릭
+      if (this.input.rightMouse){
+        this.input.rShot--;
+        this.input.rightMouse = false;
+      }
       break;
       default:
       break;

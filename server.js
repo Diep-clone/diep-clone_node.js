@@ -122,6 +122,7 @@ io.on('connection', (socket) => { // 접속.
   socket.on('input', (data) => { // 입력 정보
     currentPlayer.moveRotate = data.moveRotate;
     currentPlayer.mouse.left = data.shot>0 || data.autoE;
+    currentPlayer.mouse.right = data.rShot>0;
     if (data.o){
       if (util.findIndex(users,currentPlayer.id) > -1){
         currentPlayer.isDead=true;
@@ -215,7 +216,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  bulletUtil.moveBullet(currentBullet);
+  bulletUtil.moveBullet(currentBullet,mapSize);
 
   currentBullet.lastHealth = currentBullet.health;
 
