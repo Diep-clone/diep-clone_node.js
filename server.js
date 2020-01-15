@@ -135,6 +135,8 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향
+     if (data == null ) return; // null 값을 받으면 서버 정지
+    
     currentPlayer.target = data;
     if (currentPlayer.controlTank){
       currentPlayer.controlTank.rotate = Math.atan2(data.y-currentPlayer.controlTank.y,data.x-currentPlayer.controlTank.x);
