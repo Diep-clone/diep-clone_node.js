@@ -18,7 +18,8 @@ let tree;
 let V = SAT.Vector;
 let C = SAT.Circle;
 
-let users = []; // 유저 목록. 탱크의 정보와 똑같다.
+let users = {}; // 유저 목록.
+let tanks = [];
 let bullets = []; // 총알 목록.
 let sockets = {}; // 유저 접속 목록.
 
@@ -37,11 +38,26 @@ io.on('connection', (socket) => { // 접속.
 
   tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
-  let index;
-
   let currentPlayer = { // 현재 플레이어 객체 생성.
-    objType: 'tank',
+    objType: 'player',
     id:socket.id, // 플레이어의 소켓 id
+    rotate: null,
+    mouse:"",
+    target:{
+      x:0,
+      y:0
+    },
+    camera:{
+      x:0,
+      y:0
+    },
+    name:"",
+    controlTank:null
+  };
+
+  /*let currentTank = {
+    objType: 'tank',
+    id:socket.id,
     x:0,
     y:0,
     w:10,
@@ -56,14 +72,6 @@ io.on('connection', (socket) => { // 접속.
     radius:12.8,
     rotate:0,
     name:"",
-    mouse:{
-      left: false,
-      right: false
-    },
-    target:{
-      x:0,
-      y:0
-    },
     sight:1.78,
     guns:[],
     stats:[0,0,0,0,0,0,0,0],
@@ -72,7 +80,7 @@ io.on('connection', (socket) => { // 접속.
     isCollision:false,
     hitTime:Date.now(),
     isDead:false
-  };
+  };*/
 
   socket.on('login', (player) => { // 탱크 생성.
     if (sockets[socket.id]){
@@ -84,16 +92,40 @@ io.on('connection', (socket) => { // 접속.
 
       sockets[socket.id] = socket;
 
-      currentPlayer.x = util.randomRange(-mapSize.x/2,mapSize.x/2);
-      currentPlayer.y = util.randomRange(-mapSize.y/2,mapSize.y/2);
-      userUtil.setUserGun(currentPlayer);
+      currentPlayer.controlTank = {
+        objType: 'tank',
+        id:socket.id,
+        x:util.randomRange(-mapSize.x/2,mapSize.x/2),
+        y:util.randomRange(-mapSize.y/2,mapSize.y/2),
+        w:10,
+        h:10,
+        dx:0,
+        dy:0,
+        level:1,
+        health:1,
+        maxHealth:48,
+        lastHealth:48,
+        damage:20,
+        radius:13,
+        rotate:0,
+        name:"",
+        sight:1.78,
+        guns:[],
+        stats:[0,0,0,0,0,0,0,0],
+        bulletCount:0,
+        type:12,
+        isCollision:false,
+        hitTime:Date.now(),
+        isDead:false
+      };
 
-      index = users.length;
-      users.push(currentPlayer);
+      userUtil.setUserGun(currentPlayer.controlTank);
 
-      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
-      socket.emit('sight',userUtil.setUserSight(currentPlayer));
-      socket.emit('spawn', currentPlayer);
+      users[socket.id] = currentPlayer;
+      tanks.push(currentPlayer.controlTank);
+
+      currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
+      socket.emit('spawn', currentPlayer.controlTank);
       io.emit('mapSize', mapSize);
     }
   });
@@ -103,39 +135,47 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향
-    currentPlayer.target = data.target;
-    currentPlayer.rotate = data.rotate;
+    currentPlayer.target = data;
+    if (currentPlayer.controlTank){
+      currentPlayer.controlTank.rotate = Math.atan2(data.y-currentPlayer.controlTank.y,data.x-currentPlayer.controlTank.x);
+    }
+  });
+
+  socket.on('windowResized', (data) => {
+    currentPlayer.screenWidth = data.screenWidth;
+    currentPlayer.screenHeight = data.screenHeight;
   });
 
   //연구 목적 소켓
   socket.on('changeRadius', (data) => {
-    currentPlayer.radius = Math.max(Math.round(data*100)/100,1);
+    currentPlayer.controlTank.radius = Math.max(Math.round(data*100)/100,1);
   });
 
   socket.on('changeLevel', (data) => {
-    currentPlayer.level = Math.min(data,45);
-    currentPlayer.sight = userUtil.setUserSight(currentPlayer);
-    socket.emit('sight',userUtil.setUserSight(currentPlayer));
+    currentPlayer.controlTank.level = Math.min(data,45);
+    currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
   });
 
   // ------------끝-------------
 
   socket.on('input', (data) => { // 입력 정보
-    currentPlayer.moveRotate = data.moveRotate;
-    currentPlayer.mouse.left = data.shot>0 || data.autoE;
-    currentPlayer.mouse.right = data.rShot>0;
-    if (data.o){
-      if (util.findIndex(users,currentPlayer.id) > -1){
-        currentPlayer.isDead=true;
-        users.splice(util.findIndex(users,currentPlayer.id),1);
-        io.emit('objectDead',currentPlayer);
+    currentPlayer.rotate = data.moveRotate;
+    if (data.rShot>0) currentPlayer.mouse = "right";
+    else if (data.shot>0 || data.autoE) currentPlayer.mouse = "left";
+    else currentPlayer.mouse = "null";
+    if (currentPlayer.controlTank){
+      if (data.o){
+        if (currentPlayer.controlTank){
+          currentPlayer.controlTank.isDead=true;
+          tanks.splice(util.findIndex(tanks,currentPlayer.id),1);
+          io.emit('objectDead',currentPlayer.controlTank);
+        }
       }
-    }
-    if (data.changeTank){
-      currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
-      userUtil.setUserGun(currentPlayer);
-      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
-      socket.emit('sight',userUtil.setUserSight(currentPlayer));
+      if (data.changeTank){
+        currentPlayer.controlTank.type = currentPlayer.controlTank.type==0?tankLength-1:currentPlayer.controlTank.type-1;
+        userUtil.setUserGun(currentPlayer.controlTank);
+        currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+      }
     }
   });
 
@@ -149,17 +189,23 @@ io.on('connection', (socket) => { // 접속.
     if (util.findIndex(users,currentPlayer.id) > -1){
       currentPlayer.isDead=true;
       users.splice(util.findIndex(users,currentPlayer.id),1);
-      io.emit('objectDead',currentPlayer);
+      if (currentPlayer.controlTank){
+        currentPlayer.controlTank.isDead=true;
+        tanks.splice(util.findIndex(tanks,currentPlayer.id),1);
+        io.emit('objectDead',currentPlayer.controlTank);
+      }
     }
-    io.emit('mapSize', mapSize); // 여기 tab 스페이스 바 크기 어떻게 설정해요?
+    io.emit('mapSize', mapSize);
+
+    currentPlayer = null;
   });
 });
 
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
-  userUtil.moveUser(currentPlayer,mapSize);
+  userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
   objUtil.healObject(currentPlayer);
 
-  bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer));
+  bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]));
 
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
 
@@ -212,7 +258,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   var playerCircle = new C(new V(currentPlayer.x,currentPlayer.y),currentPlayer.radius);
 
   tree.clear();
-  users.forEach(tree.put);
+  tanks.forEach(tree.put);
   bullets.forEach(tree.put);
   var playerCollisions = [];
 
@@ -222,7 +268,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  bulletUtil.moveBullet(currentBullet,mapSize);
+  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner]);
 
   currentBullet.lastHealth = currentBullet.health;
 
@@ -280,7 +326,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   var bulletCircle = new C(new V(currentBullet.x,currentBullet.y),currentBullet.radius);
 
   tree.clear();
-  users.forEach(tree.put);
+  tanks.forEach(tree.put);
   bullets.forEach(tree.put);
   var bulletCollisions = [];
 
@@ -292,14 +338,14 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 }
 
 function moveloop(){
-  users.forEach((u) => {
+  tanks.forEach((u) => {
     tickPlayer(u);
   });
   bullets.forEach((b) => {
     tickBullet(b);
   });
-  users.forEach((u)=>{
-    if (userUtil.isDeadPlayer(u,users)){
+  tanks.forEach((u)=>{
+    if (userUtil.isDeadPlayer(u,tanks)){
       io.emit('objectDead',u);
     }
   });
@@ -310,8 +356,33 @@ function moveloop(){
 }
 
 function sendUpdates(){
-  for (let key in sockets){
-    sockets[key].emit('objectList',users,bullets);
+  for (let key in users){
+    if (users[key].controlTank){
+      users[key].camera.x = users[key].controlTank.x;
+      users[key].camera.y = users[key].controlTank.y;
+    }
+    let u = users[key];
+    let visibleTank  = tanks
+            .map(function(f) {
+                if ( f.x > u.camera.x - u.screenWidth/2 - f.radius &&
+                    f.x < u.camera.x + u.screenWidth/2 + f.radius &&
+                    f.y > u.camera.y - u.screenHeight/2 - f.radius &&
+                    f.y < u.camera.y + u.screenHeight/2 + f.radius) {
+                    return f;
+                }
+            })
+            .filter(function(f) { return f; });
+    let visibleBullet  = bullets
+            .map(function(f) {
+                if ( f.x > u.camera.x - u.screenWidth/2 - f.radius &&
+                    f.x < u.camera.x + u.screenWidth/2 + f.radius &&
+                    f.y > u.camera.y - u.screenHeight/2 - f.radius &&
+                    f.y < u.camera.y + u.screenHeight/2 + f.radius) {
+                    return f;
+                }
+            })
+            .filter(function(f) { return f; });
+    sockets[key].emit('objectList',visibleTank,visibleBullet);
   }
 }
 

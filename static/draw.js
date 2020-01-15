@@ -23,10 +23,6 @@ function DrawObject(){ // 그리기 담당
     this.mapSize = data;
   });
 
-  socket.on('sight',(data) => {
-    this.sight = data;
-  });
-
   this.camera = {
     x:0,
     y:0,
@@ -42,6 +38,10 @@ function DrawObject(){ // 그리기 담당
     return this.camera;
   }
 
+  this.setSight = function(sight){
+    this.sight = sight;
+  }
+
   this.resize = function (){
     this.canvas.width=this.objCanvas.width=this.dCanvas.width=this.uiCanvas.width=window.innerWidth * window.devicePixelRatio;
     this.canvas.height=this.objCanvas.height=this.dCanvas.height=this.uiCanvas.height=window.innerHeight * window.devicePixelRatio;
@@ -51,6 +51,7 @@ function DrawObject(){ // 그리기 담당
     this.objCtx.imageSmoothingEnabled = false;
     this.dCtx.imageSmoothingEnabled = false;
     this.uiCtx.imageSmoothingEnabled = false;
+    socket.emit('windowResized',{screenWidth:this.canvas.width,screenHeight:this.canvas.height});
   }
 
   this.setCursor = function (style){
