@@ -194,8 +194,6 @@ io.on('connection', (socket) => { // 접속.
     delete users[socket.id];
 
     io.emit('mapSize', mapSize);
-
-    currentPlayer = null;
   });
 });
 
