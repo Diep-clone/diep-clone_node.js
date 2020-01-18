@@ -5,6 +5,8 @@ const app = express();
 const server = require('http').createServer(app);
 const SAT = require('sat');
 const io = require('socket.io')(server);
+const process = require('process');
+
 io.set('heartbeat timeout', 60000);
 io.set('heartbeat interval', 25000);
 
