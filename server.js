@@ -411,7 +411,7 @@ setInterval(function(){
   os.cpuUsage(function(v){
     console.log( 'CPU Usage (%): ' + v );
   });
-});
+},2000);
 
 server.listen(process.env.PORT || 3000, () => {
     console.log("잠깐, 지금 서버를 연거야?");
