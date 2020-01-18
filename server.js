@@ -153,12 +153,16 @@ io.on('connection', (socket) => { // 접속.
 
   //연구 목적 소켓
   socket.on('changeRadius', (data) => {
-    currentPlayer.controlTank.radius = Math.max(Math.round(data*100)/100,1);
+    if (currentPlayer.controlTank){
+      currentPlayer.controlTank.radius = Math.max(Math.round(data*100)/100,1);
+    }
   });
 
   socket.on('changeLevel', (data) => {
-    currentPlayer.controlTank.level = Math.min(data,45);
-    currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
+    if (currentPlayer.controlTank){
+      currentPlayer.controlTank.level = Math.min(data,45);
+      currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
+    }
   });
 
   // ------------끝-------------
