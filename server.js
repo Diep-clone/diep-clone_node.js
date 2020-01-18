@@ -13,8 +13,8 @@ const objUtil = require('./lib/objectSet');
 const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
 
-const quadtree = require('simple-quadtree');
-const readline = require('readline');
+const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
+const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
 let tree;
 
@@ -404,6 +404,25 @@ function sendUpdates(){
 
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
+
+setInterval(function() {
+  const previousUsage = process.cpuUsage();
+// { user: 38579, system: 6986 }
+
+// spin the CPU for 500 milliseconds
+const startDate = Date.now();
+while (Date.now() - startDate < 500);
+
+// At this moment you can expect result 100%
+// Time is *1000 because cpuUsage is in us (microseconds)
+const usage = process.cpuUsage(previousUsage);
+
+usageInPercent = (usage.user + usage.system)/500
+    console.log(process.cpuUsage(`씨피유우 : ${usageInPercent}` );
+    // { user: 514883, system: 11226 }    ~ 0,5 sec
+    // here you can expect result about 20% (0.5s busy of 2.5s total runtime, relative to previousUsage that is first value taken about 2.5s ago)
+}, 2000);
+
 
 server.listen(process.env.PORT || 3000, () => {
     console.log("잠깐, 지금 서버를 연거야?");
