@@ -15,6 +15,7 @@ const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
 
 const quadtree = require('simple-quadtree');
+const readline = require('readline');
 
 let tree;
 
@@ -22,7 +23,7 @@ let V = SAT.Vector;
 let C = SAT.Circle;
 
 let users = {}; // 유저 목록.
-let tanks = [];
+let tanks = []; // 탱크 목록.
 let bullets = []; // 총알 목록.
 let sockets = {}; // 유저 접속 목록.
 
@@ -33,6 +34,21 @@ app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 })
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+var recursiveAsyncReadLine = function () {
+  rl.question('Command: ', function (answer) {
+    if (answer == 'exit') //we need some base case, for recursion
+      return rl.close(); //closing RL and returning from function.
+    eval(answer);
+    recursiveAsyncReadLine(); //Calling this function again to ask new question
+  });
+};
+recursiveAsyncReadLine();
 
 io.on('connection', (socket) => { // 접속.
 
@@ -131,10 +147,6 @@ io.on('connection', (socket) => { // 접속.
       socket.emit('spawn', currentPlayer.controlTank);
       io.emit('mapSize', mapSize);
     }
-  });
-
-  socket.on('ping', (data) => {
-    console.log(data);
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향

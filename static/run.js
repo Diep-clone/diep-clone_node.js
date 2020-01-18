@@ -1,7 +1,3 @@
-var socket = io.connect();
+var socket = io.connect({transports: ['websocket']});
 
 var system = new System();
-
-socket.on('pong!', () => {
-  console.log('pong!');
-})
