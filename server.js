@@ -407,8 +407,10 @@ function sendUpdates(){
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
 
-os.cpuUsage(function(v){
+setInterval(function(){
+  os.cpuUsage(function(v){
     console.log( 'CPU Usage (%): ' + v );
+  });
 });
 
 server.listen(process.env.PORT || 3000, () => {
