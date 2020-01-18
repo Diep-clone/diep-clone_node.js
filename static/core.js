@@ -142,8 +142,8 @@ function System(){ // 게임의 전체 진행 담당
 
   socket.emit('login');
 
-  socket.on('pong', function(data) {
-    console.log('Received Pong: ', data);
+  socket.on('pong!', function(data) {
+    console.log('Received Pong: ', Date.now()-data);
   });
 
   socket.on('spawn',(data) => {
@@ -289,7 +289,7 @@ function System(){ // 게임의 전체 진행 담당
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
 
-    socket.emit('ping');
+    socket.emit('ping!',Date.now());
 
     this.uiSet();
 

@@ -4,10 +4,7 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const SAT = require('sat');
-const io = require('socket.io')(server,{
-  pingInterval: 1000,
-  pingTimeout: 1000
-});
+const io = require('socket.io')(server);
 io.set('heartbeat timeout', 60000);
 io.set('heartbeat interval', 25000);
 
@@ -149,6 +146,10 @@ io.on('connection', (socket) => { // 접속.
       socket.emit('spawn', currentPlayer.controlTank);
       io.emit('mapSize', mapSize);
     }
+  });
+
+  socket.on('ping!', (data) => {
+    socket.emit('pong!',data);
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향
