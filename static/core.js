@@ -142,6 +142,10 @@ function System(){ // 게임의 전체 진행 담당
 
   socket.emit('login');
 
+  socket.on('pong', function(data) {
+    console.log('Received Pong: ', data);
+  });
+
   socket.on('spawn',(data) => {
     this.controlTank = this.createTankObject(data.id,this.tankList[data.type]);
     this.controlTank.setPosition(data.x,data.y);
@@ -284,6 +288,8 @@ function System(){ // 게임의 전체 진행 담당
   this.loop = function (){
     this.tick = Date.now() - this.lastTime;
     this.lastTime = Date.now();
+
+    socket.emit('ping');
 
     this.uiSet();
 

@@ -4,7 +4,10 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const SAT = require('sat');
-const io = require('socket.io')(server);
+const io = require('socket.io')(server,{
+  pingInterval: 1000,
+  pingTimeout: 1000
+});
 
 const util = require('./lib/librarys');
 const objUtil = require('./lib/objectSet');
@@ -102,7 +105,7 @@ io.on('connection', (socket) => { // 접속.
         dx:0,
         dy:0,
         level:1,
-        health:1,
+        health:48,
         maxHealth:48,
         lastHealth:48,
         damage:20,
@@ -130,13 +133,13 @@ io.on('connection', (socket) => { // 접속.
     }
   });
 
-  socket.on('ping!', () => { // 핑퐁
-    socket.emit('pong!');
+  socket.on('ping', (data) => {
+    console.log(data);
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향
      if (data == null ) return; // null 값을 받으면 서버 정지
-    
+
     currentPlayer.target = data;
     if (currentPlayer.controlTank){
       currentPlayer.controlTank.rotate = Math.atan2(data.y-currentPlayer.controlTank.y,data.x-currentPlayer.controlTank.x);
@@ -188,15 +191,8 @@ io.on('connection', (socket) => { // 접속.
 
     tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
-    if (util.findIndex(users,currentPlayer.id) > -1){
-      currentPlayer.isDead=true;
-      users.splice(util.findIndex(users,currentPlayer.id),1);
-      if (currentPlayer.controlTank){
-        currentPlayer.controlTank.isDead=true;
-        tanks.splice(util.findIndex(tanks,currentPlayer.id),1);
-        io.emit('objectDead',currentPlayer.controlTank);
-      }
-    }
+    delete users[socket.id];
+
     io.emit('mapSize', mapSize);
 
     currentPlayer = null;
@@ -205,9 +201,10 @@ io.on('connection', (socket) => { // 접속.
 
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
-  objUtil.healObject(currentPlayer);
-
   bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]));
+
+  if (users[currentPlayer.id]) objUtil.healObject(currentPlayer);
+  else userUtil.afkTank(currentPlayer);
 
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
 
@@ -271,7 +268,6 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner]);
-
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
