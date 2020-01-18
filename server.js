@@ -5,7 +5,7 @@ const app = express();
 const server = require('http').createServer(app);
 const SAT = require('sat');
 const io = require('socket.io')(server);
-const process = require('process');
+const os = require('os-utils');
 
 io.set('heartbeat timeout', 60000);
 io.set('heartbeat interval', 25000);
@@ -407,24 +407,9 @@ function sendUpdates(){
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
 
-setInterval(function() {
-  const previousUsage = process.cpuUsage();
-// { user: 38579, system: 6986 }
-
-// spin the CPU for 500 milliseconds
-const startDate = Date.now();
-while (Date.now() - startDate < 500);
-
-// At this moment you can expect result 100%
-// Time is *1000 because cpuUsage is in us (microseconds)
-const usage = process.cpuUsage(previousUsage);
-
-const usageInPercent = (usage.user + usage.system)/500;
-    console.log(process.cpuUsage(`씨피유우 : ${usageInPercent}` ));
-    // { user: 514883, system: 11226 }    ~ 0,5 sec
-    // here you can expect result about 20% (0.5s busy of 2.5s total runtime, relative to previousUsage that is first value taken about 2.5s ago)
-}, 2000);
-
+os.cpuUsage(function(v){
+    console.log( 'CPU Usage (%): ' + v );
+});
 
 server.listen(process.env.PORT || 3000, () => {
     console.log("잠깐, 지금 서버를 연거야?");
