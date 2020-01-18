@@ -126,7 +126,7 @@ io.on('connection', (socket) => { // 접속.
         maxHealth:48,
         lastHealth:48,
         damage:20,
-        radius:13,
+        radius:12.9,
         rotate:0,
         name:"",
         sight:1.78,
@@ -178,7 +178,8 @@ io.on('connection', (socket) => { // 접속.
 
   socket.on('changeLevel', (data) => {
     if (currentPlayer.controlTank){
-      currentPlayer.controlTank.level = Math.min(data,45);
+      currentPlayer.controlTank.level = Math.max(data,1);
+      currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
       currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
     }
   });
@@ -193,15 +194,13 @@ io.on('connection', (socket) => { // 접속.
     if (currentPlayer.controlTank){
       if (data.o){
         if (currentPlayer.controlTank){
-          currentPlayer.controlTank.isDead=true;
-          tanks.splice(util.findIndex(tanks,currentPlayer.id),1);
-          io.emit('objectDead',currentPlayer.controlTank);
+          currentPlayer.controlTank.health=0;
         }
       }
       if (data.changeTank){
         currentPlayer.controlTank.type = currentPlayer.controlTank.type==0?tankLength-1:currentPlayer.controlTank.type-1;
         userUtil.setUserGun(currentPlayer.controlTank);
-        currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+        currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
       }
     }
   });
