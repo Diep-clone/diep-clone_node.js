@@ -8,6 +8,8 @@ const io = require('socket.io')(server,{
   pingInterval: 1000,
   pingTimeout: 1000
 });
+io.set('heartbeat timeout', 60000);
+io.set('heartbeat interval', 25000);
 
 const util = require('./lib/librarys');
 const objUtil = require('./lib/objectSet');
