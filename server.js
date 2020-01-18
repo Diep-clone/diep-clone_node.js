@@ -418,7 +418,7 @@ while (Date.now() - startDate < 500);
 const usage = process.cpuUsage(previousUsage);
 
 usageInPercent = (usage.user + usage.system)/500;
-    console.log(process.cpuUsage(`씨피유우 : ${usageInPercent}` );
+    console.log(process.cpuUsage(`씨피유우 : ${usageInPercent}` ));
     // { user: 514883, system: 11226 }    ~ 0,5 sec
     // here you can expect result about 20% (0.5s busy of 2.5s total runtime, relative to previousUsage that is first value taken about 2.5s ago)
 }, 2000);
