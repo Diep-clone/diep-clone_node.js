@@ -179,7 +179,7 @@ io.on('connection', (socket) => { // 접속.
 
   socket.on('changeLevel', (data) => {
     if (currentPlayer.controlTank){
-      currentPlayer.controlTank.level = Math.max(data,1);
+      currentPlayer.controlTank.level = Math.max(Math.min(data,45),1);
       currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
       currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
     }

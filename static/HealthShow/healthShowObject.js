@@ -9,7 +9,7 @@ function HealthShowObject(){
 
     ctx.globalAlpha = this.opacity;
 
-    this.showPercent -= (this.showPercent - healthPercent) * 0.3;
+    this.showPercent -= (this.showPercent - healthPercent) / 3;
 
     if (healthPercent<1){
       ctx.beginPath();

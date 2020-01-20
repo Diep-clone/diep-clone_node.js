@@ -22,24 +22,24 @@ function System(){ // 게임의 전체 진행 담당
     PentaShot,////
     Assasin,////
     ArenaCloser,/// 디자인만 완료
-    Necromanser,// 구현 안됨
+    Necromanser,///
     TripleTwin,////
     Hunter,////
     Gunner,////
-    Stalker,//
+    Stalker,// 구현 안됨
     Ranger,////
     Booster,////
     Fighter,////
-    Hybrid,//
-    Manager,//
-    MotherShip,//
-    Predator,//
+    Hybrid,///
+    Manager,///
+    MotherShip,///
+    Predator,///
     Sprayer,////
     Trapper,///
-    GunnerTrapper,//
-    OverTrapper,//
-    MegaTrapper,//
-    TriTrapper,//
+    GunnerTrapper,///
+    OverTrapper,///
+    MegaTrapper,///
+    TriTrapper,///
     Smasher,//
     Landmine,//
     AutoGunner,//
@@ -51,11 +51,11 @@ function System(){ // 게임의 전체 진행 담당
     BasicDominator,//
     GunnerDominator,//
     TrapperDominator,//
-    BattleShip,//
+    BattleShip,///
     Annihilator,////
     AutoSmasher,//
     Spike,//
-    Factory,//
+    Factory,///
     Skimmer,//
     Rocketeer//
   ];
@@ -562,6 +562,7 @@ function System(){ // 게임의 전체 진행 담당
       default:
       break;
     }
+    if (!this.input.w && !this.input.a && !this.input.s && !this.input.d) this.input.moveVector = new Vector(0,0);
     this.setMoveRotate();
     socket.emit('input',this.input);
   }.bind(this);
