@@ -19,3 +19,7 @@ html, body, #canvas {
 	height: 100%;
 	cursor: default;
 }
+
+#textInput {
+    background-color: transparent;
+}

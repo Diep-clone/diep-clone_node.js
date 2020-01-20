@@ -102,7 +102,7 @@ io.on('connection', (socket) => { // 접속.
     isDead:false
   };*/
 
-  socket.on('login', (player) => { // 탱크 생성.
+  socket.on('login', (name) => { // 탱크 생성.
     if (sockets[socket.id]){
       console.log('넌 뭐야 저리가!!!');
       return false;
@@ -129,7 +129,7 @@ io.on('connection', (socket) => { // 접속.
         radius:12.9,
         rotate:0,
         bound:1,
-        name:"",
+        name:name,
         sight:1.78,
         guns:[],
         stats:[0,0,0,0,0,0,0,0],

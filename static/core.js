@@ -1,4 +1,4 @@
-function System(){ // 게임의 전체 진행 담당
+function System(name){ // 게임의 전체 진행 담당
   "use strict";
 
   this.objectList = {tank:{},bullet:{}};
@@ -140,7 +140,7 @@ function System(){ // 게임의 전체 진행 담당
 
   this.controlTank;
 
-  socket.emit('login');
+  socket.emit('login', name);
 
   socket.on('pong!', function(data) {
     console.log('Received Pong: ', Date.now()-data);

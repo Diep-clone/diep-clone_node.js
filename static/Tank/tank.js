@@ -51,6 +51,7 @@ function Tank(){
     //this.y+=this.dy;
   }
   this.setName = function (name){
+    console.log(name);
     this.name = name;
   }
   this.setColor = function (color){
