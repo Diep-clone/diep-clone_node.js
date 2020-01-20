@@ -16,25 +16,25 @@ function System(){ // 게임의 전체 진행 담당
     FlankGuard, ////
     TriAngle, ////
     Destroyer, ////
-    Overseer,/// 디자인만 완료
-    Overload,///
-    TwinFlank,///
-    PentaShot,///
-    Assasin,///
-    ArenaCloser,///
+    Overseer,////
+    Overload,////
+    TwinFlank,////
+    PentaShot,////
+    Assasin,////
+    ArenaCloser,/// 디자인만 완료
     Necromanser,// 구현 안됨
-    TripleTwin,///
-    Hunter,///
-    Gunner,///
+    TripleTwin,////
+    Hunter,////
+    Gunner,////
     Stalker,//
-    Ranger,///
-    Booster,///
-    Fighter,///
+    Ranger,////
+    Booster,////
+    Fighter,////
     Hybrid,//
     Manager,//
     MotherShip,//
     Predator,//
-    Sprayer,///
+    Sprayer,////
     Trapper,///
     GunnerTrapper,//
     OverTrapper,//
@@ -45,14 +45,14 @@ function System(){ // 게임의 전체 진행 담당
     AutoGunner,//
     Auto5,//
     Auto3,//
-    SpreadShot,///
-    Streamliner,///
+    SpreadShot,////
+    Streamliner,////
     AutoTrapper,//
     BasicDominator,//
     GunnerDominator,//
     TrapperDominator,//
     BattleShip,//
-    Annihilator,///
+    Annihilator,////
     AutoSmasher,//
     Spike,//
     Factory,//

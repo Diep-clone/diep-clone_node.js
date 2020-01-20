@@ -56,10 +56,10 @@ function DroneBullet(){
       ctx.lineJoin = "round";
       ctx.globalAlpha = 1;
       ctx.beginPath();
-      ctx.moveTo((this.x - camera.x + (Math.cos(this.imRotate) * this.radius * 2)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate) * this.radius * 2)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 3 * 2) * this.radius * 2)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 3 * 2) * this.radius * 2)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate - Math.PI / 3 * 2) * this.radius * 2)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate - Math.PI / 3 * 2) * this.radius * 2)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate) * this.radius * 2)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate) * this.radius * 2)) * camera.z);
+      ctx.moveTo((this.x - camera.x + (Math.cos(this.imRotate) * this.radius * 1.6)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate) * this.radius * 1.6)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.6)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.6)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate - Math.PI / 3 * 2) * this.radius * 1.6)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate - Math.PI / 3 * 2) * this.radius * 1.6)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate) * this.radius * 1.6)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate) * this.radius * 1.6)) * camera.z);
       ctx.fill();
       ctx.stroke();
       ctx.closePath();
@@ -70,10 +70,10 @@ function DroneBullet(){
       this.ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
       this.ctx.fillStyle = this.color.getRGBValue();
       this.ctx.beginPath();
-      this.ctx.moveTo(this.canvasPos.x + Math.cos(this.imRotate) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.imRotate) * this.radius * 2 * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate + Math.PI / 3 * 2) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.imRotate + Math.PI / 3 * 2) * this.radius * 2 * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate - Math.PI / 3 * 2) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.imRotate - Math.PI / 3 * 2) * this.radius * 2 * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate) * this.radius * 2 * camera.z,this.canvasPos.y + Math.sin(this.imRotate) * this.radius * 2 * camera.z);
+      this.ctx.moveTo(this.canvasPos.x + Math.cos(this.imRotate) * this.radius * 1.6 * camera.z,this.canvasPos.y + Math.sin(this.imRotate) * this.radius * 1.6 * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.6 * camera.z,this.canvasPos.y + Math.sin(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.6 * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate - Math.PI / 3 * 2) * this.radius * 1.6 * camera.z,this.canvasPos.y + Math.sin(this.imRotate - Math.PI / 3 * 2) * this.radius * 1.6 * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate) * this.radius * 1.6 * camera.z,this.canvasPos.y + Math.sin(this.imRotate) * this.radius * 1.6 * camera.z);
       this.ctx.fill();
       this.ctx.stroke();
       this.ctx.closePath();

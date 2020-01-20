@@ -128,6 +128,7 @@ io.on('connection', (socket) => { // 접속.
         damage:20,
         radius:12.9,
         rotate:0,
+        bound:1,
         name:"",
         sight:1.78,
         guns:[],
@@ -254,10 +255,10 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
     collision.aUser.hitTime = Date.now();
     collision.bUser.hitTime = Date.now();
 
-    collision.aUser.dx+=Math.cos(dir) * 1;
-    collision.aUser.dy+=Math.sin(dir) * 1;
-    collision.bUser.dx-=Math.cos(dir) * 1;
-    collision.bUser.dy-=Math.sin(dir) * 1;
+    collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
+    collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
+    collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
+    collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
 
     if (collision.bUser.lastHealth-collision.aUser.damage<=0){
       collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
@@ -290,7 +291,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
-    if ((!obj.owner || obj.owner !== currentBullet.owner || (obj.type === 2 && currentBullet.type === 2))
+    if ((!obj.owner || obj.owner !== currentBullet.owner || (obj.isOwnCol && currentBullet.isOwnCol))
     && obj.id !== currentBullet.owner
     && obj.id !== currentBullet.id
     && (currentBullet.isCollision === false || obj.isCollision === false)){
@@ -319,10 +320,10 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
     collision.aUser.hitTime = Date.now();
     collision.bUser.hitTime = Date.now();
 
-    collision.aUser.dx+=Math.cos(dir) * 1;
-    collision.aUser.dy+=Math.sin(dir) * 1;
-    collision.bUser.dx-=Math.cos(dir) * 1;
-    collision.bUser.dy-=Math.sin(dir) * 1;
+    collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
+    collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
+    collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
+    collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
 
     if (collision.aUser.owner !== collision.bUser.owner){
       if (collision.bUser.lastHealth-collision.aUser.damage<=0){
@@ -354,10 +355,32 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
 }
 
+function detectObject(x,y,r){
+  tree.clear();
+  tanks.forEach(tree.put);
+  bullets.forEach(tree.put);
+  var collisionsObjectList = [];
+
+  function check(obj){
+    let response = new SAT.Response();
+    let collided = SAT.testCircleCircle(new C(new V(x,y),r),
+    new C(new V(obj.x,obj.y),obj.radius),response);
+
+    if (collided){
+      collisionsObjectList.push(obj);
+    }
+  }
+
+  tree.get({x:x,y:y,r:r},check);
+
+  return collisionsObjectList;
+}
+
 function moveloop(){
   tanks.forEach((u) => {
     tickPlayer(u);
   });
+
   bullets.forEach((b) => {
     tickBullet(b);
   });
@@ -405,13 +428,13 @@ function sendUpdates(){
 
 setInterval(moveloop,1000/60);
 setInterval(sendUpdates,1000/40);
-
+/*
 setInterval(function(){
   os.cpuUsage(function(v){
     console.log( 'CPU Usage (%): ' + v );
   });
 },2000);
-
+*/
 server.listen(process.env.PORT || 3000, () => {
     console.log("잠깐, 지금 서버를 연거야?");
 });
