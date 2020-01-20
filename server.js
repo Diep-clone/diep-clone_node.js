@@ -133,7 +133,6 @@ io.on('connection', (socket) => { // 접속.
         sight:1.78,
         guns:[],
         stats:[0,0,0,0,0,0,0,0],
-        bulletCount:0,
         type:0,
         isCollision:false,
         hitTime:Date.now(),
