@@ -1,4 +1,4 @@
-function DrawObject(){ // 그리기 담당
+function DrawObject(camera){ // 그리기 담당
   "use strict";
 
   this.canvas = document.getElementById("canvas");
@@ -61,11 +61,6 @@ function DrawObject(){ // 그리기 담당
 
   this.im = {x:0,y:0};
 
-  this.cameraMove = function (x,y){
-    this.camera.x += x / this.camera.z / 3;
-    this.camera.y += y / this.camera.z / 3;
-  }
-
   this.cameraSet = function (tank){
     if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900; // 화면 크기에 따른 줌값 조정
     else this.camera.z=this.canvas.width/1600;
@@ -76,13 +71,11 @@ function DrawObject(){ // 그리기 담당
     this.showSight -= (this.showSight - this.sight) / 20;
 
     if (tank){
-      //this.camera.x = tank.x - 100;
-      //this.camera.y = tank.y - 100;
-      this.camera.x=(tank.x-this.canvas.width/2/this.camera.z);
-      this.camera.y=(tank.y-this.canvas.height/2/this.camera.z);
+      //this.camera.x-= (this.camera.x - (tank.x-this.canvas.width/2/this.camera.z)) / 20;
+      //this.camera.y-= (this.camera.y - (tank.y-this.canvas.height/2/this.camera.z)) / 20;
+      this.camera.x = (tank.x-this.canvas.width/2/this.camera.z);
+      this.camera.y = (tank.y-this.canvas.height/2/this.camera.z);
     }
-    //this.camera.x=(this.im.x-this.canvas.width/2/this.camera.z);
-    //this.camera.y=(this.im.y-this.canvas.height/2/this.camera.z);
   }
 
   this.backgroundDraw = function (){
@@ -119,13 +112,22 @@ function DrawObject(){ // 그리기 담당
     for (let key in obj){
       if (obj[key]){
         obj[key].draw(this.ctx,this.camera);
-        if (obj[key].drawHPBar){
-          obj[key].drawHPBar(this.dCtx,this.camera);
-        }
+      }
+    }
+  }
+
+  this.objectStatusDraw = function (obj){
+    for (let key in obj){
+      if (obj[key] && obj[key].drawName && obj[key].id !== system.controlTank.id){
+        obj[key].drawName(this.dCtx,this.camera);
+      }
+    }
+    for (let key in obj){
+      if (obj[key] && obj[key].drawHPBar){
+        obj[key].drawHPBar(this.dCtx,this.camera);
       }
     }
     this.ctx.globalAlpha = 1;
-    //this.ctx.drawImage(this.objCanvas,0,0);
     this.ctx.drawImage(this.dCanvas,0,0);
   }
 
@@ -294,7 +296,7 @@ function Text(text,size){
     ctx.translate(this.x,this.y);
     ctx.rotate(this.rotate);
     ctx.textAlign = this.align;
-    ctx.font = this.size * z + "px Ubuntu";
+    ctx.font = "bold " + this.size * z + "px Ubuntu";
 
     ctx.strokeText(this.text,0,0);
     ctx.fillText(this.text,0,0);

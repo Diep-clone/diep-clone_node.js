@@ -96,6 +96,7 @@ function Tank(){
   this.draw = function(ctx,camera){
     if (this.opacity>=1){
       this.canvasPos = {x:(this.x - this.dx - camera.x) * camera.z,y:(this.y - this.dy - camera.y) * camera.z};
+      ctx.globalAlpha = 1;
       ctx.lineWidth = 2 * camera.z;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -155,10 +156,25 @@ function Tank(){
       ctx.save();
       ctx.globalAlpha = this.opacity;
       //ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-Math.floor(this.canvasPos.x),(this.y - camera.y) * camera.z-Math.floor(this.canvasPos.y));
-      ctx.drawImage(this.canvas,((this.x - this.dx - camera.x) * camera.z-this.canvasPos.x),((this.y - this.dy - camera.y) * camera.z-this.canvasPos.y));
+      ctx.drawImage(this.canvas,((this.x - camera.x) * camera.z-this.canvasPos.x),((this.y - camera.y) * camera.z-this.canvasPos.y));
       //ctx.drawImage(this.canvas,(Math.floor((this.x - this.dx - camera.x) * camera.z)-this.canvasPos.x),(Math.floor((this.y - this.dy - camera.y) * camera.z)-this.canvasPos.y));
       ctx.restore();
     }
+  }
+  this.drawName = function (ctx,camera){
+    ctx.save();
+    ctx.font = "bold " + 0.8 * this.radius * camera.z + "px Ubuntu";
+    ctx.lineWidth = 2.5 * camera.z;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.textAlign = "center";
+    ctx.textBaseLine = "bottom";
+    ctx.globalAlpha = this.opacity;
+    ctx.strokeStyle = "#000000";
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+    ctx.fillText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+    ctx.restore();
   }
 }
 Tank.prototype = new HealthShowObject();

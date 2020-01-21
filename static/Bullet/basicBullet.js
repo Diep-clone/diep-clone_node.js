@@ -64,8 +64,10 @@ function BasicBullet(){
       this.ctx.stroke();
       this.ctx.closePath();
 
+      ctx.save();
       ctx.globalAlpha = this.opacity;
       ctx.drawImage(this.canvas,(this.x - camera.x) * camera.z-this.canvasPos.x,(this.y - camera.y) * camera.z-this.canvasPos.y);
+      ctx.restore();
     }
   }
 }

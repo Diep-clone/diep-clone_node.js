@@ -150,6 +150,12 @@ function System(name){ // 게임의 전체 진행 담당
     this.controlTank = this.createTankObject(data.id,this.tankList[data.type]);
     this.controlTank.setPosition(data.x,data.y);
     this.controlTank.setName(data.name);
+    this.drawObject.camera = {
+      x:(data.x-window.innerWidth * window.devicePixelRatio/2/2.3),
+      y:(data.y-window.innerHeight * window.devicePixelRatio/2/2.3),
+      z:1,
+      uiz:1
+    };
   });
 
   socket.on('objectList', (tankList,bulletList) => {
@@ -247,7 +253,7 @@ function System(name){ // 게임의 전체 진행 담당
   });
 
   this.showTankLevel = this.createUiObject(Text);
-  this.showTankRadius = this.createUiObject(Text);
+  this.showTankName = this.createUiObject(Text);
 
   this.showUpgradeTank = [
     this.createUiObject(Button),
@@ -265,9 +271,9 @@ function System(name){ // 게임의 전체 진행 담당
       this.showTankLevel.setPosition(whz[0]/2,whz[1]-100 * whz[2],0);
       this.showTankLevel.setText(this.controlTank.level);
       this.showTankLevel.setSize(20);
-      this.showTankRadius.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
-      this.showTankRadius.setText(this.controlTank.radius);
-      this.showTankRadius.setSize(20);
+      this.showTankName.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
+      this.showTankName.setText(this.controlTank.name);
+      this.showTankName.setSize(20);
     }
 /*
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
@@ -322,6 +328,7 @@ function System(name){ // 게임의 전체 진행 담당
     this.drawObject.backgroundDraw();
     this.drawObject.objectDraw(this.objectList.bullet);
     this.drawObject.objectDraw(this.objectList.tank);
+    this.drawObject.objectStatusDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);
 
     requestAnimationFrame(this.loop.bind(this));
@@ -483,8 +490,9 @@ function System(name){ // 게임의 전체 진행 담당
       }
       break;
       case 75: // K키
-        socket.emit("changeLevel",this.controlTank.level+1);
-        //this.input.k = true;
+      if (!this.input.k){
+        g = this.input.k = true;
+      }
       break;
       case 79: // O키
       if (!this.input.o){
@@ -492,12 +500,8 @@ function System(name){ // 게임의 전체 진행 담당
       }
       break;
       case 188:
-        if (this.input.ctrl) socket.emit("changeRadius",this.controlTank.radius-0.01);
-        else socket.emit("changeRadius",this.controlTank.radius-0.1);
       break;
       case 190:
-        if (this.input.ctrl) socket.emit("changeRadius",this.controlTank.radius+0.01);
-        else socket.emit("changeRadius",this.controlTank.radius+0.1);
       break;
       case 220: // \키
         if (!this.input.changeTank){
@@ -551,7 +555,7 @@ function System(name){ // 게임의 전체 진행 담당
         this.input.c=false;
       break;
       case 75: // K키
-        //this.input.k = false;
+        this.input.k = false;
       break;
       case 79: // O키
         this.input.o = false;

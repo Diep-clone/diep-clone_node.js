@@ -7,6 +7,7 @@ function HealthShowObject(){
   this.drawHPBar = function(ctx,camera){
     let healthPercent = this.health/this.maxHealth;
 
+    ctx.save();
     ctx.globalAlpha = this.opacity;
 
     this.showPercent -= (this.showPercent - healthPercent) / 3;
@@ -28,6 +29,7 @@ function HealthShowObject(){
       ctx.lineWidth = 2.6 * camera.z;
       ctx.stroke();
     }
+    ctx.restore();
   }
 }
 HealthShowObject.prototype = new DynamicObject();

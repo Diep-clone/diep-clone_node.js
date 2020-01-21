@@ -71,6 +71,7 @@ io.on('connection', (socket) => { // 접속.
       x:0,
       y:0
     },
+    k:null,
     name:"",
     controlTank:null
   };
@@ -111,6 +112,8 @@ io.on('connection', (socket) => { // 접속.
       console.log('누군가가 들어왔다!!!');
 
       sockets[socket.id] = socket;
+
+      currentPlayer.name = name;
 
       currentPlayer.controlTank = {
         objType: 'tank',
@@ -168,26 +171,15 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.screenHeight = data.screenHeight;
   });
 
-  //연구 목적 소켓
-  socket.on('changeRadius', (data) => {
-    console.log(currentPlayer);
-    if (currentPlayer.controlTank){
-      currentPlayer.controlTank.radius = Math.max(Math.round(data*100)/100,1);
+  socket.on('levelUP', () => {
+    if (currentPlayer.controlTank && currentPlayer.controlTank.level<45){
+
     }
   });
-
-  socket.on('changeLevel', (data) => {
-    if (currentPlayer.controlTank){
-      currentPlayer.controlTank.level = Math.max(Math.min(data,45),1);
-      currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
-      currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
-    }
-  });
-
-  // ------------끝-------------
 
   socket.on('input', (data) => { // 입력 정보
     currentPlayer.rotate = data.moveRotate;
+    currentPlayer.k = data.k;
     if (data.rShot>0) currentPlayer.mouse = "right";
     else if (data.shot>0 || data.autoE) currentPlayer.mouse = "left";
     else currentPlayer.mouse = "null";
@@ -222,7 +214,14 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
   bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]));
 
-  if (users[currentPlayer.id]) objUtil.healObject(currentPlayer);
+  if (users[currentPlayer.id]){
+    objUtil.healObject(currentPlayer);
+    if (users[currentPlayer.id].k && currentPlayer.level<45){
+      currentPlayer.level++;
+      currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
+      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+    }
+  }
   else userUtil.afkTank(currentPlayer);
 
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
