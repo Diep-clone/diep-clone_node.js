@@ -132,6 +132,7 @@ io.on('connection', (socket) => { // 접속.
         radius:12.9,
         rotate:0,
         bound:1,
+        invTime:-1,
         name:name,
         sight:1.78,
         guns:[],
@@ -142,7 +143,7 @@ io.on('connection', (socket) => { // 접속.
         isDead:false
       };
 
-      userUtil.setUserGun(currentPlayer.controlTank);
+      userUtil.setUserTank(currentPlayer.controlTank);
 
       users[socket.id] = currentPlayer;
       tanks.push(currentPlayer.controlTank);
@@ -191,7 +192,7 @@ io.on('connection', (socket) => { // 접속.
       }
       if (data.changeTank){
         currentPlayer.controlTank.type = currentPlayer.controlTank.type==0?tankLength-1:currentPlayer.controlTank.type-1;
-        userUtil.setUserGun(currentPlayer.controlTank);
+        userUtil.setUserTank(currentPlayer.controlTank);
         currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
       }
     }
