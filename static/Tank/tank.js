@@ -702,14 +702,15 @@ TriTrapper.prototype.constructor = TriTrapper;
 function Smasher(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
   let dis = 2*Math.sqrt(3)/3;
+  let dir = -Math.PI / 3 * 2;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*dis,Math.sin(dir)*dis]);
+    dir += Math.PI / 3;
+  }
   this.guns=[
-    new Bolt([[Math.cos(-Math.PI / 3 * 2)*dis,Math.sin(-Math.PI / 3 * 2)*dis],
-    [Math.cos(-Math.PI / 3)*dis,Math.sin(-Math.PI / 3)*dis],
-    [Math.cos(0)*dis,Math.sin(0)*dis],
-    [Math.cos(Math.PI / 3)*dis,Math.sin(Math.PI / 3)*dis],
-    [Math.cos(Math.PI / 3 * 2)*dis,Math.sin(Math.PI / 3 * 2)*dis],
-    [Math.cos(Math.PI)*dis,Math.sin(Math.PI)*dis]],Math.PI/80)
+    new Bolt(list,Math.PI/80)
   ];
   this.bodyVertex = 0;
   this.bodySize = 1;
@@ -722,20 +723,16 @@ Smasher.prototype.constructor = Smasher;
 function Landmine(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
   let dis = 2*Math.sqrt(3)/3;
+  let dir = -Math.PI / 3 * 2;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*dis,Math.sin(dir)*dis]);
+    dir += Math.PI / 3;
+  }
   this.guns=[
-    new Bolt([[Math.cos(-Math.PI / 3 * 2)*dis,Math.sin(-Math.PI / 3 * 2)*dis],
-    [Math.cos(-Math.PI / 3)*dis,Math.sin(-Math.PI / 3)*dis],
-    [Math.cos(0)*dis,Math.sin(0)*dis],
-    [Math.cos(Math.PI / 3)*dis,Math.sin(Math.PI / 3)*dis],
-    [Math.cos(Math.PI / 3 * 2)*dis,Math.sin(Math.PI / 3 * 2)*dis],
-    [Math.cos(Math.PI)*dis,Math.sin(Math.PI)*dis]],Math.PI/80),
-    new Bolt([[Math.cos(-Math.PI / 3 * 2)*dis,Math.sin(-Math.PI / 3 * 2)*dis],
-    [Math.cos(-Math.PI / 3)*dis,Math.sin(-Math.PI / 3)*dis],
-    [Math.cos(0)*dis,Math.sin(0)*dis],
-    [Math.cos(Math.PI / 3)*dis,Math.sin(Math.PI / 3)*dis],
-    [Math.cos(Math.PI / 3 * 2)*dis,Math.sin(Math.PI / 3 * 2)*dis],
-    [Math.cos(Math.PI)*dis,Math.sin(Math.PI)*dis]],Math.PI/160)
+    new Bolt(list,Math.PI/80),
+    new Bolt(list,Math.PI/160)
   ];
   this.bodyVertex = 0;
   this.bodySize = 1;
@@ -912,8 +909,15 @@ Annihilator.prototype.constructor = Annihilator;
 function AutoSmasher(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
+  let dis = 2*Math.sqrt(3)/3;
+  let dir = -Math.PI / 3 * 2;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*dis,Math.sin(dir)*dis]);
+    dir += Math.PI / 3;
+  }
   this.guns=[
-
+    /*new Bolt(list,Math.PI/80)*/
   ];
   this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "AutoSmasher";
@@ -925,8 +929,16 @@ AutoSmasher.prototype.constructor = AutoSmasher;
 function Spike(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
+  let dir = -Math.PI / 12 * 11;
+  for (let i=0;i<24;i++){
+    list.push([Math.cos(dir)*0.9,Math.sin(dir)*0.9]);
+    dir += Math.PI / 12;
+    list.push([Math.cos(dir)*1.3,Math.sin(dir)*1.3]);
+    dir += Math.PI / 12;
+  }
   this.guns=[
-
+    new Bolt(list,Math.PI/40)
   ];
   this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Spike";
