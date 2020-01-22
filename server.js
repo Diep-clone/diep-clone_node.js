@@ -140,6 +140,8 @@ io.on('connection', (socket) => { // 접속.
         sight:1.78,
         guns:[],
         stats:[0,0,0,0,0,0,0,0],
+        maxStats:[8,8,8,8,8,8,8,8],
+        stat:0,
         type:0,
         isCollision:false,
         hitTime:Date.now(),
@@ -186,7 +188,7 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.k = data.k;
     if (data.rShot>0) currentPlayer.mouse = "right";
     else if (data.shot>0 || data.autoE) currentPlayer.mouse = "left";
-    else currentPlayer.mouse = "null";
+    else currentPlayer.mouse = "";
     currentPlayer.o = data.o;
     currentPlayer.changeTank = data.changeTank;
     if (!data.changeTank && currentPlayer.isChange) currentPlayer.isChange = false;
