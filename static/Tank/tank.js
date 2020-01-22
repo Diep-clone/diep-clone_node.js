@@ -864,8 +864,12 @@ function TrapperDominator(){
     dir += Math.PI / 3;
   }
   this.guns=[
-    new Bolt(list,0)
+    new Bolt(list,0),
   ];
+  for (let dir=-Math.PI/4*3;dir<=Math.PI;dir+=Math.PI/4){
+    this.guns.push(new Gun([[0.21,1.193],[0.37,1.39],[-0.37,1.39],[-0.21,1.193]],dir));
+    this.guns.push(new Gun([[0.21,0],[0.21,1.193],[-0.21,1.193],[-0.21,0]],dir));
+  }
   this.tankType = "TrapperDominator";
 }
 TrapperDominator.prototype = new Tank();
