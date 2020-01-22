@@ -191,8 +191,6 @@ function Basic(){
   this.guns=[
     new Gun([[0,0],[0.42,0],[0.42,1.88],[-0.42,1.88],[-0.42, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
-  this.bodySize = 1;
   this.tankType = "Basic";
 }
 Basic.prototype = new Tank();
@@ -206,8 +204,6 @@ function Twin(){
     new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],0),
     new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
-  this.bodySize = 1;
   this.tankType = "Twin";
 }
 Twin.prototype = new Tank();
@@ -222,7 +218,6 @@ function Triplet(){
     new Gun([[0,0],[-0.1,0],[-0.1,1.6],[-0.9,1.6],[-0.9, 0]],0),
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Triplet";
 }
 Triplet.prototype = new Tank();
@@ -237,7 +232,6 @@ function TripleShot(){
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],-Math.PI / 4),
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI / 4)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;this.bodySize = 1;
   this.tankType = "TripleShot";
 }
 TripleShot.prototype = new Tank();
@@ -253,7 +247,6 @@ function QuadTank(){
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI / 2),
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "QuadTank";
 }
 QuadTank.prototype = new Tank();
@@ -273,7 +266,6 @@ function OctoTank(){
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],Math.PI / 4 * 3),
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],-Math.PI / 4)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "OctoTank";
 }
 OctoTank.prototype = new Tank();
@@ -286,7 +278,6 @@ function Sniper(){
   this.guns=[
     new Gun([[0,0],[0.4,0],[0.4,2.2],[-0.4,2.2],[-0.4, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Sniper";
 }
 Sniper.prototype = new Tank();
@@ -299,7 +290,6 @@ function MachineGun(){
   this.guns=[
     new Gun([[0,0],[0.4,0],[0.8,1.88],[-0.8,1.88],[-0.4, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "MachineGun";
 }
 MachineGun.prototype = new Tank();
@@ -313,7 +303,6 @@ function FlankGuard(){
     new Gun([[0,0],[0.4,0],[0.4,1.88],[-0.4,1.88],[-0.4, 0]],0),
     new Gun([[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "FlankGuard";
 }
 FlankGuard.prototype = new Tank();
@@ -328,7 +317,6 @@ function TriAngle(){
     new Gun([[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],Math.PI / 6 * 5),
     new Gun([[0,0],[0.4,0],[0.4,1.6],[-0.4,1.6],[-0.4, 0]],-Math.PI / 6 * 5)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "TriAngle";
 }
 TriAngle.prototype = new Tank();
@@ -341,7 +329,6 @@ function Destroyer(){
   this.guns=[
     new Gun([[0,0],[0.7,0],[0.7,1.88],[-0.7,1.88],[-0.7, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Destroyer";
 }
 Destroyer.prototype = new Tank();
@@ -355,7 +342,6 @@ function Overseer(){
     new Gun([[0.43,0],[0.73,1.4],[-0.73,1.4],[-0.43,0]],Math.PI/2),
     new Gun([[0.43,0],[0.73,1.4],[-0.73,1.4],[-0.43,0]],-Math.PI/2)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Overseer";
 }
 Overseer.prototype = new Tank();
@@ -371,7 +357,6 @@ function Overload(){
     new Gun([[0.43,0],[0.73,1.4],[-0.73,1.4],[-0.43,0]],Math.PI/2),
     new Gun([[0.43,0],[0.73,1.4],[-0.73,1.4],[-0.43,0]],-Math.PI/2)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Overload";
 }
 Overload.prototype = new Tank();
@@ -387,7 +372,6 @@ function TwinFlank(){
     new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],Math.PI),
     new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],Math.PI)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "TwinFlank";
 }
 TwinFlank.prototype = new Tank();
@@ -404,7 +388,6 @@ function PentaShot(){
     new Gun([[0,0],[0.42,0],[0.42,1.9],[-0.42,1.9],[-0.42, 0]],-Math.PI/8),
     new Gun([[0,0],[0.42,0],[0.42,2.25],[-0.42,2.25],[-0.42, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "PentaShot";
 }
 PentaShot.prototype = new Tank();
@@ -417,7 +400,6 @@ function Assasin(){
   this.guns=[
     new Gun([[0.42,0],[0.42,2.45],[-0.42,2.45],[-0.42, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Assasin";
 }
 Assasin.prototype = new Tank();
@@ -430,7 +412,6 @@ function ArenaCloser(){
   this.guns=[
     new Gun([[0,0],[0.42,0],[0.42,1.5],[-0.42,1.5],[-0.42, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "ArenaCloser";
 }
 ArenaCloser.prototype = new Tank();
@@ -463,7 +444,6 @@ function TripleTwin(){
     new Gun([[0,0],[0.9,0],[0.9,1.88],[0.1,1.88],[0.1, 0]],-Math.PI/3*2),
     new Gun([[0,0],[-0.1,0],[-0.1,1.88],[-0.9,1.88],[-0.9, 0]],-Math.PI/3*2)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "TripleTwin";
 }
 TripleTwin.prototype = new Tank();
@@ -477,7 +457,6 @@ function Hunter(){
     new Gun([[0,0],[0.38,0],[0.38,2.23],[-0.38,2.23],[-0.54, 0]],0),
     new Gun([[0,0],[0.54,0],[0.54,1.91],[-0.54,1.91],[-0.54, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Hunter";
 }
 Hunter.prototype = new Tank();
@@ -493,7 +472,6 @@ function Gunner(){
     new Gun([[0,0],[0.55,0],[0.55,1.73],[0.15,1.73],[0.15, 0]],0),
     new Gun([[0,0],[-0.55,0],[-0.55,1.73],[-0.15,1.73],[-0.15, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Gunner";
 }
 Gunner.prototype = new Tank();
@@ -506,7 +484,6 @@ function Stalker(){
   this.guns=[
     new Gun([[0.72,0],[0.42,2.4],[-0.42,2.4],[-0.72, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Stalker";
 }
 Stalker.prototype = new Tank();
@@ -520,7 +497,6 @@ function Ranger(){
     new Gun([[0,0],[0.42,0],[0.42,2.47],[-0.42,2.47],[-0.42, 0]],0),
     new Gun([[0.8,0],[0.4,1.3],[-0.4,1.3],[-0.8,0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Ranger";
 }
 Ranger.prototype = new Tank();
@@ -537,7 +513,6 @@ function Booster(){
     new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],Math.PI / 6 * 5),
     new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],-Math.PI / 6 * 5)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Booster";
 }
 Booster.prototype = new Tank();
@@ -554,7 +529,6 @@ function Fighter(){
     new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],Math.PI / 2),
     new Gun([[0,0],[0.4,0],[0.4,1.65],[-0.4,1.65],[-0.4, 0]],-Math.PI / 2)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Fighter";
 }
 Fighter.prototype = new Tank();
@@ -568,7 +542,6 @@ function Hybrid(){
     new Gun([[0,0],[0.7,0],[0.7,1.88],[-0.7,1.88],[-0.7, 0]],0),
     new Gun([[0.43,0],[0.73,1.4],[-0.73,1.4],[-0.43,0]],Math.PI)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Hybrid";
 }
 Hybrid.prototype = new Tank();
@@ -581,7 +554,6 @@ function Manager(){
   this.guns=[
     new Gun([[0.43,0],[0.73,1.4],[-0.73,1.4],[-0.43,0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Manager";
 }
 Manager.prototype = new Tank();
@@ -611,7 +583,6 @@ function Predator(){
     new Gun([[0.565,0],[0.565,1.9],[-0.565,1.9],[-0.565, 0]],0),
     new Gun([[0.713,0],[0.713,1.59],[-0.713,1.59],[-0.713, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Predator";
 }
 Predator.prototype = new Tank();
@@ -625,7 +596,6 @@ function Sprayer(){
     new Gun([[0,0],[0.38,0],[0.38,2.25],[-0.38,2.25],[-0.38, 0]],0),
     new Gun([[0,0],[0.4,0],[0.8,1.88],[-0.8,1.88],[-0.4, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Sprayer";
 }
 Sprayer.prototype = new Tank();
@@ -639,7 +609,6 @@ function Trapper(){
     new Gun([[0.42,1.193],[0.73,1.578],[-0.73,1.578],[-0.42,1.193]],0),
     new Gun([[0.42,0],[0.42,1.193],[-0.42,1.193],[-0.42,0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Trapper";
 }
 Trapper.prototype = new Tank();
@@ -655,7 +624,6 @@ function GunnerTrapper(){
     new Gun([[0.542,1.193],[0.95,1.708],[-0.95,1.708],[-0.542,1.193]],Math.PI),
     new Gun([[0.542,0],[0.542,1.193],[-0.542,1.193],[-0.542,0]],Math.PI)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "GunnerTrapper";
 }
 GunnerTrapper.prototype = new Tank();
@@ -671,7 +639,6 @@ function OverTrapper(){
     new Gun([[0.43,0],[0.73,1.42],[-0.73,1.42],[-0.43,0]],Math.PI / 3 * 2),
     new Gun([[0.43,0],[0.73,1.42],[-0.73,1.42],[-0.43,0]],-Math.PI / 3 * 2)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "OverTrapper";
 }
 OverTrapper.prototype = new Tank();
@@ -685,8 +652,6 @@ function MegaTrapper(){
     new Gun([[0.542,1.193],[0.95,1.708],[-0.95,1.708],[-0.542,1.193]],0),
     new Gun([[0.542,0],[0.542,1.193],[-0.542,1.193],[-0.542,0]],0)
   ];
-  this.bodyVertex = 0;
-  this.bodySize = 1;
   this.tankType = "MegaTrapper";
 }
 MegaTrapper.prototype = new Tank();
@@ -704,8 +669,6 @@ function TriTrapper(){
     new Gun([[0.42,1.193],[0.73,1.578],[-0.73,1.578],[-0.42,1.193]],-Math.PI / 3 * 2),
     new Gun([[0.42,0],[0.42,1.193],[-0.42,1.193],[-0.42,0]],-Math.PI / 3 * 2)
   ];
-  this.bodyVertex = 0;
-  this.bodySize = 1;
   this.tankType = "TriTrapper";
 }
 TriTrapper.prototype = new Tank();
@@ -725,8 +688,6 @@ function Smasher(){
   this.guns=[
     new Bolt(list,Math.PI/80)
   ];
-  this.bodyVertex = 0;
-  this.bodySize = 1;
   this.tankType = "Smasher";
 }
 Smasher.prototype = new Tank();
@@ -747,8 +708,6 @@ function Landmine(){
     new Bolt(list,Math.PI/80),
     new Bolt(list,Math.PI/160)
   ];
-  this.bodyVertex = 0;
-  this.bodySize = 1;
   this.tankType = "Landmine";
 }
 Landmine.prototype = new Tank();
@@ -767,7 +726,6 @@ function AutoGunner(){
   this.afterGuns=[
     new AutoGun([0,0],0,0.5,[[0,0],[0.3,0],[0.3,1.08],[-0.3,1.08],[-0.3, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "AutoGunner";
 }
 AutoGunner.prototype = new Tank();
@@ -857,8 +815,16 @@ AutoTrapper.prototype.constructor = AutoTrapper;
 function BasicDominator(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
+  let dir = -Math.PI / 6 * 5;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*1.24,Math.sin(dir)*1.24]);
+    dir += Math.PI / 3;
+  }
   this.guns=[
-
+    new Bolt(list,0),
+    new Gun([[0.36,0],[0.36,1.6],[-0.36,1.6],[-0.36, 0]],0),
+    new Gun([[0.6,0.8],[0.36,1.22],[-0.36,1.22],[-0.6, 0.8]],0)
   ];
   this.tankType = "BasicDominator";
 }
@@ -869,8 +835,18 @@ BasicDominator.prototype.constructor = BasicDominator;
 function GunnerDominator(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
+  let dir = -Math.PI / 6 * 5;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*1.24,Math.sin(dir)*1.24]);
+    dir += Math.PI / 3;
+  }
   this.guns=[
-
+    new Bolt(list,0),
+    new Gun([[0.3,0],[0.3,1.52],[-0.1,1.52],[-0.1, 0]],0),
+    new Gun([[0.1,0],[0.1,1.52],[-0.3,1.52],[-0.3, 0]],0),
+    new Gun([[0.18,0],[0.18,1.6],[-0.18,1.6],[-0.18, 0]],0),
+    new Gun([[0.6,0.8],[0.36,1.22],[-0.36,1.22],[-0.6,0.8]],0)
   ];
   this.tankType = "GunnerDominator";
 }
@@ -881,8 +857,14 @@ GunnerDominator.prototype.constructor = GunnerDominator;
 function TrapperDominator(){
   "use strict";
   Tank.apply(this, arguments);
+  let list = [];
+  let dir = -Math.PI / 6 * 5;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*1.24,Math.sin(dir)*1.24]);
+    dir += Math.PI / 3;
+  }
   this.guns=[
-
+    new Bolt(list,0)
   ];
   this.tankType = "TrapperDominator";
 }

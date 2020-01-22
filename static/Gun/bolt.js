@@ -4,7 +4,7 @@ function Bolt(paths,dir){
   this.point = paths;
   this.addRotate = dir;
   this.rotate = 0;
-  this.color = new RGB(0,0,0);
+  this.color = new RGB(50,50,50);
 
   this.animate = function () {
     this.rotate+=this.addRotate;
