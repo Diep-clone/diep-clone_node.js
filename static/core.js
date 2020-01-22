@@ -26,7 +26,7 @@ function System(name){ // 게임의 전체 진행 담당
     TripleTwin,////
     Hunter,////
     Gunner,////
-    Stalker,// 구현 안됨
+    Stalker,///
     Ranger,////
     Booster,////
     Fighter,////
@@ -40,24 +40,24 @@ function System(name){ // 게임의 전체 진행 담당
     OverTrapper,///
     MegaTrapper,///
     TriTrapper,///
-    Smasher,//
-    Landmine,//
-    AutoGunner,//
-    Auto5,//
-    Auto3,//
+    Smasher,///
+    Landmine,///
+    AutoGunner,///
+    Auto5,///
+    Auto3,///
     SpreadShot,////
     Streamliner,////
-    AutoTrapper,//
-    BasicDominator,//
-    GunnerDominator,//
-    TrapperDominator,//
+    AutoTrapper,///
+    BasicDominator,///
+    GunnerDominator,///
+    TrapperDominator,///
     BattleShip,///
     Annihilator,////
-    AutoSmasher,//
-    Spike,//
+    AutoSmasher,///
+    Spike,///
     Factory,///
-    Skimmer,//
-    Rocketeer//
+    Skimmer,///
+    Rocketeer///
   ];
 
   this.colorList = [
@@ -228,9 +228,9 @@ function System(name){ // 게임의 전체 진행 담당
         }
       break;
       case "bullet":
-        /*if (this.objectList.bullet[data.id]){
+        if (this.objectList.bullet[data.id]){
           this.objectList.bullet[data.id].hit();
-        }*/
+        }
       default:
       break;
     }
@@ -505,6 +505,7 @@ function System(name){ // 게임의 전체 진행 담당
       break;
       case 220: // \키
         if (!this.input.changeTank){
+          console.log(this.input.changeTank);
           g = this.input.changeTank = true;
         }
       break;

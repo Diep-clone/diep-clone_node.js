@@ -71,8 +71,11 @@ io.on('connection', (socket) => { // 접속.
       x:0,
       y:0
     },
-    k:null,
+    k:false,
+    o:false,
     name:"",
+    changeTank:false,
+    isChange:false,
     controlTank:null
   };
 
@@ -184,18 +187,9 @@ io.on('connection', (socket) => { // 접속.
     if (data.rShot>0) currentPlayer.mouse = "right";
     else if (data.shot>0 || data.autoE) currentPlayer.mouse = "left";
     else currentPlayer.mouse = "null";
-    if (currentPlayer.controlTank){
-      if (data.o){
-        if (currentPlayer.controlTank){
-          currentPlayer.controlTank.health=0;
-        }
-      }
-      if (data.changeTank){
-        currentPlayer.controlTank.type = currentPlayer.controlTank.type==0?tankLength-1:currentPlayer.controlTank.type-1;
-        userUtil.setUserTank(currentPlayer.controlTank);
-        currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
-      }
-    }
+    currentPlayer.o = data.o;
+    currentPlayer.changeTank = data.changeTank;
+    if (!data.changeTank && currentPlayer.isChange) currentPlayer.isChange = false;
   });
 
   socket.on('disconnect', () => { // 연결 끊김
@@ -221,6 +215,15 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
       currentPlayer.level++;
       currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
       currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+    }
+    if (users[currentPlayer.id].o){
+      currentPlayer.health=0;
+    }
+    if (users[currentPlayer.id].changeTank && !users[currentPlayer.id].isChange){
+      currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
+      userUtil.setUserTank(currentPlayer);
+      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+      users[currentPlayer.id].isChange = true;
     }
   }
   else userUtil.afkTank(currentPlayer);
@@ -313,18 +316,19 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 
     collision.aUser.isCollision = collision.bUser.isCollision = true;
 
-    io.emit('objectHit',collision.aUser);
-    io.emit('objectHit',collision.bUser);
-
-    collision.aUser.hitTime = Date.now();
-    collision.bUser.hitTime = Date.now();
-
     collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
     collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
     collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
     collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
 
     if (collision.aUser.owner !== collision.bUser.owner){
+
+      io.emit('objectHit',collision.aUser);
+      io.emit('objectHit',collision.bUser);
+
+      collision.aUser.hitTime = Date.now();
+      collision.bUser.hitTime = Date.now();
+
       if (collision.bUser.lastHealth-collision.aUser.damage<=0){
         collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
       }

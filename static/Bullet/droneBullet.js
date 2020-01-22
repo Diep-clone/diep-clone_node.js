@@ -9,6 +9,10 @@ function DroneBullet(){
   this.canvasSize = {x:0,y:0};
   this.canvasPos = {x:0,y:0};
   this.imRotate = this.rotate;
+  this.hitTime = 0;
+  this.r = 0;
+  this.w = 0;
+
   this.animate = function(tick){
     if (this.isDead || this.health<0 || this.time<0){
       this.opacity = Math.max(this.opacity - 0.2 * tick * 0.05, 0);
@@ -18,6 +22,20 @@ function DroneBullet(){
         return;
       }
     }
+    if (this.hitTime>0){ // hit effect
+      this.hitTime -= 0.1 * tick * 0.05;
+      this.w= 1;
+    }
+    else{
+      this.hitTime = 0;
+      if (this.w>0) this.w = Math.max(this.w - 0.7 * tick * 0.05,0);
+      if (this.w==0 && this.r==0){
+        this.r = 0.8;
+        this.w = -0.0001;
+      }
+    }
+    this.r= Math.max(this.r - 0.2 * tick * 0.05,0);
+
     let ccw = Math.cos(this.rotate)*Math.sin(this.imRotate)-Math.sin(this.rotate)*Math.cos(this.imRotate);
     let a = -((Math.cos(this.rotate)*Math.cos(this.imRotate)) + (Math.sin(this.rotate)*Math.sin(this.imRotate))-1) * Math.PI / 2;
 
@@ -32,6 +50,9 @@ function DroneBullet(){
   }
   this.dead = function(){
     this.isDead = true;
+  }
+  this.hit = function(){
+    this.hitTime=0.2;
   }
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
@@ -49,8 +70,8 @@ function DroneBullet(){
   }
   this.draw = function(ctx,camera){
     if (this.opacity>=1){
-      ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
-      ctx.fillStyle = this.color.getRGBValue();
+      ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
+      ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
       ctx.lineWidth = 2 * camera.z;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -67,8 +88,8 @@ function DroneBullet(){
     else{
       this.setCanvasSize(camera);
 
-      this.ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
-      this.ctx.fillStyle = this.color.getRGBValue();
+      ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
+      ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
       this.ctx.beginPath();
       this.ctx.moveTo(this.canvasPos.x + Math.cos(this.imRotate) * this.radius * 1.5 * camera.z,this.canvasPos.y + Math.sin(this.imRotate) * this.radius * 1.5 * camera.z);
       this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.5 * camera.z,this.canvasPos.y + Math.sin(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.5 * camera.z);
