@@ -4,6 +4,7 @@ function Tank(){
   HealthShowObject.apply(this, arguments);
   this.tankType = null;
   this.guns = [];
+  this.afterGuns = [];
   this.color = new RGB(0,176,225);
   this.name = "";
   this.level;
@@ -59,6 +60,7 @@ function Tank(){
   this.changeTank = function (type){
     let t = new type();
     this.guns = t.guns;
+    this.afterGuns = t.afterGuns;
     this.tankType = t.tankType;
     this.showRadius = this.radius * t.bodySize;
     this.bodySize = t.bodySize;
@@ -97,9 +99,11 @@ function Tank(){
       ctx.lineWidth = 2 * camera.z;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
+
       for (let i=0;i<this.guns.length;i++){
         this.guns[i].drawGun(this,ctx,camera);
       }
+
       ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
       ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
       ctx.beginPath();
@@ -118,6 +122,11 @@ function Tank(){
       ctx.fill();
       ctx.stroke();
       ctx.closePath();
+
+      for (let i=0;i<this.afterGuns.length;i++){
+        this.afterGuns[i].drawGun(this,ctx,camera);
+      }
+
       ctx.restore();
     }
     else{
@@ -145,6 +154,10 @@ function Tank(){
       this.ctx.fill();
       this.ctx.stroke();
       this.ctx.closePath();
+
+      for (let i=0;i<this.afterGuns.length;i++){
+        this.afterGuns[i].drawGun(this,this.ctx,camera);
+      }
 
       ctx.save();
       ctx.globalAlpha = this.opacity;
@@ -746,10 +759,13 @@ function AutoGunner(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    /*new Gun([[0,0],[0.87,0],[0.87,1.3],[0.47,1.3],[0.47, 0]],0),
+    new Gun([[0,0],[0.87,0],[0.87,1.3],[0.47,1.3],[0.47, 0]],0),
     new Gun([[0,0],[-0.87,0],[-0.87,1.3],[-0.47,1.3],[-0.47, 0]],0),
     new Gun([[0,0],[0.55,0],[0.55,1.73],[0.15,1.73],[0.15, 0]],0),
-    new Gun([[0,0],[-0.55,0],[-0.55,1.73],[-0.15,1.73],[-0.15, 0]],0)*/
+    new Gun([[0,0],[-0.55,0],[-0.55,1.73],[-0.15,1.73],[-0.15, 0]],0)
+  ];
+  this.afterGuns=[
+    new AutoGun([0,0],0,0.5,[[0,0],[0.3,0],[0.3,1.08],[-0.3,1.08],[-0.3, 0]],0)
   ];
   this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "AutoGunner";
@@ -761,10 +777,10 @@ AutoGunner.prototype.constructor = AutoGunner;
 function Auto5(){
   "use strict";
   Tank.apply(this, arguments);
-  this.guns=[
-
-  ];
-  this.bodyVertex = 0;this.bodySize = 1;
+  this.guns=[];
+  for (let dir=-Math.PI/5*4;dir<=Math.PI;dir+=Math.PI/5*2){
+    this.guns.push(new AutoGun([0,0.8],0,0.5,[[0,0],[0.3,0],[0.3,1.08],[-0.3,1.08],[-0.3, 0]],dir));
+  }
   this.tankType = "Auto5";
 }
 Auto5.prototype = new Tank();
@@ -774,10 +790,10 @@ Auto5.prototype.constructor = Auto5;
 function Auto3(){
   "use strict";
   Tank.apply(this, arguments);
-  this.guns=[
-
-  ];
-  this.bodyVertex = 0;this.bodySize = 1;
+  this.guns=[];
+  for (let dir=-Math.PI/3*2;dir<=Math.PI;dir+=Math.PI/3*2){
+    this.guns.push(new AutoGun([0,0.8],0,0.5,[[0,0],[0.3,0],[0.3,1.08],[-0.3,1.08],[-0.3, 0]],dir));
+  }
   this.tankType = "Auto3";
 }
 Auto3.prototype = new Tank();
@@ -800,7 +816,6 @@ function SpreadShot(){
     new Gun([[0,0],[0.29,0],[0.29,1.8],[-0.29,1.8],[-0.29, 0]],-Math.PI/12),
     new Gun([[0,0],[0.42,0],[0.42,1.88],[-0.42,1.88],[-0.42, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "SpreadShot";
 }
 SpreadShot.prototype = new Tank();
@@ -817,7 +832,6 @@ function Streamliner(){
     new Gun([[0,0],[0.42,0],[0.42,1.62],[-0.42,1.62],[-0.42, 0]],0),
     new Gun([[0,0],[0.42,0],[0.42,1.41],[-0.42,1.41],[-0.42, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Streamliner";
 }
 Streamliner.prototype = new Tank();
@@ -828,10 +842,12 @@ function AutoTrapper(){
   "use strict";
   Tank.apply(this, arguments);
   this.guns=[
-    //new Gun([[0.42,1.193],[0.73,1.578],[-0.73,1.578],[-0.42,1.193]],0),
-    //new Gun([[0.42,0],[0.42,1.193],[-0.42,1.193],[-0.42,0]],0)
+    new Gun([[0.42,1.193],[0.73,1.578],[-0.73,1.578],[-0.42,1.193]],0),
+    new Gun([[0.42,0],[0.42,1.193],[-0.42,1.193],[-0.42,0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
+  this.afterGuns=[
+    new AutoGun([0,0],0,0.5,[[0,0],[0.3,0],[0.3,1.08],[-0.3,1.08],[-0.3, 0]],0)
+  ];
   this.tankType = "AutoTrapper";
 }
 AutoTrapper.prototype = new Tank();
@@ -844,7 +860,6 @@ function BasicDominator(){
   this.guns=[
 
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "BasicDominator";
 }
 BasicDominator.prototype = new Tank();
@@ -857,7 +872,6 @@ function GunnerDominator(){
   this.guns=[
 
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "GunnerDominator";
 }
 GunnerDominator.prototype = new Tank();
@@ -870,7 +884,6 @@ function TrapperDominator(){
   this.guns=[
 
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "TrapperDominator";
 }
 TrapperDominator.prototype = new Tank();
@@ -886,7 +899,6 @@ function BattleShip(){
     new Gun([[0.9,0],[0.68,1.5],[0.1,1.5],[-0.16,0]],-Math.PI / 2),
     new Gun([[-0.9,0],[-0.68,1.5],[-0.1,1.5],[0.16,0]],-Math.PI / 2),
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "BattleShip";
 }
 BattleShip.prototype = new Tank();
@@ -899,7 +911,6 @@ function Annihilator(){
   this.guns=[
     new Gun([[0,0],[0.95,0],[0.95,1.88],[-0.95,1.88],[-0.95, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Annihilator";
 }
 Annihilator.prototype = new Tank();
@@ -917,9 +928,11 @@ function AutoSmasher(){
     dir += Math.PI / 3;
   }
   this.guns=[
-    /*new Bolt(list,Math.PI/80)*/
+    new Bolt(list,Math.PI/80)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
+  this.afterGuns=[
+    new AutoGun([0,0],0,0.5,[[0,0],[0.3,0],[0.3,1.08],[-0.3,1.08],[-0.3, 0]],0)
+  ];
   this.tankType = "AutoSmasher";
 }
 AutoSmasher.prototype = new Tank();
@@ -940,7 +953,6 @@ function Spike(){
   this.guns=[
     new Bolt(list,Math.PI/40)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Spike";
 }
 Spike.prototype = new Tank();
@@ -968,7 +980,6 @@ function Skimmer(){
     new Gun([[0,0],[0.3,0],[0.59,1.84],[-0.59,1.84],[-0.3, 0]],0),
     new Gun([[0,0],[0.71,0],[0.71,1.59],[-0.71,1.59],[-0.71, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Skimmer";
 }
 Skimmer.prototype = new Tank();
@@ -982,7 +993,6 @@ function Rocketeer(){
     new Gun([[0,0],[0.3,0],[0.59,1.84],[-0.59,1.84],[-0.3, 0]],0),
     new Gun([[0,0],[0.92,0],[0.52,1.59],[-0.52,1.59],[-0.92, 0]],0)
   ];
-  this.bodyVertex = 0;this.bodySize = 1;
   this.tankType = "Rocketeer";
 }
 Rocketeer.prototype = new Tank();
