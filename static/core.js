@@ -30,7 +30,7 @@ function System(name){ // 게임의 전체 진행 담당
     Ranger,////
     Booster,////
     Fighter,////
-    Hybrid,///
+    Hybrid,////
     Manager,///
     MotherShip,///
     Predator,///
@@ -59,6 +59,12 @@ function System(name){ // 게임의 전체 진행 담당
     Skimmer,///
     Rocketeer///
   ];
+
+  this.bulletList = [
+    TrapBullet,
+    BasicBullet,
+    DroneBullet
+  ]
 
   this.colorList = [
     new RGB(230,176,138),
@@ -199,16 +205,7 @@ function System(name){ // 게임의 전체 진행 담당
           objBullet.setRotate(bulletList[key].rotate);
         }
         else{
-          let objBullet;
-          switch (bulletList[key].type){
-            case 1:
-            objBullet = this.createBulletObject(bulletList[key].id,BasicBullet,bulletList[key].owner);
-            break;
-            case 2:
-            objBullet = this.createBulletObject(bulletList[key].id,DroneBullet,bulletList[key].owner);
-            break;
-          }
-
+          let objBullet = this.createBulletObject(bulletList[key].id,this.bulletList[bulletList[key].type],bulletList[key].owner);
           objBullet.setPosition(bulletList[key].x,bulletList[key].y);
           objBullet.setRadius(bulletList[key].radius);
           objBullet.setRotate(bulletList[key].rotate);

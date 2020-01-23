@@ -142,7 +142,7 @@ io.on('connection', (socket) => { // 접속.
         stats:[0,0,0,0,0,0,0,0],
         maxStats:[8,8,8,8,8,8,8,8],
         stat:0,
-        type:26,
+        type:0,
         isCollision:false,
         hitTime:Date.now(),
         isDead:false
@@ -349,11 +349,10 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   var bulletCircle = new C(new V(currentBullet.x,currentBullet.y),currentBullet.radius);
 
   tree.clear();
-  tanks.forEach(tree.put);
   bullets.forEach(tree.put);
   var bulletCollisions = [];
 
-  var otherObj = tree.get(currentBullet,check);
+  tree.get(currentBullet,check);
 
   bulletCollisions.forEach(collisionCheck);
 
@@ -367,8 +366,7 @@ function detectObject(object,r){
   let dist = [];
 
   function check(obj){
-    console.log(obj.id,obj.owner,object.id,object.owner);
-    if ((!obj.owner || (obj.owner !== object.id && obj.owner !== object.owner)) && obj.id !== object.id && obj.id !== object.owner){
+    if (obj.id !== object.owner){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
       new C(new V(obj.x,obj.y),obj.radius),response);
@@ -382,7 +380,7 @@ function detectObject(object,r){
     return true;
   }
 
-  tree.get({x:object.x,y:object.y,r:r,w:10,h:10},check);
+  tree.get(object,check);
 
   let min = r+1;
   let obj = undefined;
