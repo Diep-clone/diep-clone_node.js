@@ -142,7 +142,8 @@ io.on('connection', (socket) => { // 접속.
         stats:[0,0,0,0,0,0,0,0],
         maxStats:[8,8,8,8,8,8,8,8],
         stat:0,
-        type:0,
+        type:39,
+        isCanDir:true,
         isCollision:false,
         hitTime:Date.now(),
         isDead:false
@@ -164,10 +165,11 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향
-     if (data == null ) return; // null 값을 받으면 서버 정지
+    if (data == null ) return; // null 값을 받으면 서버 정지
 
     currentPlayer.target = data;
-    if (currentPlayer.controlTank){
+
+    if (currentPlayer.controlTank && currentPlayer.controlTank.isCanDir){
       currentPlayer.controlTank.rotate = Math.atan2(data.y-currentPlayer.controlTank.y,data.x-currentPlayer.controlTank.x);
     }
   });
@@ -210,6 +212,10 @@ io.on('connection', (socket) => { // 접속.
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
   bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]));
+
+  if (!currentPlayer.isCanDir){
+    currentPlayer.rotate+= 0.01;
+  }
 
   if (users[currentPlayer.id]){
     objUtil.healObject(currentPlayer);

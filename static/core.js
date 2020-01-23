@@ -176,12 +176,13 @@ function System(name){ // 게임의 전체 진행 담당
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != objTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
-          if (objTank.id !== this.controlTank.id){
-            objTank.setRotate(tankList[key].rotate);
-          }
-          else{
+          objTank.setCanDir(tankList[key].isCanDir);
+          if (objTank.id === this.controlTank.id){
             objTank.setLevel(tankList[key].level);
             this.drawObject.setSight(tankList[key].sight);
+          }
+          else if (!tankList[key].isCanDir){
+            objTank.setRotate(tankList[key].rotate);
           }
         }
         else{
@@ -311,11 +312,11 @@ function System(name){ // 게임의 전체 진행 담당
     let camera = this.drawObject.getCameraSet();
 
     if (this.controlTank) {
-
       this.drawObject.cameraSet(this.controlTank);
 
-      this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y-this.controlTank.dy,this.input.target.x/camera.z+camera.x-this.controlTank.x-this.controlTank.dx));
-
+      if (this.controlTank.isCanDir){
+        this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y-this.controlTank.dy,this.input.target.x/camera.z+camera.x-this.controlTank.x-this.controlTank.dx));
+      }
       socket.emit('mousemove',{
         x:this.input.target.x/camera.z+camera.x,
         y:this.input.target.y/camera.z+camera.y

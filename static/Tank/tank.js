@@ -18,6 +18,7 @@ function Tank(){
   this.hitTime = 0;
   this.r = 0;
   this.w = 0;
+  this.isCanDir;
   this.showRadius = this.radius;
 
   this.animate = function(tick){
@@ -56,6 +57,9 @@ function Tank(){
   }
   this.setLevel = function (lv){
     this.level = lv;
+  }
+  this.setCanDir = function (b){
+    this.isCanDir = b;
   }
   this.changeTank = function (type){
     let t = new type();
