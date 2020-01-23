@@ -14,6 +14,7 @@ const util = require('./lib/librarys');
 const objUtil = require('./lib/objectSet');
 const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
+const shapeUtil = require('./lib/shapeSet');
 
 const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
@@ -26,9 +27,10 @@ let C = SAT.Circle;
 let users = {}; // 유저 목록.
 let tanks = []; // 탱크 목록.
 let bullets = []; // 총알 목록.
+let shapes = []; // 도형 목록.
 let sockets = {}; // 유저 접속 목록.
 
-let mapSize = {x: 0,y: 0}; // 맵 크기.
+let mapSize = {x: 161.25,y: 161.25}; // 맵 크기.
 let tankLength = 53; // 탱크의 목록 길이.
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
@@ -53,8 +55,8 @@ recursiveAsyncReadLine();
 
 io.on('connection', (socket) => { // 접속.
 
-  mapSize.x+= 322.5;
-  mapSize.y+= 322.5;
+  mapSize.x+= 161.25;
+  mapSize.y+= 161.25;
 
   tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 
@@ -154,6 +156,7 @@ io.on('connection', (socket) => { // 접속.
       users[socket.id] = currentPlayer;
       tanks.push(currentPlayer.controlTank);
 
+      currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
       currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
       socket.emit('spawn', currentPlayer.controlTank);
       io.emit('mapSize', mapSize);
@@ -179,12 +182,6 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.screenHeight = data.screenHeight;
   });
 
-  socket.on('levelUP', () => {
-    if (currentPlayer.controlTank && currentPlayer.controlTank.level<45){
-
-    }
-  });
-
   socket.on('input', (data) => { // 입력 정보
     currentPlayer.rotate = data.moveRotate;
     currentPlayer.k = data.k;
@@ -198,8 +195,8 @@ io.on('connection', (socket) => { // 접속.
 
   socket.on('disconnect', () => { // 연결 끊김
     console.log('안녕 잘가!!!');
-    mapSize.x-= 322.5;
-    mapSize.y-= 322.5;
+    mapSize.x-= 161.25;
+    mapSize.y-= 161.25;
 
     tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
 

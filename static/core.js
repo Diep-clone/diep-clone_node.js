@@ -324,8 +324,8 @@ function System(name){ // 게임의 전체 진행 담당
     }
 
     this.drawObject.backgroundDraw();
-    this.drawObject.objectDraw(this.objectList.bullet);
     this.drawObject.objectDraw(this.objectList.tank);
+    this.drawObject.objectDraw(this.objectList.bullet);
     this.drawObject.objectStatusDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);
 
