@@ -181,9 +181,9 @@ function System(name){ // 게임의 전체 진행 담당
             objTank.setLevel(tankList[key].level);
             this.drawObject.setSight(tankList[key].sight);
           }
-          if (!tankList[key].isCanDir){
+          //if (!tankList[key].isCanDir){
             objTank.setRotate(tankList[key].rotate);
-          }
+          //}
         }
         else{
           let objTank = this.createTankObject(tankList[key].id,this.tankList[tankList[key].type]);
