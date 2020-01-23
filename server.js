@@ -142,7 +142,7 @@ io.on('connection', (socket) => { // 접속.
         stats:[0,0,0,0,0,0,0,0],
         maxStats:[8,8,8,8,8,8,8,8],
         stat:0,
-        type:0,
+        type:26,
         isCollision:false,
         hitTime:Date.now(),
         isDead:false
@@ -291,7 +291,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner]);
+  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,92.88));
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
@@ -360,25 +360,41 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
 }
 
-function detectObject(x,y,r){
+function detectObject(object,r){
   tree.clear();
   tanks.forEach(tree.put);
-  bullets.forEach(tree.put);
-  var collisionsObjectList = [];
+  let collisionsObjectList = [];
+  let dist = [];
 
   function check(obj){
-    let response = new SAT.Response();
-    let collided = SAT.testCircleCircle(new C(new V(x,y),r),
-    new C(new V(obj.x,obj.y),obj.radius),response);
+    console.log(obj.id,obj.owner,object.id,object.owner);
+    if ((!obj.owner || (obj.owner !== object.id && obj.owner !== object.owner)) && obj.id !== object.id && obj.id !== object.owner){
+      let response = new SAT.Response();
+      let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
+      new C(new V(obj.x,obj.y),obj.radius),response);
 
-    if (collided){
-      collisionsObjectList.push(obj);
+      if (collided){
+        collisionsObjectList.push(obj);
+        dist.push(Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y)));
+      }
+    }
+
+    return true;
+  }
+
+  tree.get({x:object.x,y:object.y,r:r,w:10,h:10},check);
+
+  let min = r+1;
+  let obj = undefined;
+
+  for (let i=0;i<dist.length;i++){
+    if (dist[i]<min){
+      min=dist[i];
+      obj=collisionsObjectList[i];
     }
   }
 
-  tree.get({x:x,y:y,r:r},check);
-
-  return collisionsObjectList;
+  return obj;
 }
 
 function moveloop(){

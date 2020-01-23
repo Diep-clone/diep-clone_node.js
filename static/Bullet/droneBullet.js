@@ -88,8 +88,8 @@ function DroneBullet(){
     else{
       this.setCanvasSize(camera);
 
-      ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
-      ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
+      this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
+      this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
       this.ctx.beginPath();
       this.ctx.moveTo(this.canvasPos.x + Math.cos(this.imRotate) * this.radius * 1.5 * camera.z,this.canvasPos.y + Math.sin(this.imRotate) * this.radius * 1.5 * camera.z);
       this.ctx.lineTo(this.canvasPos.x + Math.cos(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.5 * camera.z,this.canvasPos.y + Math.sin(this.imRotate + Math.PI / 3 * 2) * this.radius * 1.5 * camera.z);
