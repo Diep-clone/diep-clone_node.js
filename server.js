@@ -142,7 +142,7 @@ io.on('connection', (socket) => { // 접속.
         stats:[0,0,0,0,0,0,0,0],
         maxStats:[8,8,8,8,8,8,8,8],
         stat:0,
-        type:39,
+        type:0,
         isCanDir:true,
         isCollision:false,
         hitTime:Date.now(),
