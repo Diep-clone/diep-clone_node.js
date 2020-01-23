@@ -11,7 +11,7 @@ function DroneBullet(){
   this.imRotate = this.rotate;
   this.hitTime = 0;
   this.r = 0;
-  this.w = 0;
+  this.w = -0.0001;
 
   this.animate = function(tick){
     if (this.isDead || this.health<0 || this.time<0){
