@@ -48,9 +48,9 @@ function AutoGun(pos,rotate,radius,paths,dir){
 
     for (let i=0;i<this.point.length;i++){
       let x = Math.floor(this.pos[0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius + this.pos[1]*Math.cos(rotate+this.addRotate)*camera.z*radius
-      + this.point[i][0]*Math.cos(rotate-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.cos(rotate+this.rotate)*camera.z*radius+xx);
+      + this.point[i][0]*Math.cos(-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.cos(this.rotate)*camera.z*radius+xx);
       let y = Math.floor(this.pos[0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius + this.pos[1]*Math.sin(rotate+this.addRotate)*camera.z*radius
-      + this.point[i][0]*Math.sin(rotate-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.sin(rotate+this.rotate)*camera.z*radius+yy);
+      + this.point[i][0]*Math.sin(-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.sin(this.rotate)*camera.z*radius+yy);
 
       if (x<0){
         tank.canvasSize.x += -x;
@@ -83,15 +83,15 @@ function AutoGun(pos,rotate,radius,paths,dir){
 
     ctx.beginPath();
     let x = this.pos[0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius + this.pos[1]*Math.cos(rotate+this.addRotate)*camera.z*radius
-    + this.point[0][0]*Math.cos(rotate-Math.PI/2+this.rotate)*camera.z*radius+this.point[0][1]*Math.cos(rotate+this.rotate)*camera.z*radius+xx;
+    + this.point[0][0]*Math.cos(-Math.PI/2+this.rotate)*camera.z*radius+this.point[0][1]*Math.cos(this.rotate)*camera.z*radius+xx;
     let y = this.pos[0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius + this.pos[1]*Math.sin(rotate+this.addRotate)*camera.z*radius
-    + this.point[0][0]*Math.sin(rotate-Math.PI/2+this.rotate)*camera.z*radius+this.point[0][1]*Math.sin(rotate+this.rotate)*camera.z*radius+yy;
+    + this.point[0][0]*Math.sin(-Math.PI/2+this.rotate)*camera.z*radius+this.point[0][1]*Math.sin(this.rotate)*camera.z*radius+yy;
     ctx.moveTo(x,y);
     for (let i=0;i<this.point.length;i++){
       let x = this.pos[0]*Math.cos(rotate-Math.PI/2+this.addRotate)*camera.z*radius + this.pos[1]*Math.cos(rotate+this.addRotate)*camera.z*radius
-      + this.point[i][0]*Math.cos(rotate-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.cos(rotate+this.rotate)*camera.z*radius+xx;
+      + this.point[i][0]*Math.cos(-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.cos(this.rotate)*camera.z*radius+xx;
       let y = this.pos[0]*Math.sin(rotate-Math.PI/2+this.addRotate)*camera.z*radius + this.pos[1]*Math.sin(rotate+this.addRotate)*camera.z*radius
-      + this.point[i][0]*Math.sin(rotate-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.sin(rotate+this.rotate)*camera.z*radius+yy;
+      + this.point[i][0]*Math.sin(-Math.PI/2+this.rotate)*camera.z*radius+this.point[i][1]*Math.sin(this.rotate)*camera.z*radius+yy;
       ctx.lineTo(x,y);
     }
     ctx.fill();

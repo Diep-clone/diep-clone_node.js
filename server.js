@@ -304,7 +304,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500));
+  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500,0,Math.PI));
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
@@ -380,10 +380,10 @@ function detectObject(object,r,rotate,dir){
 
   function check(obj){
     if (obj.id !== object.owner){
-      /*let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
+      let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
       let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
       console.log(a);
-      if (a<=dir){*/
+      //if (a<=dir){
         let response = new SAT.Response();
         let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
         new C(new V(obj.x,obj.y),obj.radius),response);
