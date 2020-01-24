@@ -52,7 +52,7 @@ function DroneBullet(){
     this.isDead = true;
   }
   this.hit = function(){
-    this.hitTime=0.2;
+    this.hitTime=0.1;
   }
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
