@@ -64,7 +64,10 @@ io.on('connection', (socket) => { // 접속.
     objType: 'player',
     id: socket.id, // 플레이어의 소켓 id
     rotate: null,
-    mouse: "",
+    mouse: {
+      left: false,
+      right: false
+    },
     target: {
       x: 0,
       y: 0
@@ -186,9 +189,8 @@ io.on('connection', (socket) => { // 접속.
   socket.on('input', (data) => { // 입력 정보
     currentPlayer.rotate = data.moveRotate;
     currentPlayer.k = data.k;
-    if (data.rShot>0) currentPlayer.mouse = "right";
-    else if (data.shot>0 || data.autoE) currentPlayer.mouse = "left";
-    else currentPlayer.mouse = "";
+    currentPlayer.mouse.right = data.rShot>0;
+    currentPlayer.mouse.left = data.shot>0 || data.autoE;
     currentPlayer.o = data.o;
     currentPlayer.changeTank = data.changeTank;
     if (!data.changeTank && currentPlayer.isChange) currentPlayer.isChange = false;
