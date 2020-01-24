@@ -62,23 +62,23 @@ io.on('connection', (socket) => { // 접속.
 
   let currentPlayer = { // 현재 플레이어 객체 생성.
     objType: 'player',
-    id:socket.id, // 플레이어의 소켓 id
+    id: socket.id, // 플레이어의 소켓 id
     rotate: null,
-    mouse:"",
-    target:{
-      x:0,
-      y:0
+    mouse: "",
+    target: {
+      x: 0,
+      y: 0
     },
-    camera:{
-      x:0,
-      y:0
+    camera: {
+      x: 0,
+      y: 0
     },
-    k:false,
-    o:false,
-    name:"",
-    changeTank:false,
-    isChange:false,
-    controlTank:null
+    k: false,
+    o: false,
+    name: "",
+    changeTank: false,
+    isChange: false,
+    controlTank: null
   };
 
   /*let currentTank = {
@@ -122,33 +122,34 @@ io.on('connection', (socket) => { // 접속.
 
       currentPlayer.controlTank = {
         objType: 'tank',
-        id:socket.id,
-        x:util.randomRange(-mapSize.x/2,mapSize.x/2),
-        y:util.randomRange(-mapSize.y/2,mapSize.y/2),
-        w:10,
-        h:10,
-        dx:0,
-        dy:0,
-        level:1,
-        health:48,
-        maxHealth:48,
-        lastHealth:48,
-        damage:20,
-        radius:12.9,
-        rotate:0,
-        bound:1,
-        invTime:-1,
-        name:name,
-        sight:1.78,
-        guns:[],
-        stats:[0,0,0,0,0,0,0,0],
-        maxStats:[8,8,8,8,8,8,8,8],
-        stat:0,
-        type:0,
-        isCanDir:true,
-        isCollision:false,
-        hitTime:Date.now(),
-        isDead:false
+        id: socket.id,
+        x: util.randomRange(-mapSize.x/2,mapSize.x/2),
+        y: util.randomRange(-mapSize.y/2,mapSize.y/2),
+        w: 10,
+        h: 10,
+        dx: 0,
+        dy: 0,
+        level: 1,
+        exp: 0,
+        health: 48,
+        maxHealth: 48,
+        lastHealth: 48,
+        damage: 20,
+        radius: 12.9,
+        rotate: 0,
+        bound: 1,
+        invTime: -1,
+        name: name,
+        sight: 1.78,
+        guns: [],
+        stats: [0,0,0,0,0,0,0,0],
+        maxStats: [8,8,8,8,8,8,8,8],
+        stat: 0,
+        type: 0,
+        isCanDir: true,
+        isCollision: false,
+        hitTime: Date.now(),
+        isDead: false
       };
 
       userUtil.setUserTank(currentPlayer.controlTank);
@@ -208,6 +209,13 @@ io.on('connection', (socket) => { // 접속.
 
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
+
+  for (let i=0;i<currentPlayer.guns.length;i++){
+    if (currentPlayer.guns[i].dir.rotate!==null){
+
+    }
+  }
+
   bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]));
 
   if (!currentPlayer.isCanDir){
@@ -215,7 +223,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   }
 
   if (users[currentPlayer.id]){
-    objUtil.healObject(currentPlayer);
+    userUtil.healTank(currentPlayer);
     if (users[currentPlayer.id].k && currentPlayer.level<45){
       currentPlayer.level++;
       currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
@@ -294,7 +302,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,92.88));
+  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500));
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
@@ -362,7 +370,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
 }
 
-function detectObject(object,r){
+function detectObject(object,r,rotate,dir){
   tree.clear();
   tanks.forEach(tree.put);
   let collisionsObjectList = [];
@@ -370,14 +378,19 @@ function detectObject(object,r){
 
   function check(obj){
     if (obj.id !== object.owner){
-      let response = new SAT.Response();
-      let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
-      new C(new V(obj.x,obj.y),obj.radius),response);
+      /*let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
+      let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
+      console.log(a);
+      if (a<=dir){*/
+        let response = new SAT.Response();
+        let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
+        new C(new V(obj.x,obj.y),obj.radius),response);
 
-      if (collided){
-        collisionsObjectList.push(obj);
-        dist.push(Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y)));
-      }
+        if (collided){
+          collisionsObjectList.push(obj);
+          dist.push(Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y)));
+        }
+      //}
     }
 
     return true;
