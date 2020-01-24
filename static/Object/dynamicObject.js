@@ -11,10 +11,10 @@ function DynamicObject(){
   this.health=10;
   this.opacity=1;
   this.id;
-
+/*
   socket.on('objectSet',function (data){
 
-  });
+  });*/
 
   this.setPosition = function(x,y){
     this.x = x;
