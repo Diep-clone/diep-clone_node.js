@@ -375,40 +375,29 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 function detectObject(object,r,rotate,dir){
   tree.clear();
   tanks.forEach(tree.put);
-  let collisionsObjectList = [];
-  let dist = [];
+  let collisionsObject;
+  let dist = r+1;
 
   function check(obj){
     if (obj.id !== object.owner){
-      let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
-      let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
-      console.log(a);
-      //if (a<=dir){
-        let response = new SAT.Response();
-        let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
-        new C(new V(obj.x,obj.y),obj.radius),response);
-
-        if (collided){
-          collisionsObjectList.push(obj);
-          dist.push(Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y)));
+      let response = new SAT.Response();
+      let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
+      new C(new V(obj.x,obj.y),obj.radius),response);
+      if (collided){
+        let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
+        let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
+        let dis = Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y));
+        if (a<=dir && dist>dis){
+          collisionsObject = obj;
+          dist = dis;
         }
-      //}
+      }
     }
 
     return true;
   }
 
   tree.get(object,check);
-
-  let min = r+1;
-  let obj = undefined;
-
-  for (let i=0;i<dist.length;i++){
-    if (dist[i]<min){
-      min=dist[i];
-      obj=collisionsObjectList[i];
-    }
-  }
 
   return obj;
 }
