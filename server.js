@@ -399,7 +399,7 @@ function detectObject(object,r,rotate,dir){
 
   tree.get(object,check);
 
-  return obj;
+  return collisionsObject;
 }
 
 function moveloop(){
