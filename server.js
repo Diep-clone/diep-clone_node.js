@@ -58,7 +58,7 @@ io.on('connection', (socket) => { // 접속.
   mapSize.x+= 161.25;
   mapSize.y+= 161.25;
 
-  tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
+  tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2,{ maxchildren: 10 });
 
   let currentPlayer = { // 현재 플레이어 객체 생성.
     objType: 'player',
@@ -201,7 +201,7 @@ io.on('connection', (socket) => { // 접속.
     mapSize.x-= 161.25;
     mapSize.y-= 161.25;
 
-    tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2);
+    tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2,{ maxchildren: 10 });
 
     delete users[socket.id];
 
@@ -305,7 +305,9 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   let target = undefined;
-  if (currentBullet.type === 2 && currentBullet.goEnemy === undefined && currentBullet.goTank === false) target = detectObject(currentBullet,500,0,Math.PI);
+  if (currentBullet.type === 2 && currentBullet.goEnemy === undefined && !currentBullet.goTank){
+    target = detectObject(currentBullet,500,0,Math.PI);
+  }
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],target);
   currentBullet.lastHealth = currentBullet.health;
 
