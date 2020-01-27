@@ -148,7 +148,7 @@ io.on('connection', (socket) => { // 접속.
         stats: [0,0,0,0,0,0,0,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 0,
+        type: 27,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -306,7 +306,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   let target = undefined;
   if (currentBullet.type === 2 && currentBullet.goEnemy === undefined && !currentBullet.goTank){
-    target = detectObject(currentBullet,500,0,Math.PI);
+    //target = detectObject(currentBullet,250,0,Math.PI);
   }
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],target);
   currentBullet.lastHealth = currentBullet.health;
@@ -374,29 +374,27 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   bulletCollisions.forEach(collisionCheck);
 
   if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
+
 }
 
 function detectObject(object,r,rotate,dir){
   tree.clear();
-  tanks.forEach(tree.put);
+  tanks.forEach(function (obj){if (obj.id !== obj.owner) tree.put;});
   let collisionsObject;
-  let dist = r+1;
 
   function check(obj){
-    if (obj.id !== object.owner){
-      let response = new SAT.Response();
-      let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
-      new C(new V(obj.x,obj.y),obj.radius),response);
-      if (collided){
-        let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
-        let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
-        let dis = Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y));
-        if (a<=dir && dist>dis){
-          collisionsObject = obj;
-          dist = dis;
-        }
+    let response = new SAT.Response();
+    let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
+    new C(new V(obj.x,obj.y),obj.radius),response);
+    if (collided){
+      let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
+      let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
+      if (a<=dir){
+        collisionsObject = obj;
+        return false;
       }
     }
+    else return false;
 
     return true;
   }
@@ -410,7 +408,6 @@ function moveloop(){
   tanks.forEach((u) => {
     tickPlayer(u);
   });
-
   bullets.forEach((b) => {
     tickBullet(b);
   });
@@ -423,9 +420,11 @@ function moveloop(){
     if (bulletUtil.isDeadBullet(b,bullets))
       io.emit('objectDead',b);
   });
+
 }
 
 function sendUpdates(){
+  let time = Date.now();
   for (let key in users){
     if (users[key].controlTank){
       users[key].camera.x = users[key].controlTank.x;
@@ -454,6 +453,7 @@ function sendUpdates(){
             .filter(function(f) { return f; });
     sockets[key].emit('objectList',visibleTank,visibleBullet);
   }
+  console.log(Date.now() - time);
 }
 
 setInterval(moveloop,1000/60);
