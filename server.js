@@ -163,6 +163,7 @@ io.on('connection', (socket) => { // 접속.
       currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
       currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
       socket.emit('spawn', currentPlayer.controlTank);
+      socket.emit('playerSet',{level:currentPlayer.controlTank.level,sight:currentPlayer.controlTank.sight});
       io.emit('mapSize', mapSize);
     }
   });
@@ -230,6 +231,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
       currentPlayer.level++;
       currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
       currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight});
     }
     if (users[currentPlayer.id].o){
       currentPlayer.health=0;
@@ -239,6 +241,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
       userUtil.setUserTank(currentPlayer);
       currentPlayer.sight = userUtil.setUserSight(currentPlayer);
       users[currentPlayer.id].isChange = true;
+      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight});
     }
   }
   else userUtil.afkTank(currentPlayer);
@@ -306,7 +309,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   let target = undefined;
   if (currentBullet.type === 2 && currentBullet.goEnemy === undefined && !currentBullet.goTank){
-    //target = detectObject(currentBullet,250,0,Math.PI);
+    target = detectObject(currentBullet,300,0,Math.PI);
   }
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],target);
   currentBullet.lastHealth = currentBullet.health;
@@ -420,11 +423,10 @@ function moveloop(){
     if (bulletUtil.isDeadBullet(b,bullets))
       io.emit('objectDead',b);
   });
-
 }
 
 function sendUpdates(){
-  let time = Date.now();
+  console.time();
   for (let key in users){
     if (users[key].controlTank){
       users[key].camera.x = users[key].controlTank.x;
@@ -437,7 +439,17 @@ function sendUpdates(){
                     f.x < u.camera.x + u.screenWidth/2 + f.radius &&
                     f.y > u.camera.y - u.screenHeight/2 - f.radius &&
                     f.y < u.camera.y + u.screenHeight/2 + f.radius) {
-                    return f;
+                    return {
+                      id:f.id,
+                      x:util.floor(f.x,2),
+                      y:util.floor(f.y,2),
+                      radius:util.floor(f.radius,1),
+                      rotate:util.floor(f.rotate,2),
+                      health:util.floor(f.health,1),
+                      maxHealth:util.floor(f.maxHealth,1),
+                      type:f.type,
+                      name:f.name
+                    };
                 }
             })
             .filter(function(f) { return f; });
@@ -447,13 +459,21 @@ function sendUpdates(){
                     f.x < u.camera.x + u.screenWidth/2 + f.radius &&
                     f.y > u.camera.y - u.screenHeight/2 - f.radius &&
                     f.y < u.camera.y + u.screenHeight/2 + f.radius) {
-                    return f;
+                    return {
+                      id:f.id,
+                      x:util.floor(f.x,2),
+                      y:util.floor(f.y,2),
+                      radius:util.floor(f.radius,1),
+                      rotate:util.floor(f.rotate,2),
+                      type:f.type,
+                      owner:f.owner
+                    };
                 }
             })
             .filter(function(f) { return f; });
     sockets[key].emit('objectList',visibleTank,visibleBullet);
   }
-  console.log(Date.now() - time);
+  console.timeEnd();
 }
 
 setInterval(moveloop,1000/60);

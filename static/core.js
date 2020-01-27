@@ -159,9 +159,36 @@ function System(name){ // 게임의 전체 진행 담당
     this.drawObject.camera = {
       x:(data.x-window.innerWidth * window.devicePixelRatio/2/2.3),
       y:(data.y-window.innerHeight * window.devicePixelRatio/2/2.3),
-      z:1,
+      z:2,
       uiz:1
     };
+  });
+
+  socket.on('playerSet',(data)=>{
+    this.controlTank.setLevel(data.level);
+    this.drawObject.setSight(data.sight);
+  });
+
+  /*
+    - tank -
+      pos
+      radius
+      rotate
+      health
+      maxHealth
+      name
+  */
+  socket.on('objectSpawn', (data) => {
+    switch(data.objType){
+      case "tank":
+      break;
+      case "bullet":
+      break;
+      case "shape":
+      break;
+      default:
+      break;
+    }
   });
 
   socket.on('objectList', (tankList,bulletList) => {
@@ -171,19 +198,11 @@ function System(name){ // 게임의 전체 진행 담당
           let objTank = this.objectList.tank[tankList[key].id];
           objTank.setRadius(tankList[key].radius);
           objTank.setPosition(tankList[key].x,tankList[key].y);
-          objTank.setDPosition(tankList[key].dx,tankList[key].dy);
           objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != objTank.tankType)
             objTank.changeTank(this.tankList[tankList[key].type]);
-          objTank.setCanDir(tankList[key].isCanDir);
-          if (objTank.id === this.controlTank.id){
-            objTank.setLevel(tankList[key].level);
-            this.drawObject.setSight(tankList[key].sight);
-          }
-          //if (!tankList[key].isCanDir){
-            objTank.setRotate(tankList[key].rotate);
-          //}
+          objTank.setRotate(tankList[key].rotate);
         }
         else{
           let objTank = this.createTankObject(tankList[key].id,this.tankList[tankList[key].type]);
@@ -202,7 +221,6 @@ function System(name){ // 게임의 전체 진행 담당
           let objBullet = this.objectList.bullet[bulletList[key].id];
           objBullet.setRadius(bulletList[key].radius);
           objBullet.setPosition(bulletList[key].x,bulletList[key].y);
-          objBullet.setDPosition(bulletList[key].dx,bulletList[key].dy);
           objBullet.setRotate(bulletList[key].rotate);
         }
         else{
@@ -232,7 +250,11 @@ function System(name){ // 게임의 전체 진행 담당
       default:
       break;
     }
-  })
+  });
+
+  socket.on('objectEnable',(id,enable) => {
+
+  });
 
   socket.on('objectDead', (data) => { // 죽었다는 신호 전달
     switch(data.objType){
@@ -245,6 +267,9 @@ function System(name){ // 게임의 전체 진행 담당
         if (this.objectList.bullet[data.id]){
           this.objectList.bullet[data.id].dead();
         }
+        break;
+      case "shape":
+      break;
       default:
       break;
     }
