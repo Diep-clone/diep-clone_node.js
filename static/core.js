@@ -200,9 +200,11 @@ function System(name){ // 게임의 전체 진행 담당
           objTank.setPosition(tankList[key].x,tankList[key].y);
           objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
           let tankType = new this.tankList[tankList[key].type]().tankType;
-          if (tankType != objTank.tankType)
+          if (tankType != objTank.tankType){
             objTank.changeTank(this.tankList[tankList[key].type]);
+          }
           objTank.setRotate(tankList[key].rotate);
+          objTank.setOpacity(tankList[key].opacity);
         }
         else{
           let objTank = this.createTankObject(tankList[key].id,this.tankList[tankList[key].type]);

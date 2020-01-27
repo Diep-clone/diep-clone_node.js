@@ -34,6 +34,9 @@ function DynamicObject(){
     this.health = hp;
     this.maxHealth = mhp;
   }
+  this.setOpacity = function (opacity){
+    this.opacity = opacity;
+  }
   this.setId = function(id){
     this.id = id;
   }

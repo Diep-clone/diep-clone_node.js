@@ -142,13 +142,14 @@ io.on('connection', (socket) => { // 접속.
         rotate: 0,
         bound: 1,
         invTime: -1,
+        opacity: 1,
         name: name,
         sight: 1.78,
         guns: [],
         stats: [0,0,0,0,0,0,0,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 27,
+        type: 36,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -211,7 +212,7 @@ io.on('connection', (socket) => { // 접속.
 });
 
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
-  userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
+  let isMove = userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
 
   for (let i=0;i<currentPlayer.guns.length;i++){
     if (currentPlayer.guns[i].dir.rotate!==null){
@@ -219,10 +220,19 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
     }
   }
 
-  bullets = bullets.concat(bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]));
+  let tankBullets = bulletUtil.bulletSet(currentPlayer,users[currentPlayer.id]);
+
+  bullets = bullets.concat(tankBullets[0]);
 
   if (!currentPlayer.isCanDir){
     currentPlayer.rotate+= 0.01;
+  }
+
+  if (tankBullets[1] || isMove || !users[currentPlayer.id] || currentPlayer.invTime===-1){
+    currentPlayer.opacity=Math.min(currentPlayer.opacity+0.1,1);
+  }
+  else{
+    currentPlayer.opacity=Math.max(currentPlayer.opacity-1/60/currentPlayer.invTime,0);
   }
 
   if (users[currentPlayer.id]){
@@ -438,7 +448,7 @@ function sendUpdates(){
                 if ( f.x > u.camera.x - u.screenWidth/2 - f.radius &&
                     f.x < u.camera.x + u.screenWidth/2 + f.radius &&
                     f.y > u.camera.y - u.screenHeight/2 - f.radius &&
-                    f.y < u.camera.y + u.screenHeight/2 + f.radius) {
+                    f.y < u.camera.y + u.screenHeight/2 + f.radius && (f.opacity > 0 || f.id === key)) {
                     return {
                       id:f.id,
                       x:util.floor(f.x,2),
@@ -447,6 +457,7 @@ function sendUpdates(){
                       rotate:util.floor(f.rotate,2),
                       health:util.floor(f.health,1),
                       maxHealth:util.floor(f.maxHealth,1),
+                      opacity:util.floor(f.opacity,2),
                       type:f.type,
                       name:f.name
                     };
