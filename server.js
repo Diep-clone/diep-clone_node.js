@@ -239,6 +239,9 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
     userUtil.healTank(currentPlayer);
     if (users[currentPlayer.id].k && currentPlayer.level<45){
       currentPlayer.level++;
+      let healthPer = currentPlayer.health / currentPlayer.maxHealth;
+      currentPlayer.maxHealth = 48 + currentPlayer.level * 2;
+      currentPlayer.health = currentPlayer.maxHealth / healthPer;
       currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
       currentPlayer.sight = userUtil.setUserSight(currentPlayer);
       sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight});
@@ -436,7 +439,7 @@ function moveloop(){
 }
 
 function sendUpdates(){
-  console.time();
+//  console.time();
   for (let key in users){
     if (users[key].controlTank){
       users[key].camera.x = users[key].controlTank.x;
@@ -484,7 +487,7 @@ function sendUpdates(){
             .filter(function(f) { return f; });
     sockets[key].emit('objectList',visibleTank,visibleBullet);
   }
-  console.timeEnd();
+  //console.timeEnd();
 }
 
 setInterval(moveloop,1000/60);
