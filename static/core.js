@@ -1,7 +1,7 @@
 function System(name){ // 게임의 전체 진행 담당
   "use strict";
 
-  this.objectList = {tank:{},bullet:{}};
+  this.objectList = {tank:{},bullet:{},shape:{}};
   this.uiObjectList = [];
 
   this.tankList = [
@@ -66,6 +66,10 @@ function System(name){ // 게임의 전체 진행 담당
     DroneBullet
   ]
 
+  this.shapeList = [
+    Square
+  ]
+
   this.colorList = [
     new RGB(230,176,138),
     new RGB(228,102,233),
@@ -123,6 +127,13 @@ function System(name){ // 게임의 전체 진행 담당
     return obj;
   }
 
+  this.createShapeObject = function (id,type){
+    let obj = new type();
+    this.objectList.shape[id].obj;
+    this.objectList.shape[id].setId(id);
+    return obj;
+  }
+
   this.createUiObject = function (type){
     let obj = new type();
     this.uiObjectList.push(obj);
@@ -138,6 +149,9 @@ function System(name){ // 게임의 전체 진행 담당
       case "bullet":
         //delete this.objectList.bullet.id;
         this.objectList.bullet[id] = null;
+      break;
+      case "shape":
+        this.objectList.shape[id] = null;
       break;
       default:
       break;
@@ -191,7 +205,7 @@ function System(name){ // 게임의 전체 진행 담당
     }
   });
 
-  socket.on('objectList', (tankList,bulletList) => {
+  socket.on('objectList', (tankList,bulletList,shapeList) => {
     for (let key in tankList){ // 탱크 지정
       if (tankList[key]){
         if (this.objectList.tank[tankList[key].id]){
@@ -236,6 +250,20 @@ function System(name){ // 게임의 전체 진행 담당
         }
       }
     }
+    for (let key in shapeList){
+      if (shapeList[key]){
+        if (this.objectList.shape[shapeList[key].id]){
+          let objShape = this.objectList.shape[shapeList[key].id];
+          objShape.setPosition(shapeList[key].x,shapeList[key].y);
+          objShape.setRotate(shapeList[key].rotate);
+        }
+        else{
+          let objShape = this.createShapeObject(shapeList[key].id,this.shapeList[shapeList[key].type]);
+          objShape.setPosition(shapeList[key].x,shapeList[key].y);
+          objShape.setRotate(shapeList[key].rotate);
+        }
+      }
+    }
   });
 
   socket.on('objectHit', (data) => { // 피격 효과 전달
@@ -249,6 +277,12 @@ function System(name){ // 게임의 전체 진행 담당
         if (this.objectList.bullet[data.id]){
           this.objectList.bullet[data.id].hit();
         }
+      break;
+      case "shape":
+      if (this.objectList.shape[data.id]){
+        this.objectList.shape[data.id].hit();
+      }
+      break;
       default:
       break;
     }
@@ -352,6 +386,7 @@ function System(name){ // 게임의 전체 진행 담당
 
     this.drawObject.backgroundDraw();
     this.drawObject.objectDraw(this.objectList.bullet);
+    this.drawObject.objectDraw(this.objectList.shape);
     this.drawObject.objectDraw(this.objectList.tank);
     this.drawObject.objectStatusDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);

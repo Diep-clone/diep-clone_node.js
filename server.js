@@ -390,6 +390,9 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   bulletCollisions.forEach(collisionCheck);
 
   if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
+}
+
+function tickShape(currentShape){
 
 }
 
@@ -426,6 +429,10 @@ function moveloop(){
   });
   bullets.forEach((b) => {
     tickBullet(b);
+  });
+  shapeUtil.spawnShape(shapes,mapSize);
+  shapes.forEach((s) => {
+    tickShape(s);
   });
   tanks.forEach((u)=>{
     if (userUtil.isDeadPlayer(u,tanks)){
@@ -485,7 +492,23 @@ function sendUpdates(){
                 }
             })
             .filter(function(f) { return f; });
-    sockets[key].emit('objectList',visibleTank,visibleBullet);
+    let visibleShape  = shapes
+            .map(function(f) {
+                if ( f.x > u.camera.x - u.screenWidth/2 - f.radius &&
+                    f.x < u.camera.x + u.screenWidth/2 + f.radius &&
+                    f.y > u.camera.y - u.screenHeight/2 - f.radius &&
+                    f.y < u.camera.y + u.screenHeight/2 + f.radius) {
+                    return {
+                      id:f.id,
+                      x:util.floor(f.x,2),
+                      y:util.floor(f.y,2),
+                      rotate:util.floor(f.rotate,2),
+                      type:f.type
+                    };
+                }
+            })
+            .filter(function(f) { return f; });
+    sockets[key].emit('objectList',visibleTank,visibleBullet,visibleShape);
   }
   //console.timeEnd();
 }
