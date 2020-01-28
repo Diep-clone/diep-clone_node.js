@@ -10,7 +10,7 @@ function BasicBullet(){
   this.canvasPos = {x:0,y:0};
   this.animate = function(tick){
     if (this.isDead || this.health<0 || this.time<0){
-      this.opacity = Math.max(this.opacity - 0.2 * tick * 0.05, 0);
+      this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity === 0){
         system.removeObject(this.id,'bullet');
@@ -25,7 +25,7 @@ function BasicBullet(){
     this.isDead = true;
   }
   this.hit = function(){
-    
+
   }
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
@@ -44,6 +44,7 @@ function BasicBullet(){
   }
   this.draw = function(ctx,camera){
     if (this.opacity>=1){
+      ctx.save();
       ctx.strokeStyle = this.color.getDarkRGB().getRGBValue(); // 몸체 그리기
       ctx.fillStyle = this.color.getRGBValue();
       ctx.lineWidth = 2 * camera.z;
@@ -55,6 +56,7 @@ function BasicBullet(){
       ctx.fill();
       ctx.stroke();
       ctx.closePath();
+      ctx.restore();
     }
     else{
       this.setCanvasSize(camera);

@@ -255,12 +255,14 @@ function System(name){ // 게임의 전체 진행 담당
         if (this.objectList.shape[shapeList[key].id]){
           let objShape = this.objectList.shape[shapeList[key].id];
           objShape.setPosition(shapeList[key].x,shapeList[key].y);
+          objShape.setRadius(shapeList[key].radius);
           objShape.setRotate(shapeList[key].rotate);
           objShape.setHealth(shapeList[key].health,shapeList[key].maxHealth);
         }
         else{
           let objShape = this.createShapeObject(shapeList[key].id,this.shapeList[shapeList[key].type]);
           objShape.setPosition(shapeList[key].x,shapeList[key].y);
+          objShape.setRadius(shapeList[key].radius);
           objShape.setRotate(shapeList[key].rotate);
           objShape.setHealth(shapeList[key].health,shapeList[key].maxHealth);
         }
@@ -281,9 +283,9 @@ function System(name){ // 게임의 전체 진행 담당
         }
       break;
       case "shape":
-      if (this.objectList.shape[data.id]){
-        this.objectList.shape[data.id].hit();
-      }
+        if (this.objectList.shape[data.id]){
+          this.objectList.shape[data.id].hit();
+        }
       break;
       default:
       break;
@@ -307,6 +309,10 @@ function System(name){ // 게임의 전체 진행 담당
         }
         break;
       case "shape":
+        if (this.objectList.shape[data.id]){
+          this.objectList.shape[data.id].dead();
+        }
+      break;
       break;
       default:
       break;
@@ -372,6 +378,12 @@ function System(name){ // 게임의 전체 진행 담당
       }
     }
 
+    for (let key in this.objectList.shape){
+      if (this.objectList.shape[key]){
+        this.objectList.shape[key].animate(this.tick);
+      }
+    }
+
     let camera = this.drawObject.getCameraSet();
 
     if (this.controlTank) {
@@ -390,6 +402,7 @@ function System(name){ // 게임의 전체 진행 담당
     this.drawObject.objectDraw(this.objectList.bullet);
     this.drawObject.objectDraw(this.objectList.shape);
     this.drawObject.objectDraw(this.objectList.tank);
+    this.drawObject.objectStatusDraw(this.objectList.shape);
     this.drawObject.objectStatusDraw(this.objectList.tank);
     this.drawObject.uiDraw(this.uiObjectList);
 

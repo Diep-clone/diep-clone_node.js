@@ -200,17 +200,19 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('disconnect', () => { // 연결 끊김
-    console.log('안녕 잘가!!!');
-    mapSize.x-= 161.25;
-    mapSize.y-= 161.25;
+    if (sockets[socket.id]){
+      console.log('안녕 잘가!!!');
+      mapSize.x-= 161.25;
+      mapSize.y-= 161.25;
 
-    tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
+      tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
 
-    shapeUtil.extendMaxShape(-10);
+      shapeUtil.extendMaxShape(-10);
 
-    delete users[socket.id];
+      delete users[socket.id];
 
-    io.emit('mapSize', mapSize);
+      io.emit('mapSize', mapSize);
+    }
   });
 });
 
@@ -282,7 +284,6 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
   function collisionCheck(collision){ // 충돌했을 때 계산!
     let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
-    console.log("what the hell ar you doing");
 
     collision.aUser.isCollision = collision.bUser.isCollision = true; // 두 오브젝트를 둘 다 충돌됨으로 설정해 한 프레임에 두번 충돌하게 하지 않는다.
 
@@ -399,7 +400,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 }
 
 function tickShape(currentShape){
-
+  currentShape.lastHealth = currentShape.health;
 }
 
 function detectObject(object,r,rotate,dir){
@@ -511,7 +512,10 @@ function sendUpdates(){
                       id:f.id,
                       x:util.floor(f.x,2),
                       y:util.floor(f.y,2),
+                      radius:util.floor(f.radius,1),
                       rotate:util.floor(f.rotate,2),
+                      health:util.floor(f.health,1),
+                      maxHealth:util.floor(f.maxHealth,1),
                       type:f.type
                     };
                 }

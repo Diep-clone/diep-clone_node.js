@@ -15,7 +15,7 @@ function TrapBullet(){
 
   this.animate = function(tick){
     if (this.isDead || this.health<0 || this.time<0){
-      this.opacity = Math.max(this.opacity - 0.2 * tick * 0.05, 0);
+      this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity === 0){
         system.removeObject(this.id,'bullet');
@@ -61,6 +61,7 @@ function TrapBullet(){
   }
   this.draw = function(ctx,camera){
     if (this.opacity>=1){
+      ctx.save();
       ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
       ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
       ctx.lineWidth = 2 * camera.z;
@@ -78,6 +79,7 @@ function TrapBullet(){
       ctx.fill();
       ctx.stroke();
       ctx.closePath();
+      ctx.restore();
     }
     else{
       this.setCanvasSize(camera);
