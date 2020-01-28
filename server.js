@@ -406,6 +406,7 @@ function tickShape(currentShape){
 function detectObject(object,r,rotate,dir){
   tree.clear();
   tanks.forEach(function (obj){if (obj.id !== obj.owner) tree.put;});
+  shapes.forEach(tree.put);
   let collisionsObject;
 
   function check(obj){
