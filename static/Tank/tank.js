@@ -18,7 +18,6 @@ function Tank(){
   this.hitTime = 0;
   this.r = 0;
   this.w = -0.0001;
-  this.isCanDir;
   this.showRadius = this.radius;
 
   this.animate = function(tick){

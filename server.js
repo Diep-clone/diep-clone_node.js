@@ -165,7 +165,7 @@ io.on('connection', (socket) => { // 접속.
       currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
       currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
       socket.emit('spawn', currentPlayer.controlTank);
-      socket.emit('playerSet',{level:currentPlayer.controlTank.level,sight:currentPlayer.controlTank.sight});
+      socket.emit('playerSet',{level:currentPlayer.controlTank.level,sight:currentPlayer.controlTank.sight,isRotate:currentPlayer.controlTank.isCanDir});
       io.emit('mapSize', mapSize);
     }
   });
@@ -249,7 +249,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
       currentPlayer.health = currentPlayer.maxHealth / healthPer;
       currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
       currentPlayer.sight = userUtil.setUserSight(currentPlayer);
-      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight});
+      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight,isRotate:currentPlayer.isCanDir});
     }
     if (users[currentPlayer.id].o){
       currentPlayer.health=0;
@@ -259,7 +259,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
       userUtil.setUserTank(currentPlayer);
       currentPlayer.sight = userUtil.setUserSight(currentPlayer);
       users[currentPlayer.id].isChange = true;
-      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight});
+      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight,isRotate:currentPlayer.isCanDir});
     }
   }
   else userUtil.afkTank(currentPlayer);
