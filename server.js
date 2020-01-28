@@ -150,7 +150,7 @@ io.on('connection', (socket) => { // 접속.
         stats: [0,0,0,0,0,0,0,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 36,
+        type: 17,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -282,6 +282,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
   function collisionCheck(collision){ // 충돌했을 때 계산!
     let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
+    console.log("what the hell ar you doing");
 
     collision.aUser.isCollision = collision.bUser.isCollision = true; // 두 오브젝트를 둘 다 충돌됨으로 설정해 한 프레임에 두번 충돌하게 하지 않는다.
 
@@ -440,13 +441,16 @@ function moveloop(){
     tickShape(s);
   });
   tanks.forEach((u)=>{
-    if (userUtil.isDeadPlayer(u,tanks)){
+    if (userUtil.isDeadPlayer(u,tanks))
       io.emit('objectDead',u);
-    }
   });
   bullets.forEach((b)=>{
     if (bulletUtil.isDeadBullet(b,bullets))
       io.emit('objectDead',b);
+  });
+  shapes.forEach((s)=>{
+    if (shapeUtil.isDeadShape(s,shapes))
+      io.emit('objectDead',s);
   });
 }
 

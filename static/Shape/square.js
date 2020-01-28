@@ -1,7 +1,7 @@
 function Square(){
   "use strict";
 
-  DynamicObject.apply(this, arguments);
+  HealthShowObject.apply(this, arguments);
   this.color = new RGB(255,232,105);
   this.isDead = false;
   this.canvas = document.createElement("canvas");
@@ -108,5 +108,5 @@ function Square(){
     }
   }
 }
-Square.prototype = new DynamicObject();
+Square.prototype = new HealthShowObject();
 Square.prototype.constructor = Square;
