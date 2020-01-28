@@ -54,12 +54,6 @@ var recursiveAsyncReadLine = function () {
 recursiveAsyncReadLine();
 
 io.on('connection', (socket) => { // 접속.
-
-  mapSize.x+= 161.25;
-  mapSize.y+= 161.25;
-
-  tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2,{ maxchildren: 10 });
-
   let currentPlayer = { // 현재 플레이어 객체 생성.
     objType: 'player',
     id: socket.id, // 플레이어의 소켓 id
@@ -119,6 +113,13 @@ io.on('connection', (socket) => { // 접속.
     else{
       console.log('누군가가 들어왔다!!!');
 
+      mapSize.x+= 161.25;
+      mapSize.y+= 161.25;
+
+      tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
+
+      shapeUtil.extendMaxShape(10);
+
       sockets[socket.id] = socket;
 
       currentPlayer.name = name;
@@ -126,8 +127,8 @@ io.on('connection', (socket) => { // 접속.
       currentPlayer.controlTank = {
         objType: 'tank',
         id: socket.id,
-        x: util.randomRange(-mapSize.x/2,mapSize.x/2),
-        y: util.randomRange(-mapSize.y/2,mapSize.y/2),
+        x: util.randomRange(-mapSize.x,mapSize.x),
+        y: util.randomRange(-mapSize.y,mapSize.y),
         w: 10,
         h: 10,
         dx: 0,
@@ -203,7 +204,9 @@ io.on('connection', (socket) => { // 접속.
     mapSize.x-= 161.25;
     mapSize.y-= 161.25;
 
-    tree = quadtree(-mapSize.x/2,-mapSize.y/2,mapSize.x/2,mapSize.y/2,{ maxchildren: 10 });
+    tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
+
+    shapeUtil.extendMaxShape(-10);
 
     delete users[socket.id];
 
@@ -312,6 +315,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   tree.clear();
   tanks.forEach(tree.put);
   bullets.forEach(tree.put);
+  shapes.forEach(tree.put);
   var playerCollisions = [];
 
   var otherObj = tree.get(currentPlayer,check);
@@ -383,6 +387,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 
   tree.clear();
   bullets.forEach(tree.put);
+  shapes.forEach(tree.put);
   var bulletCollisions = [];
 
   tree.get(currentBullet,check);
@@ -430,7 +435,7 @@ function moveloop(){
   bullets.forEach((b) => {
     tickBullet(b);
   });
-  shapeUtil.spawnShape(shapes,mapSize);
+  shapes = shapes.concat(shapeUtil.spawnShape(mapSize));
   shapes.forEach((s) => {
     tickShape(s);
   });

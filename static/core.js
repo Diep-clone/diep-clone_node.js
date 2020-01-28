@@ -129,7 +129,7 @@ function System(name){ // 게임의 전체 진행 담당
 
   this.createShapeObject = function (id,type){
     let obj = new type();
-    this.objectList.shape[id].obj;
+    this.objectList.shape[id]=obj;
     this.objectList.shape[id].setId(id);
     return obj;
   }
