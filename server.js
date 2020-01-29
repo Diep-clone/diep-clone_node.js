@@ -147,10 +147,10 @@ io.on('connection', (socket) => { // 접속.
         name: name,
         sight: 1.78,
         guns: [],
-        stats: [0,0,0,0,0,0,0,0],
+        stats: [0,0,0,8,8,8,8,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 17,
+        type: 46,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -328,7 +328,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   let target = undefined;
   if (currentBullet.type === 2 && currentBullet.goEnemy === undefined && !currentBullet.goTank){
-    target = detectObject(currentBullet,300,0,Math.PI);
+    target = detectObject(currentBullet,500,0,Math.PI);
   }
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],target);
   currentBullet.lastHealth = currentBullet.health;
@@ -400,6 +400,8 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 }
 
 function tickShape(currentShape){
+  shapeUtil.moveShape(currentShape,mapSize);
+
   currentShape.lastHealth = currentShape.health;
 }
 
@@ -408,6 +410,7 @@ function detectObject(object,r,rotate,dir){
   tanks.forEach(function (obj){if (obj.id !== obj.owner) tree.put;});
   shapes.forEach(tree.put);
   let collisionsObject;
+  let dist = r+1;
 
   function check(obj){
     let response = new SAT.Response();
@@ -416,12 +419,12 @@ function detectObject(object,r,rotate,dir){
     if (collided){
       let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
       let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
-      if (a<=dir){
+      let dis = Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y));
+      if (a<=dir && dist>dis){
         collisionsObject = obj;
-        return false;
+        dist = dis;
       }
     }
-    else return false;
 
     return true;
   }
