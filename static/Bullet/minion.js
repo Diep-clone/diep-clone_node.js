@@ -19,7 +19,7 @@ function Minion(){
       this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity == 0){
-        system.removeObject(this.id,'tank');
+        system.removeObject(this.id,'bullet');
         return;
       }
     }
