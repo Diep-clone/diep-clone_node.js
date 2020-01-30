@@ -26,6 +26,9 @@ let users = {}; // 유저 목록.
 let tanks = []; // 탱크 목록.
 let bullets = []; // 총알 목록.
 let shapes = []; // 도형 목록.
+
+let objects = [];
+
 let sockets = {}; // 유저 접속 목록.
 
 let mapSize = {x: 161.25,y: 161.25}; // 맵 크기.
@@ -372,6 +375,8 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 function tickShape(currentShape){
   shapeUtil.moveShape(currentShape,mapSize,users[currentShape.owner],detectObject(currentShape,500,0,Math.PI));
 
+  currentShape.lastHealth = currentShape.health;
+
   function check(obj){ // 충돌했는가?
     if (obj.id !== currentShape.id
     && (currentShape.isCollision === false || obj.isCollision === false)){
@@ -398,28 +403,28 @@ function tickShape(currentShape){
   tree.get(currentShape,check);
 
   shapeCollisions.forEach(collisionCheck);
-
-  currentShape.lastHealth = currentShape.health;
 }
 
 function detectObject(object,r,rotate,dir){
   tree.clear();
-  tanks.forEach(function (obj){if (obj.id !== obj.owner) tree.put;});
-  shapes.forEach(function (obj){if (obj.owner !== obj.owner) tree.put;});
+  tanks.forEach(tree.put);
+  shapes.forEach(tree.put);
   let collisionsObject;
   let dist = r+1;
 
   function check(obj){
-    let response = new SAT.Response();
-    let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
-    new C(new V(obj.x,obj.y),obj.radius),response);
-    if (collided){
-      let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
-      let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
-      let dis = Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y));
-      if (a<=dir && dist>dis){
-        collisionsObject = obj;
-        dist = dis;
+    if (object.id !== obj.id && object.owner !== obj.id && object.owner !== obj.owner && !obj.isDead){
+      let response = new SAT.Response();
+      let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
+      new C(new V(obj.x,obj.y),obj.radius),response);
+      if (collided){
+        let angle = Math.atan2(obj.y-object.y,obj.x-object.x);
+        let a = -((Math.cos(rotate)*Math.cos(angle)) + (Math.sin(rotate)*Math.sin(angle))-1) * Math.PI / 2;
+        let dis = Math.sqrt((obj.x-object.x)*(obj.x-object.x)+(obj.y-object.y)*(obj.y-object.y));
+        if (a<=dir && dist>dis){
+          collisionsObject = obj;
+          dist = dis;
+        }
       }
     }
 
