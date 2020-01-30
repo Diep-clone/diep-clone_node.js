@@ -63,7 +63,8 @@ function System(name){ // 게임의 전체 진행 담당
   this.bulletList = [
     TrapBullet,
     BasicBullet,
-    DroneBullet
+    DroneBullet,
+    Minion
   ]
 
   this.shapeList = [

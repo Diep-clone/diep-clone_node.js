@@ -155,7 +155,7 @@ io.on('connection', (socket) => { // 접속.
         stats: [0,0,0,8,8,8,8,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 17,
+        type: 50,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -338,6 +338,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500,0,Math.PI));
+
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
@@ -414,7 +415,7 @@ function detectObject(object,r,rotate,dir){
   let dist = r+1;
 
   function check(obj){
-    if (object.id !== obj.id && object.owner !== obj.id && object.owner !== obj.owner && !obj.isDead){
+    if (object.id !== obj.id && object.owner !== obj.id && (!obj.owner || obj.objType === "tank") && !obj.isDead){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(new C(new V(object.x,object.y),r),
       new C(new V(obj.x,obj.y),obj.radius),response);
