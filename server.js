@@ -23,11 +23,11 @@ let V = SAT.Vector;
 let C = SAT.Circle;
 
 let users = {}; // 유저 목록.
-/*
+
 let tanks = []; // 탱크 목록.
 let bullets = []; // 총알 목록.
 let shapes = []; // 도형 목록.
-*/
+
 let objects = []; // 오브젝트 목록.
 
 let sockets = {}; // 유저 접속 목록.
