@@ -272,21 +272,21 @@ function System(name){ // 게임의 전체 진행 담당
     }
   });
 
-  socket.on('objectHit', (data) => { // 피격 효과 전달
-    switch(data.objType){
+  socket.on('objectHit', (id,type) => { // 피격 효과 전달
+    switch(type){
       case "tank":
-        if (this.objectList.tank[data.id]){
-          this.objectList.tank[data.id].hit();
+        if (this.objectList.tank[id]){
+          this.objectList.tank[id].hit();
         }
       break;
       case "bullet":
-        if (this.objectList.bullet[data.id]){
-          this.objectList.bullet[data.id].hit();
+        if (this.objectList.bullet[id]){
+          this.objectList.bullet[id].hit();
         }
       break;
       case "shape":
-        if (this.objectList.shape[data.id]){
-          this.objectList.shape[data.id].hit();
+        if (this.objectList.shape[id]){
+          this.objectList.shape[id].hit();
         }
       break;
       default:
@@ -298,21 +298,21 @@ function System(name){ // 게임의 전체 진행 담당
 
   });
 
-  socket.on('objectDead', (data) => { // 죽었다는 신호 전달
-    switch(data.objType){
+  socket.on('objectDead', (id,type) => { // 죽었다는 신호 전달
+    switch(type){
       case "tank":
-        if (this.objectList.tank[data.id]){
-          this.objectList.tank[data.id].dead();
+        if (this.objectList.tank[id]){
+          this.objectList.tank[id].dead();
         }
       break;
       case "bullet":
-        if (this.objectList.bullet[data.id]){
-          this.objectList.bullet[data.id].dead();
+        if (this.objectList.bullet[id]){
+          this.objectList.bullet[id].dead();
         }
         break;
       case "shape":
-        if (this.objectList.shape[data.id]){
-          this.objectList.shape[data.id].dead();
+        if (this.objectList.shape[id]){
+          this.objectList.shape[id].dead();
         }
       break;
       break;

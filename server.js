@@ -19,8 +19,6 @@ const shapeUtil = require('./lib/shapeSet');
 const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
-let tree;
-
 let V = SAT.Vector;
 let C = SAT.Circle;
 
@@ -32,6 +30,8 @@ let sockets = {}; // 유저 접속 목록.
 
 let mapSize = {x: 161.25,y: 161.25}; // 맵 크기.
 let tankLength = 53; // 탱크의 목록 길이.
+
+let tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
@@ -126,6 +126,7 @@ io.on('connection', (socket) => { // 접속.
 
       currentPlayer.controlTank = {
         objType: 'tank',
+        owner: socket.id,
         id: socket.id,
         x: util.randomRange(-mapSize.x,mapSize.x),
         y: util.randomRange(-mapSize.y,mapSize.y),
@@ -150,10 +151,11 @@ io.on('connection', (socket) => { // 접속.
         stats: [0,0,0,8,8,8,8,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 46,
+        type: 17,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
+        hitObject: null,
         isDead: false
       };
 
@@ -215,6 +217,41 @@ io.on('connection', (socket) => { // 접속.
     }
   });
 });
+
+function collisionCheck(collision){ // 충돌 시 계산
+  let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
+
+  collision.aUser.isCollision = collision.bUser.isCollision = true;
+
+  collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
+  collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
+  collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
+  collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
+
+  if (collision.aUser.owner !== collision.bUser.owner){
+    io.emit('objectHit',collision.aUser.id,collision.aUser.objType);
+    io.emit('objectHit',collision.bUser.id,collision.bUser.objType);
+
+    collision.aUser.hitTime = Date.now();
+    collision.bUser.hitTime = Date.now();
+
+    collision.aUser.hitObject = collision.bUser;
+    collision.bUser.hitObject = collision.aUser;
+
+    if (collision.bUser.lastHealth-collision.aUser.damage<=0){
+      collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
+    }
+    else{
+      collision.aUser.health-=collision.bUser.damage;
+    }
+    if (collision.aUser.lastHealth-collision.bUser.damage<=0){
+      collision.bUser.health-=collision.aUser.damage*(collision.aUser.lastHealth/collision.bUser.damage);
+    }
+    else{
+      collision.bUser.health-=collision.aUser.damage;
+    }
+  }
+}
 
 function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   let isMove = userUtil.moveUser(currentPlayer,mapSize,users[currentPlayer.id]);
@@ -282,36 +319,6 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
     return true;
   }
 
-  function collisionCheck(collision){ // 충돌했을 때 계산!
-    let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
-
-    collision.aUser.isCollision = collision.bUser.isCollision = true; // 두 오브젝트를 둘 다 충돌됨으로 설정해 한 프레임에 두번 충돌하게 하지 않는다.
-
-    io.emit('objectHit',collision.aUser);
-    io.emit('objectHit',collision.bUser);
-
-    collision.aUser.hitTime = Date.now();
-    collision.bUser.hitTime = Date.now();
-
-    collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
-    collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
-    collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
-    collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
-
-    if (collision.bUser.lastHealth-collision.aUser.damage<=0){
-      collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
-    }
-    else{
-      collision.aUser.health-=collision.bUser.damage;
-    }
-    if (collision.aUser.lastHealth-collision.bUser.damage<=0){
-      collision.bUser.health-=collision.aUser.damage*(collision.aUser.lastHealth/collision.bUser.damage);
-    }
-    else{
-      collision.bUser.health-=collision.aUser.damage;
-    }
-  }
-
   var playerCircle = new C(new V(currentPlayer.x,currentPlayer.y),currentPlayer.radius);
 
   tree.clear();
@@ -326,11 +333,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  let target = undefined;
-  if (currentBullet.type === 2 && currentBullet.goEnemy === undefined && !currentBullet.goTank){
-    target = detectObject(currentBullet,500,0,Math.PI);
-  }
-  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],target);
+  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500,0,Math.PI));
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
@@ -352,39 +355,6 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
     return true;
   }
 
-  function collisionCheck(collision){ // 충돌 시 계산
-    let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
-
-    collision.aUser.isCollision = collision.bUser.isCollision = true;
-
-    collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
-    collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
-    collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
-    collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
-
-    if (collision.aUser.owner !== collision.bUser.owner){
-
-      io.emit('objectHit',collision.aUser);
-      io.emit('objectHit',collision.bUser);
-
-      collision.aUser.hitTime = Date.now();
-      collision.bUser.hitTime = Date.now();
-
-      if (collision.bUser.lastHealth-collision.aUser.damage<=0){
-        collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
-      }
-      else{
-        collision.aUser.health-=collision.bUser.damage;
-      }
-      if (collision.aUser.lastHealth-collision.bUser.damage<=0){
-        collision.bUser.health-=collision.aUser.damage*(collision.aUser.lastHealth/collision.bUser.damage);
-      }
-      else{
-        collision.bUser.health-=collision.aUser.damage;
-      }
-    }
-  }
-
   var bulletCircle = new C(new V(currentBullet.x,currentBullet.y),currentBullet.radius);
 
   tree.clear();
@@ -400,7 +370,34 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 }
 
 function tickShape(currentShape){
-  shapeUtil.moveShape(currentShape,mapSize);
+  shapeUtil.moveShape(currentShape,mapSize,users[currentShape.owner],detectObject(currentShape,500,0,Math.PI));
+
+  function check(obj){ // 충돌했는가?
+    if (obj.id !== currentShape.id
+    && (currentShape.isCollision === false || obj.isCollision === false)){
+      let response = new SAT.Response();
+      let collided = SAT.testCircleCircle(shapeCircle,
+      new C(new V(obj.x,obj.y),obj.radius),response);
+
+      if (collided){
+        response.aUser = currentShape;
+        response.bUser = obj;
+        shapeCollisions.push(response);
+      }
+    }
+
+    return true;
+  }
+
+  var shapeCircle = new C(new V(currentShape.x,currentShape.y),currentShape.radius);
+
+  tree.clear();
+  shapes.forEach(tree.put);
+  var shapeCollisions = [];
+
+  tree.get(currentShape,check);
+
+  shapeCollisions.forEach(collisionCheck);
 
   currentShape.lastHealth = currentShape.health;
 }
@@ -408,7 +405,7 @@ function tickShape(currentShape){
 function detectObject(object,r,rotate,dir){
   tree.clear();
   tanks.forEach(function (obj){if (obj.id !== obj.owner) tree.put;});
-  shapes.forEach(tree.put);
+  shapes.forEach(function (obj){if (obj.owner !== obj.owner) tree.put;});
   let collisionsObject;
   let dist = r+1;
 
@@ -446,16 +443,19 @@ function moveloop(){
     tickShape(s);
   });
   tanks.forEach((u)=>{
-    if (userUtil.isDeadPlayer(u,tanks))
-      io.emit('objectDead',u);
+    if (userUtil.isDeadPlayer(u,tanks)){
+      io.emit('objectDead',u.id,"tank");
+    }
   });
   bullets.forEach((b)=>{
-    if (bulletUtil.isDeadBullet(b,bullets))
-      io.emit('objectDead',b);
+    if (bulletUtil.isDeadBullet(b,bullets)){
+      io.emit('objectDead',b.id,"bullet");
+    }
   });
   shapes.forEach((s)=>{
-    if (shapeUtil.isDeadShape(s,shapes))
-      io.emit('objectDead',s);
+    if (shapeUtil.isDeadShape(s,shapes)){
+      io.emit('objectDead',s.id,"shape");
+    }
   });
 }
 

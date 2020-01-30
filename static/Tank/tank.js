@@ -21,7 +21,7 @@ function Tank(){
   this.showRadius = this.radius;
 
   this.animate = function(tick){
-    if (this.isDead || this.health<0){
+    if (this.isDead){
       this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity == 0){
@@ -72,6 +72,7 @@ function Tank(){
   }
   this.dead = function(){
     this.isDead = true;
+    this.health = 0;
   }
   this.hit = function(){
     this.hitTime=0.1;
@@ -148,10 +149,10 @@ function Tank(){
       else{
         let r = this.showRadius * this.bodySize * camera.z;
         let dir = Math.PI / this.bodyVertex + this.rotate;
-        ctx.moveTo(this.canvasPos.x + Math.cos(dir) * r,this.canvasPos.y + Math.sin(dir) * r);
+        this.ctx.moveTo(this.canvasPos.x + Math.cos(dir) * r,this.canvasPos.y + Math.sin(dir) * r);
         for (let i=1;i<=this.bodyVertex;i++){
           dir += Math.PI / this.bodyVertex * 2;
-          ctx.lineTo(this.canvasPos.x + Math.cos(dir) * r,this.canvasPos.y + Math.sin(dir) * r);
+          this.ctx.lineTo(this.canvasPos.x + Math.cos(dir) * r,this.canvasPos.y + Math.sin(dir) * r);
         }
       }
       this.ctx.fill();
