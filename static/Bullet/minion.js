@@ -2,7 +2,7 @@ function Minion(){
   "use strict";
 
   DynamicObject.apply(this, arguments);
-  this.guns = [new Gun([[0,0],[0.6,0],[0.6,1.7],[-0.6,1.7],[-0.6, 0]],0)];
+  this.guns = [new Gun([[0,0],[0.5,0],[0.5,1.7],[-0.5,1.7],[-0.5, 0]],0)];
   this.color = new RGB(0,176,225);
   this.isDead = false;
   this.canvas = document.createElement('canvas');

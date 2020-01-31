@@ -339,6 +339,10 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
   bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500,0,Math.PI));
 
+  if (currentBullet.guns){
+    bullets = bullets.concat(bulletUtil.bulletbulletSet(currentBullet,users[currentBullet.owner]));
+  }
+  
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
