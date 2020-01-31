@@ -16,7 +16,8 @@ const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
 const shapeUtil = require('./lib/shapeSet');
 
-const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
+const quadtree = require('./lib/quadtree');
+//const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
 let V = SAT.Vector;
@@ -35,7 +36,7 @@ let sockets = {}; // 유저 접속 목록.
 let mapSize = {x: 161.25,y: 161.25}; // 맵 크기.
 let tankLength = 53; // 탱크의 목록 길이.
 
-let tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
+//let tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
@@ -120,7 +121,7 @@ io.on('connection', (socket) => { // 접속.
       mapSize.x+= 161.25;
       mapSize.y+= 161.25;
 
-      tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
+      //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
 
       shapeUtil.extendMaxShape(10);
 
@@ -155,7 +156,7 @@ io.on('connection', (socket) => { // 접속.
         stats: [0,0,0,8,8,8,8,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 50,
+        type: 5,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -211,7 +212,7 @@ io.on('connection', (socket) => { // 접속.
       mapSize.x-= 161.25;
       mapSize.y-= 161.25;
 
-      tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 10 });
+      //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
 
       shapeUtil.extendMaxShape(-10);
 
@@ -325,19 +326,21 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
   var playerCircle = new C(new V(currentPlayer.x,currentPlayer.y),currentPlayer.radius);
 
-  tree.clear();
-  tanks.forEach(tree.put);
+  //tree.clear();
+  /*tanks.forEach(tree.put);
   bullets.forEach(tree.put);
   shapes.forEach(tree.put);
   var playerCollisions = [];
 
-  var otherObj = tree.get(currentPlayer,check);
+  //tree.get(currentPlayer,check);
 
-  playerCollisions.forEach(collisionCheck);
+  playerCollisions.forEach(collisionCheck);*/
 }
 
 function tickBullet(currentBullet){ // 프레임 당 총알 계산
-  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],detectObject(currentBullet,500,0,Math.PI));
+  let target = undefined;
+  if (currentBullet.type>=2) target = detectObject(currentBullet,500,0,Math.PI);
+  bulletUtil.moveBullet(currentBullet,mapSize,users[currentBullet.owner],target);
 
   if (currentBullet.guns){
     bullets = bullets.concat(bulletUtil.bulletbulletSet(currentBullet,users[currentBullet.owner]));
@@ -366,14 +369,14 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
 
   var bulletCircle = new C(new V(currentBullet.x,currentBullet.y),currentBullet.radius);
 
-  tree.clear();
+  /*tree.clear();
   bullets.forEach(tree.put);
   shapes.forEach(tree.put);
   var bulletCollisions = [];
 
   tree.get(currentBullet,check);
 
-  bulletCollisions.forEach(collisionCheck);
+  bulletCollisions.forEach(collisionCheck);*/
 
   if (currentBullet.time > 0) currentBullet.time = Math.max(currentBullet.time - 1000/60, 0); // 수명
 }
@@ -401,20 +404,20 @@ function tickShape(currentShape){
   }
 
   var shapeCircle = new C(new V(currentShape.x,currentShape.y),currentShape.radius);
-
+/*
   tree.clear();
   shapes.forEach(tree.put);
   var shapeCollisions = [];
 
-  tree.get(currentShape,check);
+  //tree.get(currentShape,check);
 
-  shapeCollisions.forEach(collisionCheck);
+  shapeCollisions.forEach(collisionCheck);*/
 }
 
 function detectObject(object,r,rotate,dir){
-  tree.clear();
-  tanks.forEach(tree.put);
-  shapes.forEach(tree.put);
+  //tree.clear();
+  /*tanks.forEach(tree.put);
+  shapes.forEach(tree.put);*/
   let collisionsObject = undefined;
   let dist = r+1;
 
@@ -437,19 +440,20 @@ function detectObject(object,r,rotate,dir){
     return true;
   }
 
-  tree.get(object,check);
+  //tree.get(object,check);
 
   return collisionsObject;
 }
 
 function moveloop(){
+  console.time();
   tanks.forEach((u) => {
     tickPlayer(u);
   });
   bullets.forEach((b) => {
     tickBullet(b);
   });
-  //shapes = shapes.concat(shapeUtil.spawnShape(mapSize));
+  shapes = shapes.concat(shapeUtil.spawnShape(mapSize));
   shapes.forEach((s) => {
     tickShape(s);
   });
@@ -468,6 +472,7 @@ function moveloop(){
       io.emit('objectDead',s.id,"shape");
     }
   });
+  console.timeEnd();
 }
 
 function sendUpdates(){
