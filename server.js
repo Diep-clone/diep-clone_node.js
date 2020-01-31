@@ -146,7 +146,7 @@ io.on('connection', (socket) => { // 접속.
         damage: 20,
         radius: 12.9,
         rotate: 0,
-        bound: 1,
+        bound: 0,
         invTime: -1,
         opacity: 1,
         name: name,
