@@ -140,9 +140,9 @@ io.on('connection', (socket) => { // 접속.
         dy: 0,
         level: 1,
         exp: 0,
-        health: 48,
-        maxHealth: 48,
-        lastHealth: 48,
+        health: 999999,//48,
+        maxHealth: 999999, //48,
+        lastHealth: 999999,//48,
         damage: 20,
         radius: 12.9,
         rotate: 0,
@@ -342,7 +342,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
   if (currentBullet.guns){
     bullets = bullets.concat(bulletUtil.bulletbulletSet(currentBullet,users[currentBullet.owner]));
   }
-  
+
   currentBullet.lastHealth = currentBullet.health;
 
   function check(obj){ // 충돌했는가?
@@ -449,7 +449,7 @@ function moveloop(){
   bullets.forEach((b) => {
     tickBullet(b);
   });
-  shapes = shapes.concat(shapeUtil.spawnShape(mapSize));
+  //shapes = shapes.concat(shapeUtil.spawnShape(mapSize));
   shapes.forEach((s) => {
     tickShape(s);
   });
