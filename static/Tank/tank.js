@@ -8,6 +8,7 @@ function Tank(){
   this.color = new RGB(0,176,225);
   this.name = "";
   this.level;
+  this.score;
   this.isDead = false;
   this.canvas = document.createElement('canvas');
   this.ctx = this.canvas.getContext('2d');
@@ -56,6 +57,9 @@ function Tank(){
   }
   this.setLevel = function (lv){
     this.level = lv;
+  }
+  this.setScore = function (score){
+    this.score = score;
   }
   this.setCanDir = function (b){
     this.isCanDir = b;
@@ -180,8 +184,17 @@ function Tank(){
     ctx.globalAlpha = this.opacity;
     ctx.strokeStyle = "#000000";
     ctx.fillStyle = "#ffffff";
-    ctx.strokeText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
-    ctx.fillText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+    if (this.score <= 0){
+      ctx.strokeText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+      ctx.fillText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+    }
+    else{
+      ctx.strokeText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 15 - camera.y) * camera.z);
+      ctx.fillText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 15 - camera.y) * camera.z);
+      ctx.font = "bold " + 0.6 * this.radius * camera.z + "px Ubuntu";
+      ctx.strokeText(this.score,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+      ctx.fillText(this.score,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
+    }
     ctx.restore();
   }
 }

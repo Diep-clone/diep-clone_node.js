@@ -136,8 +136,7 @@ function System(name){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.createUiObject = function (type){
-    let obj = new type();
+  this.createUiObject = function (obj){
     this.uiObjectList.push(obj);
     return obj;
   }
@@ -161,6 +160,9 @@ function System(name){ // 게임의 전체 진행 담당
   }
 
   this.controlTank;
+  this.stat;
+  this.stats;
+  this.maxStats;
 
   socket.emit('login', name);
 
@@ -184,6 +186,9 @@ function System(name){ // 게임의 전체 진행 담당
     this.controlTank.setLevel(data.level);
     this.drawObject.setSight(data.sight);
     this.isControlRotate = data.isRotate;
+    this.stat = data.stat;
+    this.stats = data.stats;
+    this.maxStats = data.maxStats;
   });
 
   /*
@@ -216,6 +221,7 @@ function System(name){ // 게임의 전체 진행 담당
           objTank.setRadius(tankList[key].radius);
           objTank.setPosition(tankList[key].x,tankList[key].y);
           objTank.setHealth(tankList[key].health,tankList[key].maxHealth);
+          objTank.setScore(tankList[key].score);
           let tankType = new this.tankList[tankList[key].type]().tankType;
           if (tankType != objTank.tankType){
             objTank.changeTank(this.tankList[tankList[key].type]);
@@ -322,28 +328,33 @@ function System(name){ // 게임의 전체 진행 담당
     }
   });
 
-  this.showTankLevel = this.createUiObject(Text);
-  this.showTankName = this.createUiObject(Text);
+  this.showTankStat = this.createUiObject(new Text("",20,Math.PI/8));
+
+  this.showTankLevel = this.createUiObject(new Text("",20));
+  this.showTankScore = this.createUiObject(new Text("",20));
+  this.showTankName = this.createUiObject(new Text("",20));
 
   this.showUpgradeTank = [
-    this.createUiObject(Button),
-    this.createUiObject(Button),
-    this.createUiObject(Button),
-    this.createUiObject(Button),
-    this.createUiObject(Button),
-    this.createUiObject(Button)
+    this.createUiObject(new Button()),
+    this.createUiObject(new Button()),
+    this.createUiObject(new Button()),
+    this.createUiObject(new Button()),
+    this.createUiObject(new Button()),
+    this.createUiObject(new Button())
   ];
 
   this.uiSet = function (){
     let whz = this.drawObject.getCanvasSize();
 
     if (this.controlTank){
+      this.showTankStat.setPosition(50,whz[1]-50 * whz[2],0);
+      this.showTankStat.setText(this.stat===0?"":"x" + this.stat);
       this.showTankLevel.setPosition(whz[0]/2,whz[1]-100 * whz[2],0);
       this.showTankLevel.setText(this.controlTank.level);
-      this.showTankLevel.setSize(20);
+      this.showTankScore.setPosition(whz[0]/2,whz[1]-75 * whz[2],0);
+      this.showTankScore.setText(this.controlTank.score);
       this.showTankName.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
       this.showTankName.setText(this.controlTank.name);
-      this.showTankName.setSize(20);
     }
 /*
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);

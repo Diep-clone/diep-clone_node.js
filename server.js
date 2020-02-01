@@ -10,7 +10,7 @@ const os = require('os-utils');
 io.set('heartbeat timeout', 60000);
 io.set('heartbeat interval', 25000);
 
-const util = require('./lib/librarys');
+const util = require('./lib/utility');
 const objUtil = require('./lib/objectSet');
 const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
@@ -160,7 +160,7 @@ io.on('connection', (socket) => { // 접속.
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
-        hitObject: null,
+        hitObject: this,
         isDead: false
       };
 
@@ -172,7 +172,14 @@ io.on('connection', (socket) => { // 접속.
       currentPlayer.controlTank.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.controlTank.level-1))*10)/10;
       currentPlayer.controlTank.sight = userUtil.setUserSight(currentPlayer.controlTank);
       socket.emit('spawn', currentPlayer.controlTank);
-      socket.emit('playerSet',{level:currentPlayer.controlTank.level,sight:currentPlayer.controlTank.sight,isRotate:currentPlayer.controlTank.isCanDir});
+      socket.emit('playerSet',{
+        level:currentPlayer.controlTank.level,
+        sight:currentPlayer.controlTank.sight,
+        isRotate:currentPlayer.controlTank.isCanDir,
+        stat:currentPlayer.controlTank.stat,
+        stats:currentPlayer.controlTank.stats,
+        maxStats:currentPlayer.controlTank.maxStats
+      });
       io.emit('mapSize', mapSize);
     }
   });
@@ -272,7 +279,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   bullets = bullets.concat(tankBullets[0]);
 
   if (!currentPlayer.isCanDir){
-    currentPlayer.rotate+= 0.01;
+    currentPlayer.rotate+= 0.02;
   }
 
   if (tankBullets[1] || isMove || !users[currentPlayer.id] || currentPlayer.invTime===-1){
@@ -284,25 +291,32 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
 
   if (users[currentPlayer.id]){
     userUtil.healTank(currentPlayer);
+    let sc = userUtil.setUserLevel(currentPlayer);
     if (users[currentPlayer.id].k && currentPlayer.level<45){
-      currentPlayer.level++;
-      let healthPer = currentPlayer.health / currentPlayer.maxHealth;
-      currentPlayer.maxHealth = 48 + currentPlayer.level * 2;
-      currentPlayer.health = currentPlayer.maxHealth / healthPer;
-      currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
-      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
-      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight,isRotate:currentPlayer.isCanDir});
-    }
-    if (users[currentPlayer.id].o){
-      currentPlayer.health=0;
+      currentPlayer.exp = sc;
     }
     if (users[currentPlayer.id].changeTank && !users[currentPlayer.id].isChange){
       currentPlayer.type = currentPlayer.type==0?tankLength-1:currentPlayer.type-1;
       userUtil.setUserTank(currentPlayer);
-      currentPlayer.sight = userUtil.setUserSight(currentPlayer);
       users[currentPlayer.id].isChange = true;
-      sockets[currentPlayer.id].emit('playerSet',{level:currentPlayer.level,sight:currentPlayer.sight,isRotate:currentPlayer.isCanDir});
     }
+    let healthPer = currentPlayer.health / currentPlayer.maxHealth;
+    currentPlayer.maxHealth = 48 + currentPlayer.level * 2;
+    currentPlayer.health = currentPlayer.maxHealth / healthPer;
+    currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
+    currentPlayer.sight = userUtil.setUserSight(currentPlayer);
+    if (users[currentPlayer.id].o){
+      currentPlayer.hitObject = currentPlayer;
+      currentPlayer.health=0;
+    }
+    sockets[currentPlayer.id].emit('playerSet',{
+      level:currentPlayer.level,
+      sight:currentPlayer.sight,
+      isRotate:currentPlayer.isCanDir,
+      stat:currentPlayer.stat,
+      stats:currentPlayer.stats,
+      maxStats:currentPlayer.maxStats
+    });
   }
   else userUtil.afkTank(currentPlayer);
 
@@ -446,7 +460,7 @@ function detectObject(object,r,rotate,dir){
 }
 
 function moveloop(){
-  console.time();
+  //console.time();
   tanks.forEach((u) => {
     tickPlayer(u);
   });
@@ -472,7 +486,7 @@ function moveloop(){
       io.emit('objectDead',s.id,"shape");
     }
   });
-  console.timeEnd();
+  //console.timeEnd();
 }
 
 function sendUpdates(){
@@ -499,6 +513,7 @@ function sendUpdates(){
                       maxHealth:util.floor(f.maxHealth,1),
                       opacity:util.floor(f.opacity,2),
                       type:f.type,
+                      score:f.exp,
                       name:f.name
                     };
                 }
