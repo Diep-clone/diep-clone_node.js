@@ -16,8 +16,9 @@ const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
 const shapeUtil = require('./lib/shapeSet');
 
-const quadtree = require('./lib/quadTree');
+const quadtree = require('./lib/QuadTree');
 //const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
+const {QuadTree, Box, Point, Circle} = require('js-quadtree');
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
 let V = SAT.Vector;
@@ -30,6 +31,7 @@ let bullets = []; // 총알 목록.
 let shapes = []; // 도형 목록.
 
 let objects = []; // 오브젝트 목록.
+let aiObjects = []; // 플레이어가 조종할 수 없는 오브젝트 목록.
 
 let sockets = {}; // 유저 접속 목록.
 
@@ -37,6 +39,7 @@ let mapSize = {x: 161.25,y: 161.25}; // 맵 크기.
 let tankLength = 53; // 탱크의 목록 길이.
 
 //let tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
+let tree = new QuadTree(new Box(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y));
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
@@ -73,7 +76,8 @@ io.on('connection', (socket) => { // 접속.
     },
     camera: {
       x: 0,
-      y: 0
+      y: 0,
+      z: 1
     },
     k: false,
     o: false,
@@ -109,6 +113,9 @@ io.on('connection', (socket) => { // 접속.
     hitTime:Date.now(),
     isDead:false
   };*/
+  mapSize.x+= 161.25;
+  mapSize.y+= 161.25;
+  tree = new QuadTree(new Box(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y));
 
   socket.on('login', (name) => { // 탱크 생성.
     if (sockets[socket.id]){
@@ -118,8 +125,7 @@ io.on('connection', (socket) => { // 접속.
     else{
       console.log('누군가가 들어왔다!!!');
 
-      mapSize.x+= 161.25;
-      mapSize.y+= 161.25;
+
 
       //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
 
@@ -223,6 +229,7 @@ io.on('connection', (socket) => { // 접속.
       mapSize.y-= 161.25;
 
       //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
+      tree = new QuadTree(new Box(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y));
 
       shapeUtil.extendMaxShape(-10);
 
@@ -236,7 +243,7 @@ io.on('connection', (socket) => { // 접속.
 function collisionCheck(collision){ // 충돌 시 계산
   let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
 
-  collision.aUser.isCollision = collision.bUser.isCollision = true;
+  //collision.aUser.isCollision = collision.bUser.isCollision = true;
 
   collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
   collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
@@ -329,7 +336,7 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
   currentPlayer.lastHealth = currentPlayer.health; // lastHealth 는 데미지 계산 당시에 사용할 이전 체력 값이다. 이 값이 없다면 데미지 계산을 제대로 하지 못한다.
 
   function check(obj){ // 충돌했는가?
-    if ((!obj.owner || obj.owner !== currentPlayer.id) && obj.id !== currentPlayer.id && (currentPlayer.isCollision === false || obj.isCollision === false)){
+    if ((!obj.owner || obj.owner !== currentPlayer.id) && obj.id !== currentPlayer.id && (!currentPlayer.isCollision && !obj.isCollision)){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(playerCircle,
       new C(new V(obj.x,obj.y),obj.radius),response);
@@ -372,7 +379,7 @@ function tickBullet(currentBullet){ // 프레임 당 총알 계산
     if ((!obj.owner || obj.owner !== currentBullet.owner || (obj.isOwnCol && currentBullet.isOwnCol))
     && obj.id !== currentBullet.owner
     && obj.id !== currentBullet.id
-    && (currentBullet.isCollision === false || obj.isCollision === false)){
+    && (!currentBullet.isCollision && !obj.isCollision)){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(bulletCircle,
       new C(new V(obj.x,obj.y),obj.radius),response);
@@ -408,7 +415,7 @@ function tickShape(currentShape){
 
   function check(obj){ // 충돌했는가?
     if (obj.id !== currentShape.id
-    && (currentShape.isCollision === false || obj.isCollision === false)){
+    && (!currentShape.isCollision && !obj.isCollision)){
       let response = new SAT.Response();
       let collided = SAT.testCircleCircle(shapeCircle,
       new C(new V(obj.x,obj.y),obj.radius),response);
