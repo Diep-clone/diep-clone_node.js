@@ -304,8 +304,11 @@ function tickPlayer(currentPlayer){ // 프레임 당 유저(탱크) 계산
       users[currentPlayer.id].isChange = true;
     }
     let healthPer = currentPlayer.health / currentPlayer.maxHealth;
-    currentPlayer.maxHealth = 48 + currentPlayer.level * 2;
+    currentPlayer.maxHealth = 48 + currentPlayer.level * 2 + currentPlayer.stats[1] * 20;
     currentPlayer.health = currentPlayer.maxHealth / healthPer;
+
+    currentPlayer.damage = 20 + currentPlayer.stats[2] * 4 + (currentPlayer.type===49) * 8;
+
     currentPlayer.radius = Math.round(12.9*Math.pow(1.01,(currentPlayer.level-1))*10)/10;
     currentPlayer.sight = userUtil.setUserSight(currentPlayer);
     if (users[currentPlayer.id].o){
