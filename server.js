@@ -185,11 +185,12 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('ping!', (data) => {
+    if (!data) return;
     socket.emit('pong!',data);
   });
 
   socket.on('mousemove', (data) => { // 마우스 좌표, 탱크의 방향
-    if (data == null ) return; // null 값을 받으면 서버 정지
+    if (!data) return; // null 값을 받으면 서버 정지
 
     currentPlayer.target = data;
 
@@ -199,11 +200,13 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('windowResized', (data) => {
+    if (!data) return;
     currentPlayer.screenWidth = data.screenWidth;
     currentPlayer.screenHeight = data.screenHeight;
   });
 
   socket.on('input', (data) => { // 입력 정보
+    if (!data) return;
     currentPlayer.rotate = data.moveRotate;
     currentPlayer.k = data.k;
     currentPlayer.mouse.right = data.rShot>0;
