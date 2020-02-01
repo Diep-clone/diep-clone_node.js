@@ -156,7 +156,7 @@ io.on('connection', (socket) => { // 접속.
         stats: [0,0,0,8,8,8,8,0],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
-        type: 5,
+        type: 50,
         isCanDir: true,
         isCollision: false,
         hitTime: Date.now(),
@@ -493,7 +493,7 @@ function moveloop(){
 }
 
 function sendUpdates(){
-//  console.time();
+  console.time();
   for (let key in users){
     if (users[key].controlTank){
       users[key].camera.x = users[key].controlTank.x;
@@ -561,7 +561,7 @@ function sendUpdates(){
             .filter(function(f) { return f; });
     sockets[key].emit('objectList',visibleTank,visibleBullet,visibleShape);
   }
-  //console.timeEnd();
+  console.timeEnd();
 }
 
 setInterval(moveloop,1000/60);

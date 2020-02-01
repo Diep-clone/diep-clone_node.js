@@ -191,7 +191,7 @@ function Tank(){
     else{
       ctx.strokeText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 15 - camera.y) * camera.z);
       ctx.fillText(this.name,(this.x - camera.x) * camera.z,(this.y - this.radius - 15 - camera.y) * camera.z);
-      ctx.font = "bold " + 0.6 * this.radius * camera.z + "px Ubuntu";
+      ctx.font = "bold " + 0.4 * this.radius * camera.z + "px Ubuntu";
       ctx.strokeText(this.score,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
       ctx.fillText(this.score,(this.x - camera.x) * camera.z,(this.y - this.radius - 5 - camera.y) * camera.z);
     }
