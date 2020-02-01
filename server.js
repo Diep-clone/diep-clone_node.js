@@ -16,7 +16,7 @@ const userUtil = require('./lib/userSet');
 const bulletUtil = require('./lib/bulletSet');
 const shapeUtil = require('./lib/shapeSet');
 
-const quadtree = require('./lib/quadtree');
+const quadtree = require('./lib/quadTree');
 //const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
