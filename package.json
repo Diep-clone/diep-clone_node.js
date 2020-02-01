@@ -2,10 +2,10 @@
   "name": "diep.io-tankMaker",
   "version": "1.0.0",
   "description": "Copyright © 2019-2020\r # diep.io-tankMaker\r ## Description ℹ️\r This repo is Diep.io's Clone Version.",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start server.js"
+    "start": "pm2 start app.js"
   },
   "repository": {
     "type": "git",
