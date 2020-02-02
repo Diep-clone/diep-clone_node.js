@@ -21,6 +21,21 @@ html, body, #canvas {
 	cursor: default;
 }
 
-#textInput {
-    background-color: transparent;
+
+.text-input {
+	width: 493.568px;
+	height: 64px;
+	line-height: 57.6px;
+	
+	font-size: 57.6px;
+	font-weight: bold;
+
+	padding-left: 5px;
+	padding-right: 5px;
+
+	border: 6px solid black;
+
+	margin : 0 auto;
+	display: block;
+	/* border-color: 10px solid black; */
 }
