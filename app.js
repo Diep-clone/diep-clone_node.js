@@ -63,7 +63,6 @@ recursiveAsyncReadLine();
 
 io.on('connection', (socket) => { // 접속.
   let currentPlayer = { // 현재 플레이어 객체 생성.
-    objType: 'player',
     id: socket.id, // 플레이어의 소켓 id
     rotate: null,
     mouse: {
@@ -81,10 +80,11 @@ io.on('connection', (socket) => { // 접속.
     },
     k: false,
     o: false,
-    name: "",
     changeTank: false,
-    isChange: false,
-    controlTank: null
+    controlObject: null,
+    moveAi: function (){
+
+    }
   };
 
   /*let currentTank = {
@@ -133,23 +133,20 @@ io.on('connection', (socket) => { // 접속.
 
       sockets[socket.id] = socket;
 
-      currentPlayer.name = name;
-
       currentPlayer.controlTank = {
         objType: 'tank',
         owner: socket.id,
         id: socket.id,
         x: util.randomRange(-mapSize.x,mapSize.x),
         y: util.randomRange(-mapSize.y,mapSize.y),
-        w: 10,
-        h: 10,
         dx: 0,
         dy: 0,
         level: 1,
         exp: 0,
-        health: 999999,//48,
-        maxHealth: 999999, //48,
-        lastHealth: 999999,//48,
+        speed: 0.07,
+        health: 48,
+        maxHealth: 48,
+        lastHealth: 48,
         damage: 20,
         radius: 12.9,
         rotate: 0,
@@ -167,6 +164,7 @@ io.on('connection', (socket) => { // 접속.
         isCollision: false,
         hitTime: Date.now(),
         hitObject: this,
+        moveAi: null,
         isDead: false
       };
 
