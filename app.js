@@ -145,7 +145,7 @@ io.on('connection', (socket) => { // 접속.
         h: 10,
         dx: 0,
         dy: 0,
-        level: 1,
+        level: 9,
         exp: 0,
         health: 999999,//48,
         maxHealth: 999999, //48,
