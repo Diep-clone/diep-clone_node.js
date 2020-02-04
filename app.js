@@ -159,7 +159,7 @@ io.on('connection', (socket) => { // 접속.
         name: name,
         sight: 1.78,
         guns: [],
-        stats: [0,0,0,8,8,8,8,0],
+        stats: [0,0,0,8,8,8,8,8],
         maxStats: [8,8,8,8,8,8,8,8],
         stat: 0,
         type: 50,
