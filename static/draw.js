@@ -36,7 +36,11 @@ function DrawObject(camera){ // 그리기 담당
   }
 
   this.getCameraSet = function (){
-    return this.camera;
+    return {
+      x:this.camera.x + this.canvas.width / 2 / this.camera.uiz / this.sight,
+      y:this.camera.y + this.canvas.height / 2 / this.camera.uiz / this.sight,
+      z:this.camera.z,
+    }
   }
 
   this.setSight = function(sight){
@@ -61,7 +65,7 @@ function DrawObject(camera){ // 그리기 담당
 
   this.im = {x:0,y:0};
 
-  this.cameraSet = function (tank){
+  this.cameraSet = function (camera){
     if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900; // 화면 크기에 따른 줌값 조정
     else this.camera.z=this.canvas.width/1600;
 
@@ -70,12 +74,8 @@ function DrawObject(camera){ // 그리기 담당
     this.camera.z *= this.showSight;
     this.showSight -= (this.showSight - this.sight) / 20;
 
-    if (tank){
-      //this.camera.x-= (this.camera.x - (tank.x-this.canvas.width/2/this.camera.z)) / 20;
-      //this.camera.y-= (this.camera.y - (tank.y-this.canvas.height/2/this.camera.z)) / 20;
-      this.camera.x = (tank.x-this.canvas.width/2/this.camera.z);
-      this.camera.y = (tank.y-this.canvas.height/2/this.camera.z);
-    }
+    this.camera.x-= (this.camera.x - camera.x + this.canvas.width / 2 / this.camera.uiz / this.sight) / 20;
+    this.camera.y-= (this.camera.y - camera.y + this.canvas.height / 2 / this.camera.uiz / this.sight) / 20;
   }
 
   this.backgroundDraw = function (){

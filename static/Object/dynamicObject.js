@@ -40,6 +40,12 @@ function DynamicObject(){
   this.setId = function(id){
     this.id = id;
   }
+  this.isInCamera = function(camera){
+    return this.x > camera.x - 1280 / camera.z - this.radius &&
+        this.x < camera.x + 1280 / camera.z + this.radius &&
+        this.y > camera.y - 720 / camera.z - this.radius &&
+        this.y < camera.y + 720 / camera.z + this.radius;
+  }
 }
 
 

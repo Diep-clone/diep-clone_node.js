@@ -25,8 +25,8 @@ function Tank(){
     if (this.isDead){
       this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
-      if (this.opacity == 0){
-        system.removeObject(this.id,'tank');
+      if (this.opacity === 0){
+        system.removeObject(this.id,'obj');
         return;
       }
     }
@@ -74,9 +74,8 @@ function Tank(){
     this.bodyVertex = t.bodyVertex;
     this.upgradeTanks = t.upgradeTanks;
   }
-  this.dead = function(){
-    this.isDead = true;
-    this.health = 0;
+  this.setDead = function(dead){
+    this.isDead = dead;
   }
   this.hit = function(){
     this.hitTime=0.1;
@@ -84,9 +83,9 @@ function Tank(){
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
     let yy = ((this.y - this.dy - camera.y) * camera.z) - Math.floor((this.y - this.dy - camera.y) * camera.z);
-    this.canvasSize.x = ((this.radius * 2) * camera.z);
-    this.canvasSize.y = ((this.radius * 2) * camera.z);
-    this.canvasPos = {x:(this.radius * camera.z + xx),y:(this.radius * camera.z + yy)};
+    this.canvasSize.x = ((this.radius * this.bodySize * 2) * camera.z);
+    this.canvasSize.y = ((this.radius * this.bodySize * 2) * camera.z);
+    this.canvasPos = {x:(this.radius * this.bodySize * camera.z + xx),y:(this.radius * this.bodySize * camera.z + yy)};
     for (let i=0;i<this.guns.length;i++){
       this.guns[i].setParentCanvasSize(this,camera);
     }

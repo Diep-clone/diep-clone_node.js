@@ -18,7 +18,7 @@ function Square(){
       this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity === 0){
-        system.removeObject(this.id,'shape');
+        system.removeObject(this.id,'obj');
         return;
       }
     }
@@ -48,9 +48,8 @@ function Square(){
   this.setColor = function (color){
     this.color = color;
   }
-  this.dead = function(){
-    this.isDead = true;
-    this.health = 0;
+  this.setDead = function(dead){
+    this.isDead = dead;
   }
   this.hit = function(){
     this.hitTime=0.1;
