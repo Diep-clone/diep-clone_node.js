@@ -129,9 +129,9 @@ io.on('connection', (socket) => { // 접속.
       //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
       sockets[socket.id] = socket;
 
-      currentPlayer.controlObject = {
+      let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 52, // 오브젝트의 종류값.
+        type: 50, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: "ffa", // 오브젝트의 팀값.
@@ -141,25 +141,26 @@ io.on('connection', (socket) => { // 접속.
         dy: 0.0,
         level: 1, // 오브젝트의 레벨값.
         exp: 0, // 오브젝트의 경험치값.
-        speed: function (){return 0.07 * Math.pow(0.985,currentPlayer.controlObject.level-1);}, // 0.07*0.0985^(level-1)
-        healthRegen: function (){return this.maxHealth() / 210 * currentPlayer.controlObject.stats[0] * 1000 / 60;}, // maxHealth/210*healthRegenStat*(tick)
+        speed: function (){return 0.07 * Math.pow(0.985,obj.level-1);}, // 0.07*0.0985^(level-1)
         healthPer: 1, // 오브젝트의 이전 프레임 체력 비율값.
         health: 50, // 오브젝트의 체력값.
         maxHealth: function (){
-          let maxHealth = 48 + currentPlayer.controlObject.level * 2 + currentPlayer.controlObject.stats[1] * 20;
-          currentPlayer.controlObject.health = maxHealth / currentPlayer.controlObject.healthPer;
-          currentPlayer.controlObject.healthPer = currentPlayer.controlObject.health / maxHealth;
+          obj.healthPer = obj.health / obj.lastMaxHealth;
+          let maxHealth = 48 + obj.level * 2 + obj.stats[1] * 20;
+          obj.health = maxHealth / obj.healthPer;
+          obj.lastMaxHealth = maxHealth;
           return maxHealth; // 48+level*2+maxHealthStat*20
         },
         lastHealth: 48, // 오브젝트의 이전 프레임 체력값.
-        damage: function (){return 20 + currentPlayer.controlObject.stats[2] * 4;}, // 20+bodyDamageStat*4
-        radius: function (){return 12.9*Math.pow(1.01,(currentPlayer.controlObject.level-1));}, // 12.9*1.01^(level-1)
+        lastMaxHealth: 50, // 오브젝트의 이전 프레임 최대체력값.
+        damage: function (){return 20 + obj.stats[2] * 4;}, // 20+bodyDamageStat*4
+        radius: function (){return 12.9*Math.pow(1.01,(obj.level-1));}, // 12.9*1.01^(level-1)
         rotate: 0, // 오브젝트의 방향값.
         bound: 0, // 오브젝트의 반동값.
         invTime: -1, // 오브젝트의 은신에 걸리는 시간.
         opacity: 1, // 오브젝트의 투명도값.
         name: name, // 오브젝트의 이름값.
-        sight: function (){return userUtil.setUserSight(currentPlayer.controlObject);}, // 오브젝트의 시야값.
+        sight: function (){return userUtil.setUserSight(obj);}, // 오브젝트의 시야값.
         guns: [], // 오브젝트의 총구 목록.
         stats: [7,7,7,7,7,7,7,7], // 오브젝트의 스탯값.
         maxStats: [7,7,7,7,7,7,7,7], // 오브젝트의 최대 스탯값.
@@ -167,14 +168,10 @@ io.on('connection', (socket) => { // 접속.
         spawnTime: Date.now(), // 오브젝트의 스폰 시각.
         hitTime: Date.now(), // 오브젝트의 피격 시각.
         deadTime: -1, // 오브젝트의 죽은 시각.
-        hitObject: currentPlayer.controlObject, // 오브젝트의 피격 오브젝트.
+        hitObject: null, // 오브젝트의 피격 오브젝트.
         moveAi: null, // 오브젝트의 이동 AI. 플레이어의 조종권한이 없을 때 실행하는 함수입니다.
         event:{ // 여기 있는 값들은 모두 "함수" 입니다.
-          rightClickEvent:function(){}, // 우클릭을 했을 때의 추가 이벤트
-          killEvent:function(deader){ // 오브젝트를 죽였을 때의 이벤트
-            currentPlayer.controlObject.exp += deader.exp;
-          },
-          deadEvent:function(killer){} // 자신의 오브젝트가 죽었을 때의 이벤트
+
         },
         variable:{
 
@@ -186,6 +183,7 @@ io.on('connection', (socket) => { // 접속.
         isShot: false,
         isMove: false // 오브젝트가 현재 움직이는가?
       };
+      currentPlayer.controlObject = obj;
 
       userUtil.setUserTank(currentPlayer.controlObject);
 
@@ -196,7 +194,8 @@ io.on('connection', (socket) => { // 접속.
         x:util.floor(currentPlayer.controlObject.x,2),
         y:util.floor(currentPlayer.controlObject.y,2),
         type:currentPlayer.controlObject.type,
-        name:currentPlayer.controlObject.name
+        name:currentPlayer.controlObject.name,
+        sight:util.floor(util.isF(currentPlayer.controlObject.sight),2)
       });
       socket.emit('mapSize', gameSet.mapSize);
     }
@@ -226,6 +225,8 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('rightMouse', (data) => {
+    if (!currentPlayer.mouse.right && data) currentPlayer.controlObject.event.rightDownEvent();
+    if (currentPlayer.mouse.right && !data) currentPlayer.controlObject.event.rightUpEvent();
     currentPlayer.mouse.right = data;
   });
 
@@ -309,8 +310,8 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
     else
       p.camera.z = 1;
     if (p.controlObject.event){
-      if (p.controlObject.event.rightClickEvent && p.mouse.right){
-        p.controlObject.event.rightClickEvent();
+      if (p.controlObject.event.rightEvent && p.mouse.right){
+        p.controlObject.event.rightEvent();
       }
     }
     if (p.moveRotate === null){
@@ -336,6 +337,7 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
 
 function tickObject(obj){
   objUtil.moveObject(obj);
+
   if (obj.isBorder){ // 화면 밖으로 벗어나는가?
     if (obj.x>gameSet.mapSize.x+51.6) obj.x=gameSet.mapSize.x+51.6;
     if (obj.x<-gameSet.mapSize.x-51.6) obj.x=-gameSet.mapSize.x-51.6;
@@ -345,11 +347,10 @@ function tickObject(obj){
   if (obj.health<=0){
     obj.isDead = true;
   }
-
+  if (obj.isDead) return;
   if (obj.guns){
     bulletUtil.gunSet(objects,obj,objID);
   }
-
   if (obj.moveAi){
     obj.moveAi(obj);
   }
@@ -373,7 +374,9 @@ function tickObject(obj){
       }
       userUtil.healTank(obj);
     }
-    else userUtil.afkTank(obj);
+    else{
+      userUtil.afkTank(obj);
+    }
     break;
     case "bullet":
     obj.time-=1000/60;
@@ -412,7 +415,7 @@ function moveloop(){
   objects.forEach((o) => {
     if (o.isDead){
       if (o.deadTime===-1){
-        if (o.hitObject.event){
+        if (o.hitObject && o.hitObject.event){
           if (o.hitObject.event.killEvent) o.hitObject.event.killEvent(o);
         }
         if (o.event){
@@ -425,7 +428,9 @@ function moveloop(){
           }
         }
       }
-      else if (o.deadTime<0) objects.splice(util.findIndex(objects,o.id),1);
+      else if (o.deadTime<0){
+        objects.splice(util.findIndex(objects,o.id),1);
+      }
       else{
         o.deadTime-=1000/60;
       }
