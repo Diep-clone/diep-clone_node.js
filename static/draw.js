@@ -72,10 +72,10 @@ function DrawObject(camera){ // 그리기 담당
     this.camera.uiz = this.camera.z; // *1.78 은 1레벨 탱크의 시야 *1.43 은 45레벨 탱크의 시야 *1.229 는 75레벨 탱크의 시야
 
     this.camera.z *= this.showSight;
-    this.showSight -= (this.showSight - this.sight) / 20;
+    this.showSight -= (this.showSight - this.sight) / 10;
 
-    this.camera.x-= (this.camera.x - camera.x + this.canvas.width / 2 / this.camera.uiz / this.sight) / 20;
-    this.camera.y-= (this.camera.y - camera.y + this.canvas.height / 2 / this.camera.uiz / this.sight) / 20;
+    this.camera.x-= (this.camera.x - camera.x + this.canvas.width / 2 / this.camera.uiz / this.sight) / 10;
+    this.camera.y-= (this.camera.y - camera.y + this.canvas.height / 2 / this.camera.uiz / this.sight) / 10;
   }
 
   this.backgroundDraw = function (){

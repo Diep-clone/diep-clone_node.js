@@ -163,8 +163,8 @@ function System(name){ // 게임의 전체 진행 담당
     this.controlTank.setPosition(data.x,data.y);
     this.controlTank.setName(data.name);
     this.drawObject.camera = {
-      x:(data.x-window.innerWidth * window.devicePixelRatio/2/2.3),
-      y:(data.y-window.innerHeight * window.devicePixelRatio/2/2.3),
+      x:(data.x-this.drawObject.canvas.width / 2 / this.drawObject.camera.uiz / data.sight),
+      y:(data.y-this.drawObject.canvas.height / 2 / this.drawObject.camera.uiz / data.sight),
       z:2,
       uiz:1
     };
@@ -377,7 +377,7 @@ function System(name){ // 게임의 전체 진행 담당
 
     for (let key in this.objectList.obj){
       if (this.objectList.obj[key]){
-        if (!this.objectList.obj[key].isInCamera(this.drawObject.getCameraSet())){
+        if (this.objectList.obj[key]!==this.controlTank && !this.objectList.obj[key].isInCamera(this.drawObject.getCameraSet())){
           this.removeObject(key,'obj');
           continue;
         }
