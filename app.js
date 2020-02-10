@@ -83,33 +83,6 @@ io.on('connection', (socket) => { // 접속.
     changeTank: false,
     controlObject: null
   };
-
-  /*let currentTank = {
-    objType: 'tank',
-    id:socket.id,
-    x:0,
-    y:0,
-    w:10,
-    h:10,
-    dx:0,
-    dy:0,
-    level:1,
-    health:1,
-    maxHealth:48,
-    lastHealth:48,
-    damage:20,
-    radius:12.8,
-    rotate:0,
-    name:"",
-    sight:1.78,
-    guns:[],
-    stats:[0,0,0,0,0,0,0,0],
-    bulletCount:0,
-    type:12,
-    isCollision:false,
-    hitTime:Date.now(),
-    isDead:false
-  };*/
   gameSet.mapSize.x+= 161.25;
   gameSet.mapSize.y+= 161.25;
 
@@ -141,7 +114,7 @@ io.on('connection', (socket) => { // 접속.
         dy: 0.0,
         level: 1, // 오브젝트의 레벨값.
         exp: 0, // 오브젝트의 경험치값.
-        speed: function (){return 0.07 * Math.pow(0.985,obj.level-1);}, // 0.07*0.0985^(level-1)
+        speed: function (){return 0.07 * Math.pow(0.985,obj.level-1) + (0.007 * u.stats[7]);}, // 0.07*0.0985^(level-1)
         healthPer: 1, // 오브젝트의 이전 프레임 체력 비율값.
         health: 50, // 오브젝트의 체력값.
         maxHealth: function (){
