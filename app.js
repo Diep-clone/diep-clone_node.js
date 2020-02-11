@@ -117,15 +117,17 @@ io.on('connection', (socket) => { // 접속.
         speed: function (){return 0.07 * Math.pow(0.985,obj.level-1) + (0.007 * obj.stats[7]);}, // 0.07*0.0985^(level-1)
         healthPer: 1, // 오브젝트의 이전 프레임 체력 비율값.
         health: 50, // 오브젝트의 체력값.
-        maxHealth: function (){
-          obj.healthPer = obj.health / obj.lastMaxHealth;
-          let maxHealth = 48 + obj.level * 2 + obj.stats[1] * 20;
-          obj.health = maxHealth / obj.healthPer;
-          obj.lastMaxHealth = maxHealth;
-          return maxHealth; // 48+level*2+maxHealthStat*20
-        },
+        maxHealth: function (){return 48 + obj.level * 2 + obj.stats[1] * 20;}, // 48+level*2+maxHealthStat*20
         lastHealth: 48, // 오브젝트의 이전 프레임 체력값.
         lastMaxHealth: 50, // 오브젝트의 이전 프레임 최대체력값.
+        healthPerSet: function (){
+          let maxHealth = util.isF(obj.maxHealth);
+          if (obj.lastMaxHealth !== maxHealth){
+            obj.healthPer = obj.health / obj.lastMaxHealth;
+            obj.health = maxHealth / obj.healthPer;
+            obj.lastMaxHealth = maxHealth;
+          }
+        },
         damage: function (){return 20 + obj.stats[2] * 4;}, // 20+bodyDamageStat*4
         radius: function (){return 12.9*Math.pow(1.01,(obj.level-1));}, // 12.9*1.01^(level-1)
         rotate: 0, // 오브젝트의 방향값.
@@ -350,6 +352,7 @@ function tickObject(obj){
     else{
       userUtil.afkTank(obj);
     }
+    obj.healthPerSet();
     break;
     case "bullet":
     obj.time-=1000/60;
