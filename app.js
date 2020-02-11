@@ -18,7 +18,6 @@ const shapeUtil = require('./lib/shapeSet');
 
 const quadtree = require('./lib/QuadTree');
 //const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
-const {QuadTree, Box, Point, Circle} = require('js-quadtree');
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
 let V = SAT.Vector;
@@ -39,7 +38,7 @@ let sockets = {}; // 유저 접속 목록.
 let tankLength = 53; // 탱크의 목록 길이.
 
 //let tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
-let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
+//let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
@@ -83,12 +82,12 @@ io.on('connection', (socket) => { // 접속.
     changeTank: false,
     controlObject: null
   };
-  gameSet.mapSize.x+= 161.25;
-  gameSet.mapSize.y+= 161.25;
+  //gameSet.mapSize.x+= 161.25;
+  //gameSet.mapSize.y+= 161.25;
 
   shapeUtil.extendMaxShape(10);
 
-  tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
+  //tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
   io.emit('mapSize', gameSet.mapSize);
 
@@ -107,7 +106,7 @@ io.on('connection', (socket) => { // 접속.
         type: 50, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
-        team: "ffa", // 오브젝트의 팀값.
+        team: -1, // 오브젝트의 팀값.
         x: util.randomRange(-gameSet.mapSize.x,gameSet.mapSize.x), // 오브젝트의 좌표값.
         y: util.randomRange(-gameSet.mapSize.y,gameSet.mapSize.y),
         dx: 0.0, // 오브젝트의 속도값.
@@ -158,6 +157,8 @@ io.on('connection', (socket) => { // 접속.
         isShot: false,
         isMove: false // 오브젝트가 현재 움직이는가?
       };
+      obj.team = obj.id;
+
       currentPlayer.controlObject = obj;
 
       userUtil.setUserTank(currentPlayer.controlObject);
@@ -224,11 +225,11 @@ io.on('connection', (socket) => { // 접속.
   socket.on('disconnect', () => { // 연결 끊김
     if (sockets[socket.id]){
       console.log('안녕 잘가!!!');
-      gameSet.mapSize.x-= 161.25;
-      gameSet.mapSize.y-= 161.25;
+      //gameSet.mapSize.x-= 161.25;
+      //gameSet.mapSize.y-= 161.25;
 
       //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
-      tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
+      //tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
       shapeUtil.extendMaxShape(-10);
 
@@ -243,35 +244,35 @@ io.on('connection', (socket) => { // 접속.
 function collisionCheck(collision){ // 충돌 시 계산
   let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
 
-  //collision.aUser.isCollision = collision.bUser.isCollision = true;
+  if (collision.aUser === collision.bUser.owner || collision.bUser === collision.aUser.owner) return;
 
   collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
   collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
   collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
   collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
 
-  if (collision.aUser.owner !== collision.bUser.owner){
-    io.emit('objectHit',collision.aUser.id,collision.aUser.objType);
-    io.emit('objectHit',collision.bUser.id,collision.bUser.objType);
+  if (collision.aUser.team === collision.bUser.team) return;
 
-    collision.aUser.hitTime = Date.now();
-    collision.bUser.hitTime = Date.now();
+  io.emit('objectHit',collision.aUser.id,collision.aUser.objType);
+  io.emit('objectHit',collision.bUser.id,collision.bUser.objType);
 
-    collision.aUser.hitObject = collision.bUser;
-    collision.bUser.hitObject = collision.aUser;
+  collision.aUser.hitTime = Date.now();
+  collision.bUser.hitTime = Date.now();
 
-    if (collision.bUser.lastHealth-collision.aUser.damage<=0){
-      collision.aUser.health-=collision.bUser.damage*(collision.bUser.lastHealth/collision.aUser.damage);
-    }
-    else{
-      collision.aUser.health-=collision.bUser.damage;
-    }
-    if (collision.aUser.lastHealth-collision.bUser.damage<=0){
-      collision.bUser.health-=collision.aUser.damage*(collision.aUser.lastHealth/collision.bUser.damage);
-    }
-    else{
-      collision.bUser.health-=collision.aUser.damage;
-    }
+  collision.aUser.hitObject = collision.bUser;
+  collision.bUser.hitObject = collision.aUser;
+
+  if (collision.bUser.lastHealth-util.isF(collision.aUser.damage)<=0){
+    collision.aUser.health-=util.isF(collision.bUser.damage)*(collision.bUser.lastHealth/util.isF(collision.aUser.damage));
+  }
+  else{
+    collision.aUser.health-=util.isF(collision.bUser.damage);
+  }
+  if (collision.aUser.lastHealth-util.isF(collision.bUser.damage)<=0){
+    collision.bUser.health-=util.isF(collision.aUser.damage)*(collision.aUser.lastHealth/util.isF(collision.bUser.damage));
+  }
+  else{
+    collision.bUser.health-=util.isF(collision.aUser.damage);
   }
 }
 
@@ -385,6 +386,7 @@ function moveloop(){
     tickPlayer(u);
   });
   shapeUtil.spawnShape(objects,gameSet.mapSize,objID);
+  tree.clear();
   objects.forEach((o) => {
     tickObject(o);
   });
