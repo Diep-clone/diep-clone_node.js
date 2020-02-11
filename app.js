@@ -114,7 +114,7 @@ io.on('connection', (socket) => { // 접속.
         dy: 0.0,
         level: 1, // 오브젝트의 레벨값.
         exp: 0, // 오브젝트의 경험치값.
-        speed: function (){return 0.07 * Math.pow(0.985,obj.level-1) + (0.007 * u.stats[7]);}, // 0.07*0.0985^(level-1)
+        speed: function (){return 0.07 * Math.pow(0.985,obj.level-1) + (0.007 * obj.stats[7]);}, // 0.07*0.0985^(level-1)
         healthPer: 1, // 오브젝트의 이전 프레임 체력 비율값.
         health: 50, // 오브젝트의 체력값.
         maxHealth: function (){
