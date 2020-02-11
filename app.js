@@ -103,7 +103,7 @@ io.on('connection', (socket) => { // 접속.
 
       let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 50, // 오브젝트의 종류값.
+        type: 52, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: -1, // 오브젝트의 팀값.
@@ -386,7 +386,6 @@ function moveloop(){
     tickPlayer(u);
   });
   shapeUtil.spawnShape(objects,gameSet.mapSize,objID);
-  tree.clear();
   objects.forEach((o) => {
     tickObject(o);
   });
