@@ -613,62 +613,86 @@ function System(name){ // 게임의 전체 진행 담당
     if (this.controlTank){
       switch (e.keyCode){
         case 16: // Shift키
+        if (this.input.shift){
           this.input.rShot--;
           socket.emit('rightMouse',this.input.rShot);
           this.input.shift = false;
+        }
         break;
         case 17: // Ctrl키
+        if (this.input.ctrl){
           this.input.ctrl = false;
+        }
         break;
         case 32: // Space키
+        if (this.input.space){
           this.input.shot--;
           socket.emit('leftMouse',this.input.autoE || this.input.shot);
           this.input.space = false;
+        }
         break;
         case 38: // 위쪽 방향키
         case 87: // W키
+        if (this.input.w){
           this.input.moveVector.y+=1;
           this.setMoveRotate();
           socket.emit('moveRotate',this.input.moveRotate);
           this.input.w=false;
+        }
         break;
         case 37: // 왼쪽 방향키
         case 65: // A키
+        if (this.input.a){
           this.input.moveVector.x+=1;
           this.setMoveRotate();
           socket.emit('moveRotate',this.input.moveRotate);
           this.input.a=false;
+        }
         break;
         case 40: // 아래쪽 방향키
         case 83: // S키
+        if (this.input.s){
           this.input.moveVector.y-=1;
           this.setMoveRotate();
           socket.emit('moveRotate',this.input.moveRotate);
           this.input.s=false;
+        }
         break;
         case 39: // 오른쪽 방향키
         case 68: // D키
+        if (this.input.d){
           this.input.moveVector.x-=1;
           this.setMoveRotate();
           socket.emit('moveRotate',this.input.moveRotate);
           this.input.d=false;
+        }
         break;
         case 69: // E키
+        if (this.input.e){
           this.input.e=false;
+        }
         break;
         case 67: // C키
+        if (this.input.c){
           this.input.c=false;
+        }
         break;
         case 75: // K키
+        if (this.input.k){
           socket.emit('keyK',false);
           this.input.k = false;
+        }
         break;
         case 79: // O키
+        if (this.input.o){
           socket.emit('keyO',false);
           this.input.o = false;
+        }
         break;
         case 220: // \키
+        if (this.input.changeTank){
           this.input.changeTank = false;
+        }
         break;
         default:
         break;
