@@ -156,7 +156,7 @@ function System(name){ // 게임의 전체 진행 담당
   socket.emit('login', name);
 
   socket.on('pong!', function(data) {
-    //console.log('Received Pong: ', Date.now()-data);
+    console.log('Received Pong: ', Date.now()-data);
   });
 
   socket.on('spawn',(data) => {
