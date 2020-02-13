@@ -16,6 +16,7 @@ function Tank(){
   this.canvasPos = {x:0,y:0};
   this.bodyVertex = 0;
   this.bodySize = 1;
+  this.imRotate = this.rotate;
   this.hitTime = 0;
   this.r = 0;
   this.w = -0.0001;
@@ -48,6 +49,8 @@ function Tank(){
       this.guns[i].animate();
     }
     this.showRadius -= (this.showRadius - this.radius) / 3;
+
+    this.imRotate = this.rotate;
   }
   this.setName = function (name){
     this.name = name;
@@ -119,7 +122,7 @@ function Tank(){
       }
       else{
         let r = this.showRadius * this.bodySize * camera.z;
-        let dir = Math.PI / this.bodyVertex + this.rotate;
+        let dir = Math.PI / this.bodyVertex + this.imRotate;
         ctx.moveTo(this.canvasPos.x + Math.cos(dir) * r,this.canvasPos.y + Math.sin(dir) * r);
         for (let i=1;i<=this.bodyVertex;i++){
           dir += Math.PI / this.bodyVertex * 2;
@@ -151,7 +154,7 @@ function Tank(){
       }
       else{
         let r = this.showRadius * this.bodySize * camera.z;
-        let dir = Math.PI / this.bodyVertex + this.rotate;
+        let dir = Math.PI / this.bodyVertex + this.imRotate;
         this.ctx.moveTo(this.canvasPos.x + Math.cos(dir) * r,this.canvasPos.y + Math.sin(dir) * r);
         for (let i=1;i<=this.bodyVertex;i++){
           dir += Math.PI / this.bodyVertex * 2;

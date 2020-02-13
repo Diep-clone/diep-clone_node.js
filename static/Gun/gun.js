@@ -10,7 +10,7 @@ function Gun(paths,dir){
   }
 
   this.setParentCanvasSize = function (tank,camera){
-    let rotate = tank.rotate;
+    let rotate = tank.imRotate;
     let radius = tank.showRadius;
     let xx = tank.canvasPos.x;
     let yy = tank.canvasPos.y;
@@ -39,7 +39,7 @@ function Gun(paths,dir){
   }
 
   this.drawGun = function (tank,ctx,camera){
-    let rotate = tank.rotate;
+    let rotate = tank.imRotate;
     let radius = tank.showRadius;
     let xx = tank.canvasPos.x;
     let yy = tank.canvasPos.y;

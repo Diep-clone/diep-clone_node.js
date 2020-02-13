@@ -9,6 +9,7 @@ function Minion(){
   this.ctx = this.canvas.getContext('2d');
   this.canvasSize = {x:0,y:0};
   this.canvasPos = {x:0,y:0};
+  this.imRotate = this.rotate;
   this.hitTime = 0;
   this.r = 0;
   this.w = -0.0001;
@@ -41,6 +42,15 @@ function Minion(){
       this.guns[i].animate();
     }
     this.showRadius -= (this.showRadius - this.radius) / 3;
+
+    let ccw = Math.cos(this.rotate)*Math.sin(this.imRotate)-Math.sin(this.rotate)*Math.cos(this.imRotate);
+    let a = -((Math.cos(this.rotate)*Math.cos(this.imRotate)) + (Math.sin(this.rotate)*Math.sin(this.imRotate))-1) * Math.PI / 2;
+
+    if (ccw > 0){
+      this.imRotate-= a / 3;
+    } else if (ccw < 0){
+      this.imRotate+= a / 3;
+    }
   }
   this.setColor = function (color){
     this.color = color;
