@@ -119,16 +119,8 @@ io.on('connection', (socket) => { // 접속.
         maxHealth: function (){return 48 + obj.level * 2 + obj.stats[1] * 20;}, // 48+level*2+maxHealthStat*20
         lastHealth: 48, // 오브젝트의 이전 프레임 체력값.
         lastMaxHealth: 50, // 오브젝트의 이전 프레임 최대체력값.
-        healthPerSet: function (){
-          let maxHealth = util.isF(obj.maxHealth);
-          if (obj.lastMaxHealth !== maxHealth){
-            obj.healthPer = obj.health / obj.lastMaxHealth;
-            obj.health = maxHealth / obj.healthPer;
-            obj.lastMaxHealth = maxHealth;
-          }
-        },
         damage: function (){return 20 + obj.stats[2] * 4;}, // 20+bodyDamageStat*4
-        radius: function (){return 12.9*Math.pow(1.01,(obj.level-1));}, // 12.9*1.01^(level-1)
+        radius: function (){return 13*Math.pow(1.01,(obj.level-1));}, // 12.9*1.01^(level-1)
         rotate: 0, // 오브젝트의 방향값.
         bound: 0, // 오브젝트의 반동값.
         invTime: -1, // 오브젝트의 은신에 걸리는 시간.
@@ -136,7 +128,7 @@ io.on('connection', (socket) => { // 접속.
         name: name, // 오브젝트의 이름값.
         sight: function (){return userUtil.setUserSight(obj);}, // 오브젝트의 시야값.
         guns: [], // 오브젝트의 총구 목록.
-        stats: [7,7,7,7,7,7,7,7], // 오브젝트의 스탯값.
+        stats: [0,0,0,0,0,0,0,0], // 오브젝트의 스탯값.
         maxStats: [7,7,7,7,7,7,7,7], // 오브젝트의 최대 스탯값.
         stat: 0, // 오브젝트의 남은 스탯값.
         spawnTime: Date.now(), // 오브젝트의 스폰 시각.
@@ -222,6 +214,11 @@ io.on('connection', (socket) => { // 접속.
     currentPlayer.changeTank = data;
   });
 
+  socket.on('stat', (num) => {
+    if (currentPlayer.controlObject.stats[num]<currentPlayer.controlObject.maxStats[num])
+      currentPlayer.controlObject.stats[num]++;
+  });
+
   socket.on('disconnect', () => { // 연결 끊김
     if (sockets[socket.id]){
       console.log('안녕 잘가!!!');
@@ -277,7 +274,7 @@ function collisionCheck(collision){ // 충돌 시 계산
 }
 
 function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입니다.
-  if (p.controlObject){
+  if (p.controlObject && !p.controlObject.isDead){
     p.camera.x = p.controlObject.x;
     p.camera.y = p.controlObject.y;
 
@@ -337,6 +334,11 @@ function tickObject(obj){
     if (!obj.isCanDir){ // 방향 조정이 불가능할 때 방향 회전
       obj.rotate += 0.02;
     }
+    if (obj.lastMaxHealth !== util.isF(obj.maxHealth)){
+      obj.healthPer = obj.health / obj.lastMaxHealth;
+      obj.health = util.isF(obj.maxHealth) / obj.healthPer;
+      obj.lastMaxHealth = util.isF(obj.maxHealth);
+    }
     if (obj.owner){
       if (gameSet.gameMode === "sandbox"){
         if (obj.owner.k && obj.level<45){
@@ -353,7 +355,6 @@ function tickObject(obj){
     else{
       userUtil.afkTank(obj);
     }
-    obj.healthPerSet();
     break;
     case "bullet":
     obj.time-=1000/60;
@@ -432,7 +433,7 @@ function sendUpdates(){
                         y:util.floor(f.y,2),
                         radius:util.floor(util.isF(f.radius),1),
                         rotate:util.floor(f.rotate,2),
-                        maxHealth:util.floor(util.isF(f.maxHealth),1),
+                        maxHealth:util.floor(f.lastMaxHealth,1),
                         health:util.floor(f.health,1),
                         opacity:util.floor(f.opacity,2),
                         type:f.type,

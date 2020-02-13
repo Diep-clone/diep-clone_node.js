@@ -100,6 +100,7 @@ function System(name){ // 게임의 전체 진행 담당
     a: false,
     s: false,
     d: false,
+    num:[false,false,false,false,false,false,false,false],
     o: false,
     k: false,
     e: false,
@@ -324,6 +325,7 @@ function System(name){ // 게임의 전체 진행 담당
   });
 
   this.showTankStat = this.createUiObject(new Text("",20,Math.PI/8));
+  this.showTankStats = this.createUiObject(new Text("",15,0,"left"));
 
   this.showTankLevel = this.createUiObject(new Text("",20));
   this.showTankScore = this.createUiObject(new Text("",20));
@@ -344,6 +346,14 @@ function System(name){ // 게임의 전체 진행 담당
     if (this.controlTank){
       this.showTankStat.setPosition(50,whz[1]-50 * whz[2],0);
       this.showTankStat.setText(this.stat===0?"":"x" + this.stat);
+      this.showTankStats.setPosition(25,whz[1]-25 * whz[2],0);
+      let tankStats = "";
+      if (this.stats){
+        for (let i=0;i<this.stats.length;i++){
+          tankStats += this.stats[i] + " ";
+        }
+      }
+      this.showTankStats.setText(tankStats);
       this.showTankLevel.setPosition(whz[0]/2,whz[1]-100 * whz[2],0);
       this.showTankLevel.setText(this.controlTank.level);
       this.showTankScore.setPosition(whz[0]/2,whz[1]-75 * whz[2],0);
@@ -581,6 +591,19 @@ function System(name){ // 게임의 전체 진행 담당
           this.input.c=true;
         }
         break;
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        if (!this.input.num[e.keyCode-49]){
+          socket.emit('stat',e.keyCode-49);
+          this.input.num[e.keyCode-49]=true;
+        }
+        break;
         case 75: // K키
         if (!this.input.k){
           socket.emit('keyK',true);
@@ -665,6 +688,18 @@ function System(name){ // 게임의 전체 진행 담당
           this.setMoveRotate();
           socket.emit('moveRotate',this.input.moveRotate);
           this.input.d=false;
+        }
+        break;
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        if (this.input.num[e.keyCode-49]){
+          this.input.num[e.keyCode-49]=false;
         }
         break;
         case 69: // E키

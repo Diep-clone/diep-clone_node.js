@@ -260,14 +260,14 @@ function Bar(){
   }
 }
 
-function Text(text,size,rotate){
+function Text(text,size,rotate,align){
   "use strict";
 
   this.text = text;
   this.size = size;
   this.x;
   this.y;
-  this.align = "center";
+  this.align = align || "center";
   this.rotate = rotate || 0;
 
   this.inMousePoint = function (x,y){
@@ -277,7 +277,7 @@ function Text(text,size,rotate){
   this.setPosition = function (x,y,rotate){
     this.x = x;
     this.y = y;
-    this.rotate = rotate;
+    this.rotate = rotate || this.rotate;
   }
 
   this.setText = function (text){
