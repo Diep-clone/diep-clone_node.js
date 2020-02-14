@@ -223,7 +223,9 @@ function System(name){ // 게임의 전체 진행 담당
           if (tankType != objO.tankType){
             objO.changeTank(this.tankList[obj.type]);
           }
-          objO.setRotate(obj.rotate);
+          if (obj !== this.controlTank){
+            objO.setRotate(obj.rotate);
+          }
         }
         else{
           if (obj.isDead) continue;
@@ -324,7 +326,7 @@ function System(name){ // 게임의 전체 진행 담당
     }
   });
 
-  this.showTankStat = this.createUiObject(new Text("",20,Math.PI/8));
+  this.showTankStat = this.createUiObject(new Text("",20,-Math.PI/8));
   this.showTankStats = this.createUiObject(new Text("",15,0,"left"));
 
   this.showTankLevel = this.createUiObject(new Text("",20));
