@@ -215,8 +215,10 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('stat', (num) => {
-    if (currentPlayer.controlObject.stats[num]<currentPlayer.controlObject.maxStats[num])
+    if (currentPlayer.controlObject.stat>0 && currentPlayer.controlObject.stats[num]<currentPlayer.controlObject.maxStats[num]){
       currentPlayer.controlObject.stats[num]++;
+      currentPlayer.controlObject.stat--;
+    }
   });
 
   socket.on('disconnect', () => { // 연결 끊김
