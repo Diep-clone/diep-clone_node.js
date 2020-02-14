@@ -1,6 +1,6 @@
 {
   "name": "diep.io-tankMaker",
-  "version": "1.0.0",
+  "version": "0.8.5-beta",
   "description": "Copyright © 2019-2020\r # diep.io-tankMaker\r ## Description ℹ️\r This repo is Diep.io's Clone Version.",
   "main": "app.js",
   "scripts": {
