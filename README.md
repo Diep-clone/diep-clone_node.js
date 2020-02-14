@@ -1,5 +1,5 @@
 Copyright © 2019-2020
-# diep.io-copy
+# diep.io-clone
 ## Description ℹ️
 This repo is Diep.io's Clone Version.
 
