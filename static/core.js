@@ -223,7 +223,7 @@ function System(name){ // 게임의 전체 진행 담당
           if (tankType != objO.tankType){
             objO.changeTank(this.tankList[obj.type]);
           }
-          if (obj !== this.controlTank){
+          if (objO !== this.controlTank){
             objO.setRotate(obj.rotate);
           }
         }
