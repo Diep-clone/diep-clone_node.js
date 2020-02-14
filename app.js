@@ -42,7 +42,7 @@ let tankLength = 53; // 탱크의 목록 길이.
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/static/index.html');
 })
 
 const rl = readline.createInterface({
