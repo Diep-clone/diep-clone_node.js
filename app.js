@@ -95,8 +95,12 @@ io.on('connection', (socket) => { // 접속.
     if (sockets[socket.id]){
       console.log('넌 뭐야 저리가!!!');
       return false;
-    }
+    } 
     else{
+      if (name.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g,"$&$1$2").length > 15) {
+        name = '';
+        console.log('앗 무지개 방패로 이름 공격을 막았어요 :)');
+      }
       console.log('누군가가 들어왔다!!!');
       //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
       sockets[socket.id] = socket;
