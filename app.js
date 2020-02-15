@@ -95,7 +95,7 @@ io.on('connection', (socket) => { // 접속.
     if (sockets[socket.id]){
       console.log('넌 뭐야 저리가!!!');
       return false;
-    } 
+    }
     else{
       if (name.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g,"$&$1$2").length > 15) {
         name = '';
@@ -107,7 +107,7 @@ io.on('connection', (socket) => { // 접속.
 
       let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 51, // 오브젝트의 종류값.
+        type: 12, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: -1, // 오브젝트의 팀값.
@@ -197,8 +197,10 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('rightMouse', (data) => {
-    if (!currentPlayer.mouse.right && data) currentPlayer.controlObject.event.rightDownEvent();
-    if (currentPlayer.mouse.right && !data) currentPlayer.controlObject.event.rightUpEvent();
+    if (currentPlayer.controlObject && currentPlayer.controlObject.event){
+      if (!currentPlayer.mouse.right && data) currentPlayer.controlObject.event.rightDownEvent();
+      if (currentPlayer.mouse.right && !data) currentPlayer.controlObject.event.rightUpEvent();
+    }
     currentPlayer.mouse.right = data;
   });
 

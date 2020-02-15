@@ -415,12 +415,18 @@ function System(name){ // 게임의 전체 진행 담당
     let camera = this.drawObject.camera;
 
     if (this.controlTank) {
+      let targetX = this.input.target.x/camera.z+camera.x;
+      let targetY = this.input.target.y/camera.z+camera.y;
+      if (this.input.autoC){
+        targetX = Math.cos(this.controlTank.rotate+0.02)*200+this.controlTank.x;
+        targetY = Math.sin(this.controlTank.rotate+0.02)*200+this.controlTank.y;
+      }
       if (this.isControlRotate){
-        this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y,this.input.target.x/camera.z+camera.x-this.controlTank.x));
+        this.controlTank.setRotate(Math.atan2(targetY-this.controlTank.y,targetX-this.controlTank.x));
       }
       socket.emit('mousemove',{
-        x:this.input.target.x/camera.z+camera.x,
-        y:this.input.target.y/camera.z+camera.y
+        x:targetX,
+        y:targetY
       });
     }
 
