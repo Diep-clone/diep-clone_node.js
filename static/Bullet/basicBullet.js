@@ -27,6 +27,9 @@ function BasicBullet(){
   this.hit = function(){
 
   }
+  this.gunAnime = function(gun){
+    
+  }
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);
     let yy = ((this.y - this.dy - camera.y) * camera.z) - Math.floor((this.y - this.dy - camera.y) * camera.z);

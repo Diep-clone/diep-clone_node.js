@@ -152,12 +152,13 @@ function System(name){ // 게임의 전체 진행 담당
   this.stat;
   this.stats;
   this.maxStats;
+  this.ping;
 
   socket.emit('login', name);
 
   socket.on('pong!', function(data) {
-    console.log('Received Pong: ', Date.now()-data);
-  });
+    this.ping = Date.now()-data;
+  }.bind(this));
 
   socket.on('spawn',(data) => {
     this.controlTank = this.createObject(data.id,this.tankList[data.type]);
@@ -169,6 +170,7 @@ function System(name){ // 게임의 전체 진행 담당
       z:2,
       uiz:1
     };
+    console.log(this);
   });
 
   socket.on('playerSet',(data)=>{
@@ -179,28 +181,6 @@ function System(name){ // 게임의 전체 진행 담당
     this.stat = data.stat;
     this.stats = data.stats;
     this.maxStats = data.maxStats;
-  });
-
-  /*
-    - tank -
-      pos
-      radius
-      rotate
-      health
-      maxHealth
-      name
-  */
-  socket.on('objectSpawn', (data) => {
-    switch(data.objType){
-      case "tank":
-      break;
-      case "bullet":
-      break;
-      case "shape":
-      break;
-      default:
-      break;
-    }
   });
 
   socket.on('objectList', (objectList) => {
@@ -326,12 +306,33 @@ function System(name){ // 게임의 전체 진행 담당
     }
   });
 
+  socket.on('shot', (type,id,gun) => {
+    switch(type){
+      case "tank":
+      case "shape":
+        if (this.objectList.obj[id]){
+          this.objectList.obj[id].gunAnime(gun);
+        }
+      break;
+      case "bullet":
+      case "drone":
+        if (this.objectList.bul[id]){
+          this.objectList.bul[id].gunAnime(gun);
+        }
+      break;
+      default:
+      break;
+    }
+  });
+
   this.showTankStat = this.createUiObject(new Text("",20,-Math.PI/8));
   this.showTankStats = this.createUiObject(new Text("",15,0,"left"));
 
   this.showTankLevel = this.createUiObject(new Text("",20));
   this.showTankScore = this.createUiObject(new Text("",20));
   this.showTankName = this.createUiObject(new Text("",20));
+
+  this.showPing = this.createUiObject(new Text("",20,0,"right"));
 
   this.showUpgradeTank = [
     this.createUiObject(new Button()),
@@ -362,7 +363,11 @@ function System(name){ // 게임의 전체 진행 담당
       this.showTankScore.setText(this.controlTank.score);
       this.showTankName.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
       this.showTankName.setText(this.controlTank.name);
+
+      this.showPing.setPosition(whz[0]-50*whz[2],whz[1]-50 * whz[2],0);
+      this.showPing.setText(this.ping);
     }
+
 /*
     this.showUpgradeTank[0].setPosition(43.3*whz[2],62.3*whz[2],122.8*whz[2],141.8*whz[2]);
     this.showUpgradeTank[0].setColor(new RGB(166,248,244));

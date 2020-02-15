@@ -103,7 +103,7 @@ io.on('connection', (socket) => { // 접속.
 
       let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 45, // 오브젝트의 종류값.
+        type: 30, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: -1, // 오브젝트의 팀값.
@@ -122,7 +122,7 @@ io.on('connection', (socket) => { // 접속.
         damage: function (){return 20 + obj.stats[2] * 4;}, // 20+bodyDamageStat*4
         radius: function (){return 13*Math.pow(1.01,(obj.level-1));}, // 12.9*1.01^(level-1)
         rotate: 0, // 오브젝트의 방향값.
-        bound: 0, // 오브젝트의 반동값.
+        bound: 1, // 오브젝트의 반동값.
         invTime: -1, // 오브젝트의 은신에 걸리는 시간.
         opacity: 1, // 오브젝트의 투명도값.
         name: name, // 오브젝트의 이름값.
@@ -324,7 +324,7 @@ function tickObject(obj){
   }
   if (obj.isDead) return;
   if (obj.guns){
-    bulletUtil.gunSet(objects,obj,objID);
+    bulletUtil.gunSet(objects,obj,objID,io);
   }
   if (obj.moveAi){
     obj.moveAi(obj);
@@ -403,6 +403,7 @@ function moveloop(){
         }
         o.deadTime=1000;
         for (let i=0;i<o.guns.length;i++){
+          if (!o.guns[i]) continue;
           for (let j=0;j<o.guns[i].bullets.length;j++){
             o.guns[i].bullets[j].isDead = true;
           }
