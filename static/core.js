@@ -416,7 +416,7 @@ function System(name){ // 게임의 전체 진행 담당
 
     if (this.controlTank) {
       if (this.isControlRotate){
-        this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y-this.controlTank.dy,this.input.target.x/camera.z+camera.x-this.controlTank.x-this.controlTank.dx));
+        this.controlTank.setRotate(Math.atan2(this.input.target.y/camera.z+camera.y-this.controlTank.y,this.input.target.x/camera.z+camera.x-this.controlTank.x));
       }
       socket.emit('mousemove',{
         x:this.input.target.x/camera.z+camera.x,
