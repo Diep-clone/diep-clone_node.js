@@ -1,7 +1,9 @@
-function Minion(){
+function Minion(radius,rotate){
   "use strict";
 
   DynamicObject.apply(this, arguments);
+  this.radius = radius;
+  this.rotate = rotate;
   this.guns = [new Gun([[0,0],[0.5,0],[0.5,1.7],[-0.5,1.7],[-0.5, 0]],0)];
   this.color = new RGB(0,176,225);
   this.isDead = false;
@@ -60,6 +62,9 @@ function Minion(){
   }
   this.hit = function(){
     this.hitTime=0.1;
+  }
+  this.gunAnime = function(gun){
+    if (gun<this.guns.length) this.guns[gun].shot();
   }
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);

@@ -1,7 +1,9 @@
-function TrapBullet(){
+function TrapBullet(radius,rotate){
   "use strict";
 
   DynamicObject.apply(this, arguments);
+  this.radius = radius;
+  this.rotate = rotate;
   this.color = new RGB(0,176,225);
   this.isDead = false;
   this.canvas = document.createElement("canvas");

@@ -1,7 +1,9 @@
-function BasicBullet(){
+function BasicBullet(radius,rotate){
   "use strict";
 
   DynamicObject.apply(this, arguments);
+  this.radius = radius;
+  this.rotate = rotate;
   this.color = new RGB(0,176,225);
   this.isDead = false;
   this.canvas = document.createElement("canvas");
@@ -28,7 +30,7 @@ function BasicBullet(){
 
   }
   this.gunAnime = function(gun){
-    
+
   }
   this.setCanvasSize = function(camera){
     let xx = ((this.x - this.dx - camera.x) * camera.z) - Math.floor((this.x - this.dx - camera.x) * camera.z);

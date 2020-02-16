@@ -64,7 +64,9 @@ function System(name){ // 게임의 전체 진행 담당
     TrapBullet,
     BasicBullet,
     DroneBullet,
-    Minion
+    Minion,
+    SkimmerBullet,
+    RocketeerBullet
   ]
 
   this.shapeList = [
@@ -123,8 +125,8 @@ function System(name){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.createBulletObject = function (id,type){
-    let obj = new type();
+  this.createBulletObject = function (id,type,radius,rotate){
+    let obj = new type(radius,rotate);
     this.objectList.bul[id]=obj;
     this.objectList.bul[id].setId(id);
     return obj;
@@ -170,7 +172,6 @@ function System(name){ // 게임의 전체 진행 담당
       z:2,
       uiz:1
     };
-    console.log(this);
   });
 
   socket.on('playerSet',(data)=>{
@@ -232,7 +233,7 @@ function System(name){ // 게임의 전체 진행 담당
         }
         else{
           if (obj.isDead) continue;
-          let objO = this.createBulletObject(obj.id,this.bulletList[obj.type],obj.owner);
+          let objO = this.createBulletObject(obj.id,this.bulletList[obj.type],obj.radius,obj.rotate);
           objO.setPosition(obj.x,obj.y);
           objO.setRadius(obj.radius);
           objO.setRotate(obj.rotate);

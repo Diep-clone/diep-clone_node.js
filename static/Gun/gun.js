@@ -9,9 +9,10 @@ function Gun(paths,dir){
 
   this.animate = function () {
     for (let i=0;i<this.list.length;i++){
-      if (this.list[i]<=0.6){
+      if (this.list[i]<1){
         this.backGun+=this.list[i];
-        this.list[i]+=0.1;
+        console.log(this.list[i]);
+        this.list[i]+=0.2;
       }
       else this.list.splice(i,1);
     }
@@ -72,6 +73,6 @@ function Gun(paths,dir){
   }
 
   this.shot = function (){
-    this.list.push(-0.6);
+    this.list.push(-0.9);
   }
 }
