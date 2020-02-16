@@ -11,7 +11,6 @@ function Gun(paths,dir){
     for (let i=0;i<this.list.length;i++){
       if (this.list[i]<1){
         this.backGun+=this.list[i];
-        console.log(this.list[i]);
         this.list[i]+=0.2;
       }
       else this.list.splice(i,1);

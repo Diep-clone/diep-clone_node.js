@@ -1,4 +1,4 @@
-function Square(radius,rotate){
+function Pentagon(radius,rotate){
   "use strict";
 
   HealthShowObject.apply(this, arguments);
@@ -80,11 +80,12 @@ function Square(radius,rotate){
       ctx.lineJoin = "round";
       ctx.globalAlpha = 1;
       ctx.beginPath();
-      ctx.moveTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 4) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 4) * this.radius * 1.5)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 4 * 3) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 4 * 3) * this.radius * 1.5)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate - Math.PI / 4 * 3) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate - Math.PI / 4 * 3) * this.radius * 1.5)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate - Math.PI / 4) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate - Math.PI / 4) * this.radius * 1.5)) * camera.z);
-      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 4) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 4) * this.radius * 1.5)) * camera.z);
+      ctx.moveTo((this.x - camera.x + (Math.cos(this.imRotate) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate) * this.radius * 1.5)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 5 * 2) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 5 * 2) * this.radius * 1.5)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate + Math.PI / 5 * 4) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate + Math.PI / 5 * 4) * this.radius * 1.5)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate - Math.PI / 5 * 4) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate - Math.PI / 5 * 4) * this.radius * 1.5)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate - Math.PI / 5 * 2) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate - Math.PI / 5 * 2) * this.radius * 1.5)) * camera.z);
+      ctx.lineTo((this.x - camera.x + (Math.cos(this.imRotate) * this.radius * 1.5)) * camera.z,(this.y - camera.y + (Math.sin(this.imRotate) * this.radius * 1.5)) * camera.z);
       ctx.fill();
       ctx.stroke();
       ctx.closePath();
@@ -96,11 +97,12 @@ function Square(radius,rotate){
       this.ctx.strokeStyle = this.color.getDarkRGB().getRedRGB(this.r).getLightRGB(this.w).getRGBValue(); // 몸체 그리기
       this.ctx.fillStyle = this.color.getRedRGB(this.r).getLightRGB(this.w).getRGBValue();
       this.ctx.beginPath();
-      this.ctx.moveTo(this.canvasPos.x + (Math.cos(this.imRotate + Math.PI / 4) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate + Math.PI / 4) * this.radius * 1.5) * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate + Math.PI / 4 * 3) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate + Math.PI / 4 * 3) * this.radius * 1.5) * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate - Math.PI / 4 * 3) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate - Math.PI / 4 * 3) * this.radius * 1.5) * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate - Math.PI / 4) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate - Math.PI / 4) * this.radius * 1.5) * camera.z);
-      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate + Math.PI / 4) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate + Math.PI / 4) * this.radius * 1.5) * camera.z);
+      this.ctx.moveTo(this.canvasPos.x + (Math.cos(this.imRotate) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate) * this.radius * 1.5) * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate + Math.PI / 5 * 2) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate + Math.PI / 5 * 2) * this.radius * 1.5) * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate + Math.PI / 5 * 4) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate + Math.PI / 5 * 4) * this.radius * 1.5) * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate - Math.PI / 5 * 4) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate - Math.PI / 5 * 4) * this.radius * 1.5) * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate - Math.PI / 5 * 2) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate - Math.PI / 5 * 2) * this.radius * 1.5) * camera.z);
+      this.ctx.lineTo(this.canvasPos.x + (Math.cos(this.imRotate) * this.radius * 1.5) * camera.z,this.canvasPos.y + (Math.sin(this.imRotate) * this.radius * 1.5) * camera.z);
       this.ctx.fill();
       this.ctx.stroke();
       this.ctx.closePath();
@@ -112,5 +114,5 @@ function Square(radius,rotate){
     }
   }
 }
-Square.prototype = new HealthShowObject();
-Square.prototype.constructor = Square;
+Pentagon.prototype = new HealthShowObject();
+Pentagon.prototype.constructor = Pentagon;
