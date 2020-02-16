@@ -267,9 +267,9 @@ function System(name){ // 게임의 전체 진행 담당
           objO.setHealth(obj.health,obj.maxHealth);
           let colorList = [
             new RGB(255,232,105),
-            new RGB(255,232,105),
-            new RGB(255,232,105),
-            new RGB(255,232,105),
+            new RGB(252,118,118),
+            new RGB(118,140,252),
+            new RGB(118,140,252),
             new RGB(255,232,105),
             new RGB(255,232,105)
           ];
