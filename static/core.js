@@ -33,7 +33,7 @@ function System(name){ // 게임의 전체 진행 담당
     Hybrid,////
     Manager,////
     MotherShip,////
-    Predator,///
+    Predator,////
     Sprayer,////
     Trapper,////
     GunnerTrapper,////
@@ -48,16 +48,16 @@ function System(name){ // 게임의 전체 진행 담당
     SpreadShot,////
     Streamliner,////
     AutoTrapper,///
-    BasicDominator,///
-    GunnerDominator,///
-    TrapperDominator,///
+    BasicDominator,////
+    GunnerDominator,////
+    TrapperDominator,////
     BattleShip,////
     Annihilator,////
     AutoSmasher,///
     Spike,////
     Factory,////
-    Skimmer,///
-    Rocketeer///
+    Skimmer,////
+    Rocketeer////
   ];
 
   this.bulletList = [
