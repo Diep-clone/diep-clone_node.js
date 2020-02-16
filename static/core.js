@@ -220,26 +220,6 @@ function System(name){ // 게임의 전체 진행 담당
         }
         break;
         case "bullet":
-        if (this.objectList.bul[obj.id]){
-          let objO = this.objectList.bul[obj.id];
-          objO.setDead(obj.isDead);
-          if (!obj.isDead){
-            objO.setRadius(obj.radius);
-          }
-          objO.setPosition(obj.x,obj.y);
-          objO.setRotate(obj.rotate);
-        }
-        else{
-          if (obj.isDead) continue;
-          let objO = this.createBulletObject(obj.id,this.bulletList[obj.type],obj.owner);
-          objO.setPosition(obj.x,obj.y);
-          objO.setRadius(obj.radius);
-          objO.setRotate(obj.rotate);
-          if (obj.owner !== this.controlTank.id){
-            objO.setColor(new RGB(241,78,84));
-          }
-        }
-        break;
         case "drone":
         if (this.objectList.bul[obj.id]){
           let objO = this.objectList.bul[obj.id];
