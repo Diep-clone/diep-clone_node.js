@@ -123,8 +123,8 @@ function System(name){ // 게임의 전체 진행 담당
 
   this.drawObject = new DrawObject();
 
-  this.createObject = function (id,type){
-    let obj = new type();
+  this.createObject = function (id,type,radius,rotate){
+    let obj = new type(radius,rotate);
     this.objectList.obj[id]=obj;
     this.objectList.obj[id].setId(id);
     return obj;
@@ -215,7 +215,7 @@ function System(name){ // 게임의 전체 진행 담당
         }
         else{
           if (obj.isDead) continue;
-          let objO = this.createObject(obj.id,this.tankList[obj.type]);
+          let objO = this.createObject(obj.id,this.tankList[obj.type],obj.radius,obj.rotate);
           objO.setPosition(obj.x,obj.y);
           objO.setName(obj.name);
           objO.setScore(obj.score);
@@ -260,7 +260,7 @@ function System(name){ // 게임의 전체 진행 담당
         }
         else{
           if (obj.isDead) continue;
-          let objO = this.createObject(obj.id,this.shapeList[obj.type]);
+          let objO = this.createObject(obj.id,this.shapeList[obj.type],obj.radius,obj.rotate);
           objO.setPosition(obj.x,obj.y);
           objO.setRadius(obj.radius);
           objO.setRotate(obj.rotate);

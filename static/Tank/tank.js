@@ -1,7 +1,9 @@
-function Tank(){
+function Tank(radius,rotate){
   "use strict";
 
   HealthShowObject.apply(this, arguments);
+  this.radius = radius || 13;
+  this.rotate = rotate || 0;
   this.tankType = null;
   this.guns = [];
   this.afterGuns = [];

@@ -1,7 +1,9 @@
-function Triangle(){
+function Triangle(radius,rotate){
   "use strict";
 
   HealthShowObject.apply(this, arguments);
+  this.radius = radius;
+  this.rotate = rotate;
   this.color = new RGB(255,232,105);
   this.isDead = false;
   this.canvas = document.createElement("canvas");
