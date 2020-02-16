@@ -35,6 +35,7 @@ function TrapBullet(){
       }
     }
     this.r= Math.max(this.r - 0.2 * tick * 0.05,0);
+    this.imRotate = this.rotate;
   }
   this.setColor = function (color){
     this.color = color;
