@@ -366,7 +366,7 @@ function System(name){ // 게임의 전체 진행 담당
       if (this.drawObject.mapSize)
       {
         this.showMiniMap.setPosition(whz[0] - 21*whz[2],whz[1] - 21*whz[2]);
-        this.showMiniMap.setPointPosition((this.controlTank.x+this.mapSize.x)/2/this.mapSize.x,(this.controlTank.y+this.mapSize.y)/2/this.mapSize.y,this.controlTank.rotate);
+        this.showMiniMap.setPointPosition((this.controlTank.x+this.drawObject.mapSize.x)/2/this.drawObject.mapSize.x,(this.controlTank.y+this.drawObject.mapSize.y)/2/this.drawObject.mapSize.y,this.controlTank.rotate);
       }
     }
 
