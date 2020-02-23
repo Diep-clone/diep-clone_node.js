@@ -331,7 +331,7 @@ function MiniMap(){
     this.x = x;
     this.y = y;
   };
-  
+
   this.setPointPosition = function (x,y,rotate){
     this.pointX = x*this.miniMapSize+this.border;
     this.pointY = y*this.miniMapSize+this.border;
@@ -339,7 +339,6 @@ function MiniMap(){
   };
 
   this.draw = function (ctx,z){
-    
     this.canvasSize.x = (this.miniMapSize + this.border * 2) * z;
     this.canvasSize.y = (this.miniMapSize + this.border * 2) * z;
     this.canvas.width = this.canvasSize.x;
@@ -357,23 +356,22 @@ function MiniMap(){
     this.ctx.stroke();
     this.ctx.fillStyle = '#000000';
     this.ctx.beginPath();
-    for(var i=0;i<this.point.length;i++)
-    {
+    for(var i=0;i<this.point.length;i++){
       if(i==0)
-      {
         this.ctx.moveTo((this.pointX+this.point[i][0]*Math.cos(this.pointRotate+this.point[i][1]))*z,(this.pointY+this.point[i][0]*Math.sin(this.pointRotate+this.point[i][1]))*z);
-      }
       else
-      {
         this.ctx.lineTo((this.pointX+this.point[i][0]*Math.cos(this.pointRotate+this.point[i][1]))*z,(this.pointY+this.point[i][0]*Math.sin(this.pointRotate+this.point[i][1]))*z);
-      }
     }
     this.ctx.lineTo((this.pointX+this.point[0][0]*Math.cos(this.pointRotate+this.point[0][1]))*z,(this.pointY+this.point[0][0]*Math.sin(this.pointRotate+this.point[0][1]))*z);
     this.ctx.fill();
-    
+
     ctx.save();
     ctx.globalAlpha = this.opacity;
     ctx.drawImage(this.canvas,this.x - this.miniMapSize  * z,this.y - this.miniMapSize  * z);
     ctx.restore();
+  };
+
+  this.inMousePoint = function (x,y){
+    return false;
   };
 }
