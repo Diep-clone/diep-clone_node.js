@@ -305,7 +305,7 @@ function Text(text,size,rotate,align){
 }
 
 function MiniMap(){
-  "use strict"; 
+  "use strict";
 
   this.x;
   this.y;
@@ -339,7 +339,7 @@ function MiniMap(){
   };
 
   this.draw = function (ctx,z){
-    
+
     this.canvasSize.x = (this.miniMapSize + this.border * 2) * z;
     this.canvasSize.y = (this.miniMapSize + this.border * 2) * z;
     this.canvas.width = this.canvasSize.x;
@@ -354,9 +354,11 @@ function MiniMap(){
     this.ctx.beginPath();
     this.ctx.rect(4 * z,4 * z,this.miniMapSize * z,this.miniMapSize * z);
     this.ctx.fill();
-    
+
+    this.ctx.save();
+
     this.ctx.clip();
-    
+
     this.ctx.fillStyle = '#000000';
     this.ctx.beginPath();
     for(var i=0;i<this.point.length;i++){
@@ -367,7 +369,9 @@ function MiniMap(){
     }
     this.ctx.lineTo((this.pointX+this.point[0][0]*Math.cos(this.pointRotate+this.point[0][1]))*z,(this.pointY+this.point[0][0]*Math.sin(this.pointRotate+this.point[0][1]))*z);
     this.ctx.fill();
-    
+
+    this.ctx.restore();
+
     this.ctx.beginPath();
     this.ctx.rect(4 * z,4 * z,this.miniMapSize * z,this.miniMapSize * z);
     this.ctx.stroke();
