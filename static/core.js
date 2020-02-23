@@ -160,7 +160,6 @@ function System(name){ // 게임의 전체 진행 담당
   this.stats;
   this.maxStats;
   this.ping;
-  this.mapSize;
 
   socket.emit('login', name);
 
@@ -320,11 +319,6 @@ function System(name){ // 게임의 전체 진행 담당
       break;
     }
   });
-  
-  socket.on('mapSize',(size)=>
-  {
-   this.mapSize=size; 
-  });
 
   this.showTankStat = this.createUiObject(new Text("",20,-Math.PI/8));
   this.showTankStats = this.createUiObject(new Text("",15,0,"left"));
@@ -368,8 +362,8 @@ function System(name){ // 게임의 전체 진행 담당
 
       this.showPing.setPosition(whz[0]-50*whz[2],whz[1]-50 * whz[2],0);
       this.showPing.setText(this.ping);
-      
-      if(this.mapSize!==undefined)
+
+      if (this.drawObject.mapSize)
       {
         this.showMiniMap.setPosition(whz[0] - 21*whz[2],whz[1] - 21*whz[2]);
         this.showMiniMap.setPointPosition((this.controlTank.x+this.mapSize.x)/2/this.mapSize.x,(this.controlTank.y+this.mapSize.y)/2/this.mapSize.y,this.controlTank.rotate);
