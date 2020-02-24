@@ -328,7 +328,7 @@ function System(name){ // 게임의 전체 진행 담당
   this.showTankScore = this.createUiObject(new Text("",20));
   this.showTankName = this.createUiObject(new Text("",20));
 
-  this.showPing = this.createUiObject(new Text("",12.5,0,"right"));
+  this.showPing = this.createUiObject(new Text("",12.5,0,"right",false));
 
   this.showMiniMap = this.createUiObject(new MiniMap());
 
