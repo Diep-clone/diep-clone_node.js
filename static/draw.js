@@ -399,3 +399,51 @@ function MiniMap(){
     return false;
   };
 }
+
+function ScoreBoard()
+{
+  this.x;
+  this.y;
+  
+  this.width=167;
+  
+  this.scoreBoardTitle=new Text("Scoreboard",20);
+  this.scoreBoardBar=[];
+  this.scoreBoardText=[];
+  this.scoreBoardList=[];
+  
+  for(let i=0;i<10;i++)
+  {
+    this.scoreBoardBar[i]=new Bar(new RGB(66,255,145),33);
+    this.scoreBoardText[i]=new Text("",13);
+  }
+  
+  this.setPosition = function (x,y,z,a){
+    this.x = x;
+    this.y = y;
+    
+    this.scoreBoardList=a;
+    
+    this.scoreBoardTitle.setPosition(x,y);
+    
+    for(var i=0;i<this.scoreBoardList.length;i++)
+    {
+      this.scoreBoardBar[i].setPosition(x-this.width/2*z,x+this.width/2*z,y+(5+20*i)*z,this.scoreBoardList[i].score/this.scoreBoardList[0].score);
+      this.scoreBoardText[i].setText(this.scoreBoardList[i].name+' - '+String(this.scoreBoardList[i].score));
+      this.scoreBoardText[i].setPosition(x,y+(25+20*i)*z);
+    }
+  }
+
+  this.draw = function (ctx,z){
+    this.scoreBoardTitle.draw(ctx,z);
+    for(var i=0;i<this.scoreBoardList.length;i++)
+    {
+      this.scoreBoardBar[i].draw(ctx,z);
+      this.scoreBoardText[i].draw(ctx,z);
+    }
+  };
+
+  this.inMousePoint = function (x,y){
+    return false;
+  };
+}
