@@ -269,6 +269,7 @@ function Text(text,size,rotate,align){
   this.y;
   this.align = align || "center";
   this.rotate = rotate || 0;
+  this.enable = true;
 
   this.inMousePoint = function (x,y){
     return false;
@@ -280,6 +281,10 @@ function Text(text,size,rotate,align){
     this.rotate = rotate || this.rotate;
   }
 
+  this.setEnable = function (b){
+    this.enable = b;
+  }
+
   this.setText = function (text){
     this.text = text;
   }
@@ -289,18 +294,20 @@ function Text(text,size,rotate,align){
   }
 
   this.draw = function (ctx,z){
-    ctx.save();
-    ctx.fillStyle = "#ffffff";
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 5 * z;
-    ctx.translate(this.x,this.y);
-    ctx.rotate(this.rotate);
-    ctx.textAlign = this.align;
-    ctx.font = "bold " + this.size * z + "px Ubuntu";
+    if (this.enable){
+      ctx.save();
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 5 * z;
+      ctx.translate(this.x,this.y);
+      ctx.rotate(this.rotate);
+      ctx.textAlign = this.align;
+      ctx.font = "bold " + this.size * z + "px Ubuntu";
 
-    ctx.strokeText(this.text,0,0);
-    ctx.fillText(this.text,0,0);
-    ctx.restore();
+      ctx.strokeText(this.text,0,0);
+      ctx.fillText(this.text,0,0);
+      ctx.restore();
+    }
   }
 }
 
@@ -332,7 +339,7 @@ function MiniMap(){
     this.pointY = y*this.miniMapSize+this.border;
     this.pointRotate = rotate;
   };
-  
+
   this.drawPoint=function(ctx,i,z,start)
   {
     var x=this.x + (this.pointX+this.point[i][0]*Math.cos(this.pointRotate+this.point[i][1]) - this.miniMapSize)*z;
