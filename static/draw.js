@@ -223,16 +223,16 @@ function Button(text){
   }
 }
 
-function Bar(){
+function Bar(c,radius){
   "use strict";
 
   this.x1;
   this.x2;
   this.y;
   this.percent;
-  this.radius;
+  this.radius=radius;
 
-  this.color = new RGB(0,0,0);
+  this.color = c||new RGB(0,0,0);
 
   this.setPosition = function (x1,x2,y,p){
     this.x1 = x1;
@@ -244,19 +244,34 @@ function Bar(){
   this.setRadius = function (r){
     this.radius = r;
   }
+  
+  this.setColor = function (c)
+  {
+    this.color = c;
+  };
 
   this.inMousePoint = function (x,y){
     return false;
   }
 
   this.draw = function (ctx,z){
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     ctx.beginPath();
-    ctx.fillStyle = this.color.getRGBValue();
-    ctx.strokeStyle = "#000000";
-
-    ctx.fill();
-    ctx.stroke();
+    ctx.moveTo(this.x1,this.y+this.radius/2*z);
+    ctx.lineTo(this.x2,this.y+this.radius/2*z);
     ctx.closePath();
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth=this.radius/2*z;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(this.x1,this.y+this.radius/2*z);
+    ctx.lineTo(this.x1 + (this.x2 - this.x1) * this.percent,this.y+this.radius/2*z);
+    ctx.closePath();
+    ctx.lineWidth=this.radius/2.7*z;
+    ctx.strokeStyle = this.color.getRGBValue();
+    ctx.stroke();
   }
 }
 
@@ -298,11 +313,13 @@ function Text(text,size,rotate,align,enable){
       ctx.save();
       ctx.fillStyle = "#ffffff";
       ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 5 * z;
+      ctx.lineWidth = this.size * 0.2 * z;
       ctx.translate(this.x,this.y);
       ctx.rotate(this.rotate);
       ctx.textAlign = this.align;
-      ctx.font = "bold " + this.size * z + "px Ubuntu";
+      ctx.lineCap = "butt";
+      ctx.lineJoin = "miter";
+      ctx.font = this.size * z + "px Ubuntu";
 
       ctx.strokeText(this.text,0,0);
       ctx.fillText(this.text,0,0);

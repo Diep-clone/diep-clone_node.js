@@ -216,7 +216,7 @@ function Basic(){
   this.guns=[
     new Gun([[0,0],[0.42,0],[0.42,1.88],[-0.42,1.88],[-0.42, 0]],0)
   ];
-  this.tankType = "Basic";
+  this.tankType = "Tank";
 }
 Basic.prototype = new Tank();
 Basic.prototype.constructor = Basic;

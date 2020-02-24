@@ -88,6 +88,68 @@ function System(name){ // 게임의 전체 진행 담당
     new RGB(147,234,103),
     new RGB(103,233,233)
   ];
+  
+  this.expList = [
+    0,
+    4,
+    13,
+    28,
+    50,
+    78,
+    113,
+    157,
+    211,
+    275,
+    350,
+    437,
+    538,
+    655,
+    787,
+    938,
+    1109,
+    1301,
+    1516,
+    1757,
+    2026,
+    2325,
+    2658,
+    3026,
+    3433,
+    3883,
+    4379,
+    4925,
+    5525,
+    6184,
+    6907,
+    7698,
+    8537,
+    9426,
+    10368,
+    11367,
+    12426,
+    13549,
+    14739,
+    16000,
+    17337,
+    18754,
+    20256,
+    21849,
+    23536
+  ];
+  
+  this.number3comma=function(s)
+  {
+    var r=s.substr(s.length-3,3);
+    do
+    {
+      s=s.substr(0,s.length-3);
+      if(s.length>0)
+      {
+        r=s.substr(Math.max(s.length-3,0),3)+','+r;
+      }
+    }while(s.length>0);
+    return r;
+  }
 
   this.tick = 0;
   this.lastTime = Date.now();
@@ -161,6 +223,7 @@ function System(name){ // 게임의 전체 진행 담당
   this.stats;
   this.maxStats;
   this.ping;
+  this.scoreBoard=[];
 
   socket.emit('login', name);
 
@@ -321,12 +384,18 @@ function System(name){ // 게임의 전체 진행 담당
     }
   });
 
+  socket.on('scoreboardlist', (array) => {
+    this.scoreBoard=array;
+  });
+
   this.showTankStat = this.createUiObject(new Text("",20,-Math.PI/8));
   this.showTankStats = this.createUiObject(new Text("",15,0,"left"));
 
-  this.showTankLevel = this.createUiObject(new Text("",20));
-  this.showTankScore = this.createUiObject(new Text("",20));
-  this.showTankName = this.createUiObject(new Text("",20));
+  this.showTankLevelBar = this.createUiObject(new Bar(new RGB(255,225,78),40));
+  this.showTankLevel = this.createUiObject(new Text("",13));
+  this.showTankScoreBar = this.createUiObject(new Bar(new RGB(66,255,145),32));
+  this.showTankScore = this.createUiObject(new Text("",13));
+  this.showTankName = this.createUiObject(new Text("",33));
 
   this.showPing = this.createUiObject(new Text("",12.5,0,"right",false));
 
@@ -355,11 +424,22 @@ function System(name){ // 게임의 전체 진행 담당
         }
       }
       this.showTankStats.setText(tankStats);
-      this.showTankLevel.setPosition(whz[0]/2,whz[1]-100 * whz[2],0);
-      this.showTankLevel.setText(this.controlTank.level);
-      this.showTankScore.setPosition(whz[0]/2,whz[1]-75 * whz[2],0);
-      this.showTankScore.setText(this.controlTank.score);
-      this.showTankName.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
+      this.showTankLevelBar.setPosition((whz[0]-334 * whz[2])/2,(whz[0]+334 * whz[2])/2,whz[1] - 48 * whz[2],this.controlTank.score<this.expList[44]?(this.controlTank.score-this.expList[this.controlTank.level-1])/(this.expList[this.controlTank.level]-this.expList[this.controlTank.level-1]):1);
+      this.showTankLevel.setPosition(whz[0]/2,whz[1] - 24 * whz[2],0);
+      this.showTankLevel.setText("Lvl "+String(this.controlTank.level)+" "+this.controlTank.tankType);
+      let ScoreBarPercent=1;
+      if(this.scoreBoard.length>0)
+      {
+        ScoreBarPercent=this.controlTank.score/this.scoreBoard[0].score;
+      }
+      if(isNaN(ScoreBarPercent))
+      {
+        ScoreBarPercent=1;
+      }
+      this.showTankScoreBar.setPosition((whz[0]-250 * whz[2])/2,(whz[0]+250 * whz[2])/2,whz[1] - 64 * whz[2],ScoreBarPercent);
+      this.showTankScore.setPosition(whz[0]/2,whz[1]-44 * whz[2],0);
+      this.showTankScore.setText("Score: "+this.number3comma(String(this.controlTank.score)));
+      this.showTankName.setPosition(whz[0]/2,whz[1]-64 * whz[2],0);
       this.showTankName.setText(this.controlTank.name);
 
       this.showPing.setPosition(whz[0]-(21 + 5)*whz[2],whz[1] - (21 + 147 + 5) * whz[2],0);

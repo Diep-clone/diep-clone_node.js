@@ -426,6 +426,25 @@ function moveloop(){
 }
 
 function sendUpdates(){
+  var ScoreBoardList=objects.map(function(f)
+  {
+    switch (f.objType){
+      case "tank":
+      if(!f.isDead)
+      {
+        return {
+          type:f.type,
+          score:f.exp,
+          name:f.name,
+          isDead:f.isDead
+        };
+      }
+      default:
+    }
+  }).filter(function(f) { return f; }).sort(function(a,b)
+  {
+      return Math.sign(b.score-a.score);
+  }).slice(0,10);
   users.forEach((u) => {
     let visibleObject  = objects
             .map(function(f) {
@@ -491,6 +510,7 @@ function sendUpdates(){
       stats:u.controlObject.stats,
       maxStats:u.controlObject.maxStats
     });
+    sockets[u.id].emit('scoreboardlist',ScoreBoardList);
   });
 }
 
