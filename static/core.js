@@ -327,7 +327,13 @@ function System(name){ // 게임의 전체 진행 담당
   this.showTankScore = this.createUiObject(new Text("",20));
   this.showTankName = this.createUiObject(new Text("",20));
 
-  this.showPing = this.createUiObject(new Text("",20,0,"right"));
+  this.showPing = this.createUiObject(new Text("",12.5,0,"right"));
+  this.showPingEnable=false;
+  this.pingEnable=function(b)
+  {
+    this.showPingEnable=b;
+  };
+  
   this.showMiniMap = this.createUiObject(new MiniMap());
 
   this.showUpgradeTank = [
@@ -359,9 +365,16 @@ function System(name){ // 게임의 전체 진행 담당
       this.showTankScore.setText(this.controlTank.score);
       this.showTankName.setPosition(whz[0]/2,whz[1]-50 * whz[2],0);
       this.showTankName.setText(this.controlTank.name);
-
-      this.showPing.setPosition(whz[0]-50*whz[2],whz[1]-50 * whz[2],0);
-      this.showPing.setText(this.ping);
+      
+      if(this.showPingEnable)
+      {
+        this.showPing.setPosition(whz[0]-(21 + 5)*whz[2],whz[1] - (21 + 147 + 5) * whz[2],0);
+        this.showPing.setText(String(this.ping)+' ms heroku-newyork');
+      }
+      else
+      {
+        this.showPing.setText("");
+      }
 
       if (this.drawObject.mapSize)
       {
@@ -625,6 +638,9 @@ function System(name){ // 게임의 전체 진행 담당
           this.input.k = true;
         }
         break;
+        case 76:
+        this.pingEnable(true);
+        break;
         case 79: // O키
         if (!this.input.o){
           socket.emit('keyO',true);
@@ -732,6 +748,9 @@ function System(name){ // 게임의 전체 진행 담당
           socket.emit('keyK',false);
           this.input.k = false;
         }
+        break;
+        case 76:
+        this.pingEnable(false);
         break;
         case 79: // O키
         if (this.input.o){

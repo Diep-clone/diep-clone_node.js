@@ -136,7 +136,7 @@ function DrawObject(camera){ // 그리기 담당
       ui[i].draw(this.uiCtx,this.camera.uiz);
     }
 
-    this.ctx.globalAlpha = 0.82;
+    this.ctx.globalAlpha = 0.7;
     this.ctx.drawImage(this.uiCanvas,0,0);
   }
 
@@ -314,11 +314,6 @@ function MiniMap(){
   this.pointRotate;
   this.color = new RGB(205,205,205);
   this.borderColor = new RGB(87,87,87);
-  this.opacity = 0.87;
-  this.canvas = document.createElement("canvas");
-  this.ctx = this.canvas.getContext("2d");
-  this.canvasSize = {x:0,y:0};
-  this.canvasPos = {x:0,y:0};
   this.miniMapSize = 146;
   this.border = 4.5;
   this.point=[
@@ -337,49 +332,43 @@ function MiniMap(){
     this.pointY = y*this.miniMapSize+this.border;
     this.pointRotate = rotate;
   };
+  
+  this.drawPoint=function(ctx,i,z,start)
+  {
+    var x=this.x + (this.pointX+this.point[i][0]*Math.cos(this.pointRotate+this.point[i][1]) - this.miniMapSize)*z;
+    var y=this.y + (this.pointY+this.point[i][0]*Math.sin(this.pointRotate+this.point[i][1]) - this.miniMapSize)*z;
+    if(start)
+      ctx.moveTo(x,y);
+    else
+      ctx.lineTo(x,y);
+  }
 
   this.draw = function (ctx,z){
 
-    this.canvasSize.x = (this.miniMapSize + this.border * 2) * z;
-    this.canvasSize.y = (this.miniMapSize + this.border * 2) * z;
-    this.canvas.width = this.canvasSize.x;
-    this.canvas.height = this.canvasSize.y;
-    this.ctx.fillStyle = this.color.getRGBValue();
-    this.ctx.strokeStyle = this.borderColor.getRGBValue();
-    this.ctx.lineCap = "round";
-    this.ctx.lineJoin = "round";
-    this.ctx.lineWidth = this.border * z;
-    this.canvasPos.x = this.border * z + 3;
-    this.canvasPos.y = this.border * z + 3;
-    this.ctx.beginPath();
-    this.ctx.rect(4 * z,4 * z,this.miniMapSize * z,this.miniMapSize * z);
-    this.ctx.fill();
-
-    this.ctx.save();
-
-    this.ctx.clip();
-
-    this.ctx.fillStyle = '#000000';
-    this.ctx.beginPath();
-    for(var i=0;i<this.point.length;i++){
-      if(i==0)
-        this.ctx.moveTo((this.pointX+this.point[i][0]*Math.cos(this.pointRotate+this.point[i][1]))*z,(this.pointY+this.point[i][0]*Math.sin(this.pointRotate+this.point[i][1]))*z);
-      else
-        this.ctx.lineTo((this.pointX+this.point[i][0]*Math.cos(this.pointRotate+this.point[i][1]))*z,(this.pointY+this.point[i][0]*Math.sin(this.pointRotate+this.point[i][1]))*z);
-    }
-    this.ctx.lineTo((this.pointX+this.point[0][0]*Math.cos(this.pointRotate+this.point[0][1]))*z,(this.pointY+this.point[0][0]*Math.sin(this.pointRotate+this.point[0][1]))*z);
-    this.ctx.fill();
-
-    this.ctx.restore();
-
-    this.ctx.beginPath();
-    this.ctx.rect(4 * z,4 * z,this.miniMapSize * z,this.miniMapSize * z);
-    this.ctx.stroke();
+    ctx.fillStyle = this.color.getRGBValue();
+    ctx.strokeStyle = this.borderColor.getRGBValue();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = this.border * z;
+    ctx.beginPath();
+    ctx.rect(this.x - this.miniMapSize * z + 4 * z,this.y - this.miniMapSize  * z + 4 * z,this.miniMapSize * z,this.miniMapSize * z);
+    ctx.fill();
 
     ctx.save();
-    ctx.globalAlpha = this.opacity;
-    ctx.drawImage(this.canvas,this.x - this.miniMapSize  * z,this.y - this.miniMapSize  * z);
+
+    ctx.clip();
+
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    for(var i=0;i<this.point.length+1;i++)
+      this.drawPoint(ctx,i%this.point.length,z,i==0);
+    ctx.fill();
+
     ctx.restore();
+
+    ctx.beginPath();
+    ctx.rect(this.x - this.miniMapSize * z + 4 * z,this.y - this.miniMapSize * z + 4 * z,this.miniMapSize * z,this.miniMapSize * z);
+    ctx.stroke();
   };
 
   this.inMousePoint = function (x,y){
