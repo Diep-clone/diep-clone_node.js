@@ -37,7 +37,7 @@ let sockets = {}; // 유저 접속 목록.
 
 let tankLength = 53; // 탱크의 목록 길이.
 
-//let tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
+let tree = new quadtree(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y);
 //let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
@@ -82,12 +82,12 @@ io.on('connection', (socket) => { // 접속.
     changeTank: false,
     controlObject: null
   };
-  //gameSet.mapSize.x+= 161.25;
-  //gameSet.mapSize.y+= 161.25;
+  gameSet.mapSize.x+= 161.5;
+  gameSet.mapSize.y+= 161.5;
 
   shapeUtil.extendMaxShape(10);
 
-  //tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
+  tree = new quadtree(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y);
 
   io.emit('mapSize', gameSet.mapSize);
 
@@ -102,7 +102,6 @@ io.on('connection', (socket) => { // 접속.
         console.log('앗 무지개 방패로 이름 공격을 막았어요 :)');
       }
       console.log('누군가가 들어왔다!!!');
-      //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
       sockets[socket.id] = socket;
 
       let obj = {
@@ -230,11 +229,10 @@ io.on('connection', (socket) => { // 접속.
   socket.on('disconnect', () => { // 연결 끊김
     if (sockets[socket.id]){
       console.log('안녕 잘가!!!');
-      //gameSet.mapSize.x-= 161.25;
-      //gameSet.mapSize.y-= 161.25;
+      gameSet.mapSize.x+= 161.5;
+      gameSet.mapSize.y+= 161.5;
 
-      //tree = quadtree(-mapSize.x,-mapSize.y,mapSize.x,mapSize.y,{ maxchildren: 25 });
-      //tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
+      tree = new quadtree(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y);
 
       shapeUtil.extendMaxShape(-10);
 
@@ -246,38 +244,38 @@ io.on('connection', (socket) => { // 접속.
   });
 });
 
-function collisionCheck(collision){ // 충돌 시 계산
-  let dir = Math.atan2(collision.aUser.y-collision.bUser.y,collision.aUser.x-collision.bUser.x);
+function collisionCheck(aUser,bUser){ // 충돌 시 계산
+  let dir = Math.atan2(aUser.y-bUser.y,aUser.x-bUser.x);
 
-  if (collision.aUser === collision.bUser.owner || collision.bUser === collision.aUser.owner) return;
+  if (aUser === bUser.owner || bUser === aUser.owner) return;
 
-  collision.aUser.dx+=Math.cos(dir) * collision.aUser.bound;
-  collision.aUser.dy+=Math.sin(dir) * collision.aUser.bound;
-  collision.bUser.dx-=Math.cos(dir) * collision.bUser.bound;
-  collision.bUser.dy-=Math.sin(dir) * collision.bUser.bound;
+  aUser.dx+=Math.cos(dir) * aUser.bound;
+  aUser.dy+=Math.sin(dir) * aUser.bound;
+  bUser.dx-=Math.cos(dir) * bUser.bound;
+  bUser.dy-=Math.sin(dir) * bUser.bound;
 
-  if (collision.aUser.team === collision.bUser.team) return;
+  if (aUser.team === bUser.team) return;
 
-  io.emit('objectHit',collision.aUser.id,collision.aUser.objType);
-  io.emit('objectHit',collision.bUser.id,collision.bUser.objType);
+  io.emit('objectHit',aUser.id,aUser.objType);
+  io.emit('objectHit',bUser.id,bUser.objType);
 
-  collision.aUser.hitTime = Date.now();
-  collision.bUser.hitTime = Date.now();
+  aUser.hitTime = Date.now();
+  bUser.hitTime = Date.now();
 
-  collision.aUser.hitObject = collision.bUser;
-  collision.bUser.hitObject = collision.aUser;
+  aUser.hitObject = bUser;
+  bUser.hitObject = aUser;
 
-  if (collision.bUser.lastHealth-util.isF(collision.aUser.damage)<=0){
-    collision.aUser.health-=util.isF(collision.bUser.damage)*(collision.bUser.lastHealth/util.isF(collision.aUser.damage));
+  if (bUser.lastHealth-util.isF(aUser.damage)<=0){
+    aUser.health-=util.isF(bUser.damage)*(bUser.lastHealth/util.isF(aUser.damage));
   }
   else{
-    collision.aUser.health-=util.isF(collision.bUser.damage);
+    aUser.health-=util.isF(bUser.damage);
   }
-  if (collision.aUser.lastHealth-util.isF(collision.bUser.damage)<=0){
-    collision.bUser.health-=util.isF(collision.aUser.damage)*(collision.aUser.lastHealth/util.isF(collision.bUser.damage));
+  if (aUser.lastHealth-util.isF(bUser.damage)<=0){
+    bUser.health-=util.isF(aUser.damage)*(aUser.lastHealth/util.isF(bUser.damage));
   }
   else{
-    collision.bUser.health-=util.isF(collision.aUser.damage);
+    bUser.health-=util.isF(aUser.damage);
   }
 }
 
@@ -328,13 +326,24 @@ function tickObject(obj){
   if (obj.health<=0){
     obj.isDead = true;
   }
-  if (obj.isDead) return;
-  if (obj.guns){
-    bulletUtil.gunSet(objects,obj,objID,io);
-  }
   if (obj.moveAi){
     obj.moveAi(obj);
   }
+  if (obj.isDead) return;
+
+  if (obj.guns){
+    bulletUtil.gunSet(objects,obj,objID,io);
+  }
+
+  tree.retrieve(obj).forEach((u) => {
+    let res = new SAT.Response();
+    let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
+    if (isCol){
+      collisionCheck(obj,u);
+    }
+  });
+
+  tree.insert(obj);
 
   switch (obj.objType){
     case "tank":
@@ -391,6 +400,7 @@ function tickObject(obj){
 }
 
 function moveloop(){
+  tree.clear();
   users.forEach((u) => {
     tickPlayer(u);
   });
@@ -426,7 +436,7 @@ function moveloop(){
 }
 
 function sendUpdates(){
-  var ScoreBoardList=objects.map(function(f)
+  var scoreBoardList=objects.map(function(f)
   {
     switch (f.objType){
       case "tank":
@@ -510,7 +520,7 @@ function sendUpdates(){
       stats:u.controlObject.stats,
       maxStats:u.controlObject.maxStats
     });
-    sockets[u.id].emit('scoreboardlist',ScoreBoardList);
+    sockets[u.id].emit('scoreboardlist',scoreBoardList);
   });
 }
 
