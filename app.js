@@ -37,7 +37,7 @@ let sockets = {}; // 유저 접속 목록.
 
 let tankLength = 53; // 탱크의 목록 길이.
 
-let tree = new quadtree(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y);
+let tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 //let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
@@ -87,7 +87,7 @@ io.on('connection', (socket) => { // 접속.
 
   shapeUtil.extendMaxShape(10);
 
-  tree = new quadtree(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y);
+  tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 
   io.emit('mapSize', gameSet.mapSize);
 
@@ -106,7 +106,7 @@ io.on('connection', (socket) => { // 접속.
 
       let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 0, // 오브젝트의 종류값.
+        type: 17, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: -1, // 오브젝트의 팀값.
@@ -232,7 +232,7 @@ io.on('connection', (socket) => { // 접속.
       gameSet.mapSize.x+= 161.5;
       gameSet.mapSize.y+= 161.5;
 
-      tree = new quadtree(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y);
+      tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 
       shapeUtil.extendMaxShape(-10);
 
@@ -324,6 +324,7 @@ function tickObject(obj){
     if (obj.y<-gameSet.mapSize.y-51.6) obj.y=-gameSet.mapSize.y-51.6;
   }
   if (obj.health<=0){
+    obj.health=0;
     obj.isDead = true;
   }
   if (obj.moveAi){
@@ -418,10 +419,12 @@ function moveloop(){
           if (o.event.deadEvent) o.event.deadEvent(o.hitObject);
         }
         o.deadTime=1000;
-        for (let i=0;i<o.guns.length;i++){
-          if (!o.guns[i]) continue;
-          for (let j=0;j<o.guns[i].bullets.length;j++){
-            o.guns[i].bullets[j].isDead = true;
+        if (o.guns){
+          for (let i=0;i<o.guns.length;i++){
+            if (!o.guns[i]) continue;
+            for (let j=0;j<o.guns[i].bullets.length;j++){
+              o.guns[i].bullets[j].isDead = true;
+            }
           }
         }
       }
