@@ -30,6 +30,11 @@ function DrawObject(camera){ // 그리기 담당
     z:1,
     uiz:1
   };
+  this.realCamera = {
+    x:0,
+    y:0,
+    z:0
+  }
 
   this.getCanvasSize = function (){
     return [this.canvas.width,this.canvas.height,this.camera.uiz];
@@ -37,9 +42,9 @@ function DrawObject(camera){ // 그리기 담당
 
   this.getCameraSet = function (){
     return {
-      x:this.camera.x + this.canvas.width / 2 / this.camera.uiz / this.sight,
-      y:this.camera.y + this.canvas.height / 2 / this.camera.uiz / this.sight,
-      z:this.camera.z,
+      x:this.realCamera.x + this.canvas.width / 2 / this.camera.uiz / this.sight,
+      y:this.realCamera.y + this.canvas.height / 2 / this.camera.uiz / this.sight,
+      z:this.realCamera.z,
     }
   }
 
@@ -66,6 +71,11 @@ function DrawObject(camera){ // 그리기 담당
   this.im = {x:0,y:0};
 
   this.cameraSet = function (camera){
+    this.realCamera = {
+      x:camera.x,
+      y:camera.y,
+      z:this.sight
+    };
     if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900; // 화면 크기에 따른 줌값 조정
     else this.camera.z=this.canvas.width/1600;
 
@@ -244,7 +254,7 @@ function Bar(c,radius){
   this.setRadius = function (r){
     this.radius = r;
   }
-  
+
   this.setColor = function (c)
   {
     this.color = c;
@@ -404,28 +414,28 @@ function ScoreBoard()
 {
   this.x;
   this.y;
-  
+
   this.width=167;
-  
+
   this.scoreBoardTitle=new Text("Scoreboard",20);
   this.scoreBoardBar=[];
   this.scoreBoardText=[];
   this.scoreBoardList=[];
-  
+
   for(let i=0;i<10;i++)
   {
     this.scoreBoardBar[i]=new Bar(new RGB(66,255,145),33);
     this.scoreBoardText[i]=new Text("",13);
   }
-  
+
   this.setPosition = function (x,y,z,a){
     this.x = x;
     this.y = y;
-    
+
     this.scoreBoardList=a;
-    
+
     this.scoreBoardTitle.setPosition(x,y);
-    
+
     for(var i=0;i<this.scoreBoardList.length;i++)
     {
       this.scoreBoardBar[i].setPosition(x-this.width/2*z,x+this.width/2*z,y+(5+20*i)*z,this.scoreBoardList[i].score/this.scoreBoardList[0].score);
