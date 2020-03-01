@@ -30,11 +30,6 @@ function DrawObject(camera){ // 그리기 담당
     z:1,
     uiz:1
   };
-  this.realCamera = {
-    x:0,
-    y:0,
-    z:0
-  }
 
   this.getCanvasSize = function (){
     return [this.canvas.width,this.canvas.height,this.camera.uiz];
@@ -42,9 +37,9 @@ function DrawObject(camera){ // 그리기 담당
 
   this.getCameraSet = function (){
     return {
-      x:this.realCamera.x + this.canvas.width / 2 / this.camera.uiz / this.sight,
-      y:this.realCamera.y + this.canvas.height / 2 / this.camera.uiz / this.sight,
-      z:this.realCamera.z,
+      x:this.camera.x + this.canvas.width / 2 / this.camera.uiz / this.sight,
+      y:this.camera.y + this.canvas.height / 2 / this.camera.uiz / this.sight,
+      z:this.camera.z,
     }
   }
 
@@ -71,11 +66,6 @@ function DrawObject(camera){ // 그리기 담당
   this.im = {x:0,y:0};
 
   this.cameraSet = function (camera){
-    this.realCamera = {
-      x:camera.x,
-      y:camera.y,
-      z:this.sight
-    };
     if (this.canvas.width<this.canvas.height/9*16) this.camera.z=this.canvas.height/900; // 화면 크기에 따른 줌값 조정
     else this.camera.z=this.canvas.width/1600;
 
