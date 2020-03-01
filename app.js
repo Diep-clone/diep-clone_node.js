@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 322.5,y: 322.5}
+  mapSize: {x: 161.5,y: 161.5}
 };
 
 let users = []; // 유저 목록.
@@ -106,7 +106,7 @@ io.on('connection', (socket) => { // 접속.
 
       let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 17, // 오브젝트의 종류값.
+        type: 0, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: -1, // 오브젝트의 팀값.
@@ -413,10 +413,14 @@ function moveloop(){
     if (o.isDead){
       if (o.deadTime===-1){
         if (o.hitObject && o.hitObject.event){
-          if (o.hitObject.event.killEvent) o.hitObject.event.killEvent(o);
+          if (o.hitObject.event.killEvent){
+            if (!o.hitObject.event.killEvent(o)) return false;
+          }
         }
         if (o.event){
-          if (o.event.deadEvent) o.event.deadEvent(o.hitObject);
+          if (o.event.deadEvent){
+            if (!o.event.deadEvent(o.hitObject)) return false;
+          }
         }
         o.deadTime=1000;
         if (o.guns){
