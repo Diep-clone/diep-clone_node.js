@@ -106,7 +106,7 @@ io.on('connection', (socket) => { // 접속.
 
       let obj = {
         objType: 'tank', // 오브젝트 타입. tank, bullet, drone, shape, boss 총 5가지가 있다.
-        type: 0, // 오브젝트의 종류값.
+        type: 16, // 오브젝트의 종류값.
         owner: currentPlayer, // 오브젝트의 부모.
         id: objID(), // 오브젝트의 고유 id.
         team: -1, // 오브젝트의 팀값.
@@ -126,6 +126,7 @@ io.on('connection', (socket) => { // 접속.
         radius: function (){return 13*Math.pow(1.01,(obj.level-1));}, // 12.9*1.01^(level-1)
         rotate: 0, // 오브젝트의 방향값.
         bound: 1, // 오브젝트의 반동값.
+        stance: 1, // 오브젝트의 반동 감소값.
         invTime: -1, // 오브젝트의 은신에 걸리는 시간.
         opacity: 1, // 오브젝트의 투명도값.
         name: name, // 오브젝트의 이름값.
@@ -249,10 +250,10 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
 
   if (aUser === bUser.owner || bUser === aUser.owner) return;
 
-  aUser.dx+=Math.cos(dir) * aUser.bound;
-  aUser.dy+=Math.sin(dir) * aUser.bound;
-  bUser.dx-=Math.cos(dir) * bUser.bound;
-  bUser.dy-=Math.sin(dir) * bUser.bound;
+  aUser.dx+=Math.cos(dir) * Math.min(bUser.bound * aUser.stance,4);
+  aUser.dy+=Math.sin(dir) * Math.min(bUser.bound * aUser.stance,4);
+  bUser.dx-=Math.cos(dir) * Math.min(aUser.bound * bUser.stance,4);
+  bUser.dy-=Math.sin(dir) * Math.min(aUser.bound * bUser.stance,4);
 
   if (aUser.team === bUser.team) return;
 
