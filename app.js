@@ -35,7 +35,7 @@ var objID = (function(){ var id=1; return function(){ return id++;} })();
 
 let sockets = {}; // 유저 접속 목록.
 
-let tankLength = 53; // 탱크의 목록 길이.
+let tankLength = 54; // 탱크의 목록 길이.
 
 let tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 //let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));

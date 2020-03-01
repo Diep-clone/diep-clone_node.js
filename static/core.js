@@ -57,7 +57,8 @@ function System(name){ // 게임의 전체 진행 담당
     Spike,////
     Factory,////
     Skimmer,////
-    Rocketeer////
+    Rocketeer,////
+    Bumper
   ];
 
   this.bulletList = [
@@ -88,7 +89,7 @@ function System(name){ // 게임의 전체 진행 담당
     new RGB(147,234,103),
     new RGB(103,233,233)
   ];
-  
+
   this.expList = [
     0,
     4,
@@ -136,7 +137,7 @@ function System(name){ // 게임의 전체 진행 담당
     21849,
     23536
   ];
-  
+
   this.number3comma=function(s)
   {
     var r=s.substr(Math.max(s.length-3,0),3);
@@ -400,7 +401,7 @@ function System(name){ // 게임의 전체 진행 담당
   this.showPing = this.createUiObject(new Text("",12.5,0,"right",false));
 
   this.showMiniMap = this.createUiObject(new MiniMap());
-  
+
   this.showScoreBoard = this.createUiObject(new ScoreBoard());
 
   this.showUpgradeTank = [
@@ -452,7 +453,7 @@ function System(name){ // 게임의 전체 진행 담당
         this.showMiniMap.setPosition(whz[0] - 21*whz[2],whz[1] - 21*whz[2]);
         this.showMiniMap.setPointPosition((this.controlTank.x+this.drawObject.mapSize.x)/2/this.drawObject.mapSize.x,(this.controlTank.y+this.drawObject.mapSize.y)/2/this.drawObject.mapSize.y,this.controlTank.rotate);
       }
-      
+
       this.showScoreBoard.setPosition(whz[0] - 108*whz[2],34*whz[2],whz[2],this.scoreBoard);
     }
 

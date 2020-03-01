@@ -999,3 +999,23 @@ function Rocketeer(){
 }
 Rocketeer.prototype = new Tank();
 Rocketeer.prototype.constructor = Rocketeer;
+
+
+function Bumper(){
+  "use strict";
+  Tank.apply(this, arguments);
+  let list = [];
+  let dis = 2*Math.sqrt(3)/3;
+  let dir = -Math.PI / 3 * 2;
+  for (let i=0;i<6;i++){
+    list.push([Math.cos(dir)*dis,Math.sin(dir)*dis]);
+    dir += Math.PI / 3;
+  }
+  this.guns=[
+    new Bolt(list,Math.PI/80),
+    new Gun([[0,0],[0.7,0],[0.7,1.88],[-0.7,1.88],[-0.7, 0]],0)
+  ];
+  this.tankType = "Bumper";
+}
+Bumper.prototype = new Tank();
+Bumper.prototype.constructor = Bumper;
