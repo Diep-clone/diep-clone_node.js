@@ -353,9 +353,9 @@ function tickObject(obj){
     if (obj.owner){
       userUtil.healTank(obj);
       if (gameSet.gameMode === "sandbox"){
-        if (obj.owner.k && obj.level<45){
+        /*if (obj.owner.k && obj.level<45){
           obj.exp = sc;
-        }
+        }*/
         if (obj.owner.changeTank){
           obj.type = obj.type==0?tankLength-1:obj.type-1;
           userUtil.setUserTank(obj);
@@ -543,6 +543,6 @@ setInterval(function(){
   });
 },2000);
 */
-server.listen(process.env.PORT || 3000, () => {
+server.listen(80, () => {
     console.log("잠깐, 지금 서버를 연거야?");
 });
