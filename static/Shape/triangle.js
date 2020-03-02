@@ -17,7 +17,7 @@ function Triangle(radius,rotate){
 
   this.animate = function(tick){
     if (this.isDead){
-      this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
+      this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity === 0){
         system.removeObject(this.id,'obj');
