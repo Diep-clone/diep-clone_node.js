@@ -257,8 +257,8 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
 
   if (aUser.team!==-1 && bUser.team!==-1 && aUser.team === bUser.team) return;
 
-  io.emit('objectHit',aUser.id,aUser.objType);
-  io.emit('objectHit',bUser.id,bUser.objType);
+  io.emit('objectHit',aUser.id);
+  io.emit('objectHit',bUser.id);
 
   aUser.hitTime = Date.now();
   bUser.hitTime = Date.now();

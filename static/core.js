@@ -1,7 +1,7 @@
 function System(name){ // 게임의 전체 진행 담당
   "use strict";
 
-  this.objectList = {obj:{},bul:{}};
+  this.objectList = {};
   this.uiObjectList = [];
 
   this.tankList = [
@@ -190,15 +190,8 @@ function System(name){ // 게임의 전체 진행 담당
 
   this.createObject = function (id,type,radius,rotate){
     let obj = new type(radius,rotate);
-    this.objectList.obj[id]=obj;
-    this.objectList.obj[id].setId(id);
-    return obj;
-  }
-
-  this.createBulletObject = function (id,type,radius,rotate){
-    let obj = new type(radius,rotate);
-    this.objectList.bul[id]=obj;
-    this.objectList.bul[id].setId(id);
+    this.objectList[id]=obj;
+    this.objectList[id].setId(id);
     return obj;
   }
 
@@ -207,17 +200,8 @@ function System(name){ // 게임의 전체 진행 담당
     return obj;
   }
 
-  this.removeObject = function (id,type){
-    switch (type){
-      case "obj":
-        this.objectList.obj[id] = null;
-      break;
-      case "bul":
-        this.objectList.bul[id] = null;
-      break;
-      default:
-      break;
-    }
+  this.removeObject = function (id){
+    this.objectList[id] = null;
   }
 
   this.controlTank;
@@ -256,12 +240,19 @@ function System(name){ // 게임의 전체 진행 담당
   });
 
   socket.on('objectList', (objectList) => {
+    let deleteList = {};
+    for (let key in this.objectList){
+      if (this.objectList[key]){
+        deleteList[this.objectList[key].id]=true;
+      }
+    }
     for (let key in objectList){ // 탱크 지정
       let obj = objectList[key];
+      deleteList[obj.id]=false;
       switch (obj.objType){
         case "tank":
-        if (this.objectList.obj[obj.id]){
-          let objO = this.objectList.obj[obj.id];
+        if (this.objectList[obj.id]){
+          let objO = this.objectList[obj.id];
           objO.setDead(obj.isDead);
           if (!obj.isDead){
             objO.setRadius(obj.radius);
@@ -293,8 +284,8 @@ function System(name){ // 게임의 전체 진행 담당
         break;
         case "bullet":
         case "drone":
-        if (this.objectList.bul[obj.id]){
-          let objO = this.objectList.bul[obj.id];
+        if (this.objectList[obj.id]){
+          let objO = this.objectList[obj.id];
           objO.setDead(obj.isDead);
           if (!obj.isDead){
             objO.setRadius(obj.radius);
@@ -304,7 +295,7 @@ function System(name){ // 게임의 전체 진행 담당
         }
         else{
           if (obj.isDead) continue;
-          let objO = this.createBulletObject(obj.id,this.bulletList[obj.type],obj.radius,obj.rotate);
+          let objO = this.createObject(obj.id,this.bulletList[obj.type],obj.radius,obj.rotate);
           objO.setPosition(obj.x,obj.y);
           objO.setRadius(obj.radius);
           objO.setRotate(obj.rotate);
@@ -314,8 +305,8 @@ function System(name){ // 게임의 전체 진행 담당
         }
         break;
         case "shape":
-        if (this.objectList.obj[obj.id]){
-          let objO = this.objectList.obj[obj.id];
+        if (this.objectList[obj.id]){
+          let objO = this.objectList[obj.id];
           objO.setDead(obj.isDead);
           if (!obj.isDead){
             objO.setRadius(obj.radius);
@@ -336,8 +327,8 @@ function System(name){ // 게임의 전체 진행 담당
             new RGB(252,118,118),
             new RGB(118,140,252),
             new RGB(118,140,252),
-            new RGB(255,232,105),
-            new RGB(255,232,105)
+            new RGB(228,102,233),
+            new RGB(228,102,233)
           ];
           objO.setColor(colorList[obj.type]);
         }
@@ -346,43 +337,22 @@ function System(name){ // 게임의 전체 진행 담당
         break;
       }
     }
-  });
-
-  socket.on('objectHit', (id,type) => { // 피격 효과 전달
-    switch(type){
-      case "tank":
-      case "shape":
-        if (this.objectList.obj[id]){
-          this.objectList.obj[id].hit();
-        }
-      break;
-      case "bullet":
-      case "drone":
-        if (this.objectList.bul[id]){
-          this.objectList.bul[id].hit();
-        }
-      break;
-      default:
-      break;
+    for (let key in deleteList){
+      if (deleteList[key] === true && deleteList[key]!==this.controlTank.id){
+        this.removeObject(deleteList[key]);
+      }
     }
   });
 
-  socket.on('shot', (type,id,gun) => {
-    switch(type){
-      case "tank":
-      case "shape":
-        if (this.objectList.obj[id]){
-          this.objectList.obj[id].gunAnime(gun);
-        }
-      break;
-      case "bullet":
-      case "drone":
-        if (this.objectList.bul[id]){
-          this.objectList.bul[id].gunAnime(gun);
-        }
-      break;
-      default:
-      break;
+  socket.on('objectHit', (id) => { // 피격 효과 전달
+    if (this.objectList[id]){
+      this.objectList[id].hit();
+    }
+  });
+
+  socket.on('shot', (id,gun) => {
+    if (this.objectList[id]){
+      this.objectList[id].gunAnime(gun);
     }
   });
 
@@ -431,23 +401,22 @@ function System(name){ // 게임의 전체 진행 담당
       this.showTankLevelBar.setPosition((whz[0]-334 * whz[2])/2,(whz[0]+334 * whz[2])/2,whz[1] - 48 * whz[2],this.controlTank.score<this.expList[44]?(this.controlTank.score-this.expList[this.controlTank.level-1])/(this.expList[this.controlTank.level]-this.expList[this.controlTank.level-1]):1);
       this.showTankLevel.setPosition(whz[0]/2,whz[1] - 24 * whz[2],0);
       this.showTankLevel.setText("Lvl "+String(this.controlTank.level)+" "+this.controlTank.tankType);
-      let ScoreBarPercent=1;
-      if(this.scoreBoard.length>0)
-      {
-        ScoreBarPercent=this.controlTank.score/this.scoreBoard[0].score;
+      let scoreBarPercent=1;
+      if(this.scoreBoard.length>0){
+        scoreBarPercent=this.controlTank.score/this.scoreBoard[0].score;
+        if(this.scoreBoard[0].score===0){
+          scoreBarPercent=1;
+        }
       }
-      if(isNaN(ScoreBarPercent))
-      {
-        ScoreBarPercent=1;
-      }
-      this.showTankScoreBar.setPosition((whz[0]-250 * whz[2])/2,(whz[0]+250 * whz[2])/2,whz[1] - 64 * whz[2],ScoreBarPercent);
+
+      this.showTankScoreBar.setPosition((whz[0]-250 * whz[2])/2,(whz[0]+250 * whz[2])/2,whz[1] - 64 * whz[2],scoreBarPercent);
       this.showTankScore.setPosition(whz[0]/2,whz[1]-44 * whz[2],0);
       this.showTankScore.setText("Score: "+this.number3comma(String(this.controlTank.score)));
       this.showTankName.setPosition(whz[0]/2,whz[1]-64 * whz[2],0);
       this.showTankName.setText(this.controlTank.name);
 
       this.showPing.setPosition(whz[0]-(21 + 5)*whz[2],whz[1] - (21 + 147 + 5) * whz[2],0);
-      this.showPing.setText(String(this.ping)+' ms heroku-newyork');
+      this.showPing.setText(String(this.ping)+' ms');
 
       if (this.drawObject.mapSize)
       {
@@ -482,23 +451,9 @@ function System(name){ // 게임의 전체 진행 담당
 
     this.uiSet();
 
-    for (let key in this.objectList.obj){
-      if (this.objectList.obj[key]){
-        if (this.objectList.obj[key]!==this.controlTank && !this.objectList.obj[key].isInCamera(this.drawObject.getCameraSet())){
-          this.removeObject(key,'obj');
-          continue;
-        }
-        this.objectList.obj[key].animate(this.tick);
-      }
-    }
-
-    for (let key in this.objectList.bul){
-      if (this.objectList.bul[key]){
-        if (!this.objectList.bul[key].isInCamera(this.drawObject.getCameraSet())){
-          this.removeObject(key,'bul');
-          continue;
-        }
-        this.objectList.bul[key].animate(this.tick);
+    for (let key in this.objectList){
+      if (this.objectList[key]){
+        this.objectList[key].animate(this.tick);
       }
     }
 
@@ -521,9 +476,8 @@ function System(name){ // 게임의 전체 진행 담당
     }
 
     this.drawObject.backgroundDraw();
-    this.drawObject.objectDraw(this.objectList.bul);
-    this.drawObject.objectDraw(this.objectList.obj);
-    this.drawObject.objectStatusDraw(this.objectList.obj);
+    this.drawObject.objectDraw(this.objectList);
+    this.drawObject.objectStatusDraw(this.objectList);
     this.drawObject.uiDraw(this.uiObjectList);
 
     requestAnimationFrame(this.loop.bind(this));

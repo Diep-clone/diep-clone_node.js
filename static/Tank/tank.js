@@ -29,7 +29,7 @@ function Tank(radius,rotate){
       this.opacity = Math.max(this.opacity - 0.13 * tick * 0.05, 0);
       this.radius += 0.4 * tick * 0.05;
       if (this.opacity === 0){
-        system.removeObject(this.id,'obj');
+        system.removeObject(this.id);
         return;
       }
     }

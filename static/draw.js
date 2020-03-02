@@ -400,8 +400,9 @@ function MiniMap(){
   };
 }
 
-function ScoreBoard()
-{
+function ScoreBoard() {
+  "use strict";
+
   this.x;
   this.y;
 
@@ -428,8 +429,11 @@ function ScoreBoard()
 
     for(var i=0;i<this.scoreBoardList.length;i++)
     {
-      this.scoreBoardBar[i].setPosition(x-this.width/2*z,x+this.width/2*z,y+(5+20*i)*z,this.scoreBoardList[i].score/this.scoreBoardList[0].score);
-      this.scoreBoardText[i].setText(this.scoreBoardList[i].name+' - '+String(this.scoreBoardList[i].score));
+      let per = this.scoreBoardList[i].score/this.scoreBoardList[0].score;
+      if (this.scoreBoardList[0].score===0) per=1;
+      this.scoreBoardBar[i].setPosition(x-this.width/2*z,x+this.width/2*z,y+(5+20*i)*z,per);
+      if (this.scoreBoardList[i].name) this.scoreBoardText[i].setText(this.scoreBoardList[i].name+' - '+String(this.scoreBoardList[i].score));
+      else this.scoreBoardText[i].setText(String(this.scoreBoardList[i].score));
       this.scoreBoardText[i].setPosition(x,y+(25+20*i)*z);
     }
   }

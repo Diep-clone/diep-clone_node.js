@@ -17,11 +17,10 @@ function Square(radius,rotate){
 
   this.animate = function(tick){
     if (this.isDead){
-      console.log(1);
       this.opacity = Math.max(this.opacity - 0.1 * tick * 0.05, 0);
       this.radius += 0.3 * tick * 0.05;
       if (this.opacity === 0){
-        system.removeObject(this.id,'obj');
+        system.removeObject(this.id);
         return;
       }
     }
