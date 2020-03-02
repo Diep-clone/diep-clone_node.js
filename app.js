@@ -347,10 +347,11 @@ function tickObject(obj){
     }
     if (obj.lastMaxHealth !== util.isF(obj.maxHealth)){
       obj.healthPer = obj.health / obj.lastMaxHealth;
-      obj.health = util.isF(obj.maxHealth) / obj.healthPer;
+      obj.health = util.isF(obj.maxHealth) * obj.healthPer;
       obj.lastMaxHealth = util.isF(obj.maxHealth);
     }
     if (obj.owner){
+      userUtil.healTank(obj);
       if (gameSet.gameMode === "sandbox"){
         if (obj.owner.k && obj.level<45){
           obj.exp = sc;
@@ -361,7 +362,6 @@ function tickObject(obj){
           obj.owner.changeTank = false;
         }
       }
-      userUtil.healTank(obj);
     }
     else{
       userUtil.afkTank(obj);
