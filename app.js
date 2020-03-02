@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 161.5,y: 161.5}
+  mapSize: {x: 2000,y: 2000}
 };
 
 let users = []; // 유저 목록.
@@ -82,10 +82,10 @@ io.on('connection', (socket) => { // 접속.
     changeTank: false,
     controlObject: null
   };
-  gameSet.mapSize.x+= 161.5;
-  gameSet.mapSize.y+= 161.5;
+  //gameSet.mapSize.x+= 50;
+  //gameSet.mapSize.y+= 50;
 
-  shapeUtil.extendMaxShape(10);
+  //shapeUtil.extendMaxShape(10);
 
   tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 
@@ -230,12 +230,12 @@ io.on('connection', (socket) => { // 접속.
   socket.on('disconnect', () => { // 연결 끊김
     if (sockets[socket.id]){
       console.log('안녕 잘가!!!');
-      gameSet.mapSize.x+= 161.5;
-      gameSet.mapSize.y+= 161.5;
+      //gameSet.mapSize.x+= 50;
+      //gameSet.mapSize.y+= 50;
 
       tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 
-      shapeUtil.extendMaxShape(-10);
+      //shapeUtil.extendMaxShape(-10);
 
       currentPlayer.controlObject.owner = null;
       users.splice(util.findIndex(users,currentPlayer.id),1);
@@ -255,7 +255,7 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
   bUser.dx-=Math.cos(dir) * Math.min(aUser.bound * bUser.stance,4);
   bUser.dy-=Math.sin(dir) * Math.min(aUser.bound * bUser.stance,4);
 
-  if (aUser.team === bUser.team) return;
+  if (aUser.team!==-1 && bUser.team!==-1 && aUser.team === bUser.team) return;
 
   io.emit('objectHit',aUser.id,aUser.objType);
   io.emit('objectHit',bUser.id,bUser.objType);
@@ -278,6 +278,8 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
   else{
     bUser.health-=util.isF(aUser.damage);
   }
+  if (aUser.health<0) aUser.health = 0;
+  if (bUser.health<0) bUser.health = 0;
 }
 
 function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입니다.
