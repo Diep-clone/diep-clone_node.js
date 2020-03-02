@@ -320,12 +320,6 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
 function tickObject(obj){
   objUtil.moveObject(obj);
 
-  if (obj.isBorder){ // 화면 밖으로 벗어나는가?
-    if (obj.x>gameSet.mapSize.x+51.6) obj.x=gameSet.mapSize.x+51.6;
-    if (obj.x<-gameSet.mapSize.x-51.6) obj.x=-gameSet.mapSize.x-51.6;
-    if (obj.y>gameSet.mapSize.y+51.6) obj.y=gameSet.mapSize.y+51.6;
-    if (obj.y<-gameSet.mapSize.y-51.6) obj.y=-gameSet.mapSize.y-51.6;
-  }
   if (obj.health<=0){
     obj.health=0;
     obj.isDead = true;
@@ -335,6 +329,12 @@ function tickObject(obj){
   }
   if (obj.isDead) return;
 
+  if (obj.isBorder){ // 화면 밖으로 벗어나는가?
+    if (obj.x>gameSet.mapSize.x+51.6) obj.x=gameSet.mapSize.x+51.6;
+    if (obj.x<-gameSet.mapSize.x-51.6) obj.x=-gameSet.mapSize.x-51.6;
+    if (obj.y>gameSet.mapSize.y+51.6) obj.y=gameSet.mapSize.y+51.6;
+    if (obj.y<-gameSet.mapSize.y-51.6) obj.y=-gameSet.mapSize.y-51.6;
+  }
   if (obj.guns){
     bulletUtil.gunSet(objects,obj,objID,io);
   }
