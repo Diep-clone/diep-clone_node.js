@@ -1019,3 +1019,16 @@ function Bumper(){
 }
 Bumper.prototype = new Tank();
 Bumper.prototype.constructor = Bumper;
+
+
+function Dispersion(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0.4,0],[0.4,2.2],[-0.4,2.2],[-0.4, 0]],0),
+    new Gun([[0.4,0.9],[0,1.8],[-0.4, 0.9]],0)
+  ];
+  this.tankType = "Dispersion";
+}
+Dispersion.prototype = new Tank();
+Dispersion.prototype.constructor = Dispersion;
