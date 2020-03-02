@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 2000,y: 2000}
+  mapSize: {x: 500,y: 500}
 };
 
 let users = []; // 유저 목록.
@@ -339,16 +339,6 @@ function tickObject(obj){
     bulletUtil.gunSet(objects,obj,objID,io);
   }
 
-  tree.retrieve(obj).forEach((u) => {
-    let res = new SAT.Response();
-    let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
-    if (isCol){
-      collisionCheck(obj,u);
-    }
-  });
-
-  tree.insert(obj);
-
   switch (obj.objType){
     case "tank":
     let sc = userUtil.setUserLevel(obj);
@@ -392,6 +382,16 @@ function tickObject(obj){
     default:
     break;
   }
+
+  tree.retrieve(obj).forEach((u) => {
+    let res = new SAT.Response();
+    let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
+    if (isCol){
+      collisionCheck(obj,u);
+    }
+  });
+
+  tree.insert(obj);
 
   if (obj.isMove || obj.isShot || obj.invTime<0){
     obj.opacity=Math.min(obj.opacity+0.1,1);
