@@ -250,10 +250,10 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
 
   if (aUser === bUser.owner || bUser === aUser.owner) return;
 
-  aUser.dx+=Math.cos(dir) * Math.min(bUser.bound * aUser.stance,4);
-  aUser.dy+=Math.sin(dir) * Math.min(bUser.bound * aUser.stance,4);
-  bUser.dx-=Math.cos(dir) * Math.min(aUser.bound * bUser.stance,4);
-  bUser.dy-=Math.sin(dir) * Math.min(aUser.bound * bUser.stance,4);
+  aUser.dx+=Math.cos(dir) * Math.min(bUser.bound * aUser.stance,6);
+  aUser.dy+=Math.sin(dir) * Math.min(bUser.bound * aUser.stance,6);
+  bUser.dx-=Math.cos(dir) * Math.min(aUser.bound * bUser.stance,6);
+  bUser.dy-=Math.sin(dir) * Math.min(aUser.bound * bUser.stance,6);
 
   if (aUser.team!==-1 && bUser.team!==-1 && aUser.team === bUser.team) return;
 
