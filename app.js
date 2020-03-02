@@ -543,6 +543,6 @@ setInterval(function(){
   });
 },2000);
 */
-server.listen(process.env.PORT || 80, () => {
+server.listen(80, () => {
     console.log("잠깐, 지금 서버를 연거야?");
 });
