@@ -78,8 +78,10 @@ io.on('connection', (socket) => { // 접속.
       z: 1
     },
     k: false,
+    kTime:0,
     o: false,
     changeTank: false,
+    changeTime: 0,
     controlObject: null
   };
   //gameSet.mapSize.x+= 50;
@@ -345,14 +347,20 @@ function tickObject(obj,index){
     if (obj.owner){
       userUtil.healTank(obj);
       if (gameSet.gameMode === "sandbox"){
-        /*if (obj.owner.k && obj.level<45){
+        if (obj.owner.k && obj.level<45 && obj.owner.kTime<=0){
           obj.exp = sc;
-        }*/
+          obj.owner.kTime+=100;
+        }
+        obj.owner.kTime=Math.max(obj.owner.kTime-1000/60,0);
         if (obj.owner.changeTank){
-          obj.type = obj.type==0?tankLength-1:obj.type-1;
-          userUtil.setUserTank(obj);
+          if (obj.owner.changeTime<=0){
+            obj.type = obj.type==0?tankLength-1:obj.type-1;
+            userUtil.setUserTank(obj);
+            obj.owner.changeTime+=100;
+          }
           obj.owner.changeTank = false;
         }
+        obj.owner.changeTime=Math.max(obj.owner.changeTime-1000/60,0);
       }
     }
     else{
