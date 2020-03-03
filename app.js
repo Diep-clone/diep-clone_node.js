@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 2000,y: 2000}
+  mapSize: {x: 1000,y: 1000}
 };
 
 let users = []; // 유저 목록.
