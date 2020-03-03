@@ -61,7 +61,8 @@ function System(name){ // 게임의 전체 진행 담당
     Rocketeer,////
 
     Bumper,
-    Dispersion
+    Dispersion,
+    Diffusion
   ];
 
   this.bulletList = [
