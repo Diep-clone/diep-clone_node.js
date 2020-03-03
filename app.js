@@ -30,8 +30,8 @@ var gameSet = {
 };
 
 let users = []; // 유저 목록.
-var objects = []; // 오브젝트 목록.
-var objID = (function(){ var id=1; return function(){ return id++;} })();
+global.objects = []; // 오브젝트 목록.
+global.objID = (function(){ var id=1; return function(){ return id++;} })();
 
 let sockets = {}; // 유저 접속 목록.
 
@@ -314,23 +314,21 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
 function tickObject(obj,index){
   objUtil.moveObject(obj);
 
+  if (obj.isDead) return;
+
   if (obj.health<=0){
     obj.health=0;
     obj.isDead = true;
-  }
-  if (obj.moveAi){
-    obj.moveAi(obj);
-  }
-  if (obj.isDead) return;
-
-  if (obj.isBorder){ // 화면 밖으로 벗어나는가?
-    if (obj.x>gameSet.mapSize.x+51.6) obj.x=gameSet.mapSize.x+51.6;
-    if (obj.x<-gameSet.mapSize.x-51.6) obj.x=-gameSet.mapSize.x-51.6;
-    if (obj.y>gameSet.mapSize.y+51.6) obj.y=gameSet.mapSize.y+51.6;
-    if (obj.y<-gameSet.mapSize.y-51.6) obj.y=-gameSet.mapSize.y-51.6;
-  }
-  if (obj.guns){
-    bulletUtil.gunSet(objects,obj,index,objID,io);
+    if (obj.hitObject && obj.hitObject.event){
+      if (obj.hitObject.event.killEvent){
+        if (!obj.hitObject.event.killEvent(obj.hitObject,obj)) return false;
+      }
+    }
+    if (obj.event){
+      if (obj.event.deadEvent){
+        if (!obj.event.deadEvent(obj,obj.hitObject)) return false;
+      }
+    }
   }
 
   switch (obj.objType){
@@ -372,6 +370,16 @@ function tickObject(obj,index){
     obj.isOwnCol=Math.max(obj.isOwnCol-1000/60,0);
     if (obj.time<=0){
       obj.isDead = true;
+      if (obj.hitObject && obj.hitObject.event){
+        if (obj.hitObject.event.killEvent){
+          if (!obj.hitObject.event.killEvent(obj.hitObject,obj)) return false;
+        }
+      }
+      if (obj.event){
+        if (obj.event.deadEvent){
+          if (!obj.event.deadEvent(obj,obj.hitObject)) return false;
+        }
+      }
     }
     break;
     case "drone":
@@ -381,6 +389,19 @@ function tickObject(obj,index){
     break;
     default:
     break;
+  }
+
+  if (obj.moveAi){
+    obj.moveAi(obj);
+  }
+  if (obj.isBorder){ // 화면 밖으로 벗어나는가?
+    if (obj.x>gameSet.mapSize.x+51.6) obj.x=gameSet.mapSize.x+51.6;
+    if (obj.x<-gameSet.mapSize.x-51.6) obj.x=-gameSet.mapSize.x-51.6;
+    if (obj.y>gameSet.mapSize.y+51.6) obj.y=gameSet.mapSize.y+51.6;
+    if (obj.y<-gameSet.mapSize.y-51.6) obj.y=-gameSet.mapSize.y-51.6;
+  }
+  if (obj.guns){
+    bulletUtil.gunSet(obj,index,io);
   }
 
   tree.retrieve(obj).forEach((u) => {
@@ -408,7 +429,7 @@ function moveloop(){
   users.forEach((u) => {
     tickPlayer(u);
   });
-  shapeUtil.spawnShape(objects,gameSet.mapSize,objID);
+  shapeUtil.spawnShape(gameSet.mapSize);
   let index = 0;
   objects.forEach((o) => {
     tickObject(o,index++);
@@ -417,16 +438,6 @@ function moveloop(){
   objects.forEach((o) => {
     if (o.isDead){
       if (o.deadTime===-1){
-        if (o.hitObject && o.hitObject.event){
-          if (o.hitObject.event.killEvent){
-            if (!o.hitObject.event.killEvent(o)) return false;
-          }
-        }
-        if (o.event){
-          if (o.event.deadEvent){
-            if (!o.event.deadEvent(o.hitObject)) return false;
-          }
-        }
         o.deadTime=1000;
         if (o.guns){
           for (let i=0;i<o.guns.length;i++){
