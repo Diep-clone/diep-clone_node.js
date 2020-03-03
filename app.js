@@ -265,7 +265,7 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
 
   aUser.hitObject = bUser;
   bUser.hitObject = aUser;
-
+/*
   if (bUser.lastHealth-util.isF(aUser.damage)<=0){
     aUser.health-=util.isF(bUser.damage)*(bUser.lastHealth/util.isF(aUser.damage));
   }
@@ -279,7 +279,7 @@ function collisionCheck(aUser,bUser){ // 충돌 시 계산
     bUser.health-=util.isF(aUser.damage);
   }
   if (aUser.health<0) aUser.health = 0;
-  if (bUser.health<0) bUser.health = 0;
+  if (bUser.health<0) bUser.health = 0;*/
 }
 
 function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입니다.
