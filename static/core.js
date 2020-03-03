@@ -204,6 +204,7 @@ function System(name){ // 게임의 전체 진행 담당
     this.objectList[id] = null;
   }
 
+  this.isGameStart = false;
   this.controlTank;
   this.stat;
   this.stats;
@@ -218,15 +219,10 @@ function System(name){ // 게임의 전체 진행 담당
   }.bind(this));
 
   socket.on('spawn',(data) => {
+    this.isGameStart = true;
     this.controlTank = this.createObject(data.id,this.tankList[data.type]);
     this.controlTank.setPosition(data.x,data.y);
     this.controlTank.setName(data.name);
-    this.drawObject.camera = {
-      x:(data.x-this.drawObject.canvas.width / 2 / this.drawObject.camera.uiz / data.sight),
-      y:(data.y-this.drawObject.canvas.height / 2 / this.drawObject.camera.uiz / data.sight),
-      z:2,
-      uiz:1
-    };
   });
 
   socket.on('playerSet',(data)=>{
@@ -240,6 +236,7 @@ function System(name){ // 게임의 전체 진행 담당
   });
 
   socket.on('objectList', (objectList) => {
+    if (!this.isGameStart) return false;
     let deleteList = {};
     for (let key in this.objectList){
       if (this.objectList[key]){
