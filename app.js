@@ -161,14 +161,6 @@ io.on('connection', (socket) => { // 접속.
 
       users.push(currentPlayer);
       objects.push(currentPlayer.controlObject);
-      socket.emit('spawn', {
-        id:currentPlayer.controlObject.id,
-        x:util.floor(currentPlayer.controlObject.x,2),
-        y:util.floor(currentPlayer.controlObject.y,2),
-        type:currentPlayer.controlObject.type,
-        name:currentPlayer.controlObject.name,
-        sight:util.floor(util.isF(currentPlayer.controlObject.sight),2)
-      });
       socket.emit('mapSize', gameSet.mapSize);
     }
   });
@@ -490,6 +482,7 @@ function sendUpdates(){
                         type:f.type,
                         score:f.exp,
                         name:f.name,
+                        owner:(f.owner)?f.owner.id:null,
                         isDead:f.isDead
                       };
                       case "bullet":

@@ -206,8 +206,8 @@ function System(name){ // 게임의 전체 진행 담당
     this.objectList[id] = null;
   }
 
-  this.isGameStart = false;
   this.controlTank;
+  this.controlTankLevel;
   this.stat;
   this.stats;
   this.maxStats;
@@ -220,15 +220,8 @@ function System(name){ // 게임의 전체 진행 담당
     this.ping = Date.now()-data;
   }.bind(this));
 
-  socket.on('spawn',(data) => {
-    this.controlTank = this.createObject(data.id,this.tankList[data.type]);
-    this.controlTank.setPosition(data.x,data.y);
-    this.controlTank.setName(data.name);
-    this.isGameStart = true;
-  });
-
   socket.on('playerSet',(data)=>{
-    this.controlTank.setLevel(data.level);
+    this.controlTankLevel = data.level;
     this.drawObject.setSight(data.camera.z);
     this.drawObject.cameraSet(data.camera);
     this.isControlRotate = data.isRotate;
@@ -238,7 +231,6 @@ function System(name){ // 게임의 전체 진행 담당
   });
 
   socket.on('objectList', (objectList) => {
-    if (!this.isGameStart) return false;
     let deleteList = {};
     for (let key in this.objectList){
       if (this.objectList[key]){
@@ -279,7 +271,8 @@ function System(name){ // 게임의 전체 진행 담당
           objO.setRadius(obj.radius);
           objO.setRotate(obj.rotate);
           objO.setHealth(obj.health,obj.maxHealth);
-          objO.setColor(new RGB(241,78,84));
+          if (obj.owner === socket.id) this.controlTank = objO;
+          else objO.setColor(new RGB(241,78,84));
         }
         break;
         case "bullet":
@@ -398,9 +391,9 @@ function System(name){ // 게임의 전체 진행 담당
         }
       }
       this.showTankStats.setText(tankStats);
-      this.showTankLevelBar.setPosition((whz[0]-334 * whz[2])/2,(whz[0]+334 * whz[2])/2,whz[1] - 48 * whz[2],this.controlTank.score<this.expList[44]?(this.controlTank.score-this.expList[this.controlTank.level-1])/(this.expList[this.controlTank.level]-this.expList[this.controlTank.level-1]):1);
+      this.showTankLevelBar.setPosition((whz[0]-334 * whz[2])/2,(whz[0]+334 * whz[2])/2,whz[1] - 48 * whz[2],this.controlTank.score<this.expList[44]?(this.controlTank.score-this.expList[this.controlTankLevel-1])/(this.expList[this.controlTankLevel]-this.expList[this.controlTankLevel-1]):1);
       this.showTankLevel.setPosition(whz[0]/2,whz[1] - 24 * whz[2],0);
-      this.showTankLevel.setText("Lvl "+String(this.controlTank.level)+" "+this.controlTank.tankType);
+      this.showTankLevel.setText("Lvl "+String(this.controlTankLevel)+" "+this.controlTank.tankType);
       let scoreBarPercent=1;
       if(this.scoreBoard.length>0){
         scoreBarPercent=this.controlTank.score/this.scoreBoard[0].score;
