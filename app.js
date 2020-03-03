@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 2000,y: 2000}
+  mapSize: {x: 200,y: 200}
 };
 
 let users = []; // 유저 목록.
@@ -317,7 +317,7 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
   }
 }
 
-function tickObject(obj){
+function tickObject(obj,index){
   objUtil.moveObject(obj);
 
   if (obj.health<=0){
@@ -336,7 +336,7 @@ function tickObject(obj){
     if (obj.y<-gameSet.mapSize.y-51.6) obj.y=-gameSet.mapSize.y-51.6;
   }
   if (obj.guns){
-    bulletUtil.gunSet(objects,obj,objID,io);
+    bulletUtil.gunSet(objects,obj,index,objID,io);
   }
 
   switch (obj.objType){
@@ -409,9 +409,11 @@ function moveloop(){
     tickPlayer(u);
   });
   shapeUtil.spawnShape(objects,gameSet.mapSize,objID);
+  let index = 0;
   objects.forEach((o) => {
-    tickObject(o);
+    tickObject(o,index++);
   });
+  index = 0;
   objects.forEach((o) => {
     if (o.isDead){
       if (o.deadTime===-1){
@@ -436,12 +438,13 @@ function moveloop(){
         }
       }
       else if (o.deadTime<0){
-        objects.splice(util.findIndex(objects,o.id),1);
+        objects.splice(index,1);
       }
       else{
         o.deadTime-=1000/60;
       }
     }
+    index++;
   });
 }
 
