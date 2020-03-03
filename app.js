@@ -347,10 +347,10 @@ function tickObject(obj,index){
     if (obj.owner){
       userUtil.healTank(obj);
       if (gameSet.gameMode === "sandbox"){
-        if (obj.owner.k && obj.level<45 && obj.owner.kTime<=0){
+        /*if (obj.owner.k && obj.level<45 && obj.owner.kTime<=0){
           obj.exp = sc;
           obj.owner.kTime+=100;
-        }
+        }*/
         obj.owner.kTime=Math.max(obj.owner.kTime-1000/60,0);
         if (obj.owner.changeTank){
           if (obj.owner.changeTime<=0){
