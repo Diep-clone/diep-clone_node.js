@@ -1032,3 +1032,16 @@ function Dispersion(){
 }
 Dispersion.prototype = new Tank();
 Dispersion.prototype.constructor = Dispersion;
+
+
+function Diffusion(){
+  "use strict";
+  Tank.apply(this, arguments);
+  this.guns=[
+    new Gun([[0,0],[0.4,0],[0.8,1.88],[-0.8,1.88],[-0.4, 0]],0),
+    new Gun([[0.4,0.9],[0,1.5],[-0.4, 0.9]],0)
+  ];
+  this.tankType = "Diffusion";
+}
+Diffusion.prototype = new Tank();
+Diffusion.prototype.constructor = Diffusion;
