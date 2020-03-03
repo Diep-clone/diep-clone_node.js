@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 2000,y: 2000}
+  mapSize: {x: 1000,y: 1000}
 };
 
 let users = []; // 유저 목록.
@@ -403,7 +403,7 @@ function tickObject(obj,index){
   if (obj.guns){
     bulletUtil.gunSet(obj,index,io);
   }
-/*
+
   tree.retrieve(obj).forEach((u) => {
     let res = new SAT.Response();
     let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
@@ -413,7 +413,7 @@ function tickObject(obj,index){
   });
 
   tree.insert(obj);
-*/
+
   if (obj.isMove || obj.isShot || obj.invTime<0){
     obj.opacity=Math.min(obj.opacity+0.1,1);
   }
@@ -425,7 +425,7 @@ function tickObject(obj,index){
 }
 
 function moveloop(){
-  //tree.clear();
+  tree.clear();
   users.forEach((u) => {
     tickPlayer(u);
   });
