@@ -354,7 +354,7 @@ function tickObject(obj,index){
           if (obj.owner.changeTime<=0){
             obj.type = obj.type==0?tankLength-1:obj.type-1;
             userUtil.setUserTank(obj);
-            obj.owner.changeTime+=100;
+            obj.owner.changeTime+=300;
           }
           obj.owner.changeTank = false;
         }
