@@ -108,10 +108,10 @@ function DrawObject(camera){ // 그리기 담당
     this.ctx.stroke();
   }
 
-  this.objectDraw = function (obj){
-    for (let key in obj){
-      if (obj[key]){
-        obj[key].draw(this.ctx,this.camera);
+  this.objectDraw = function (obj,order){
+    for (let i=0;i<order.length;i++){
+      if (obj[order[i].id]){
+        obj[order[i].id].draw(this.ctx,this.camera);
       }
     }
   }

@@ -2,6 +2,7 @@ function System(name){ // 게임의 전체 진행 담당
   "use strict";
 
   this.objectList = {};
+  this.objectOrder = [];
   this.uiObjectList = [];
 
   this.tankList = [
@@ -58,6 +59,7 @@ function System(name){ // 게임의 전체 진행 담당
     Factory,////
     Skimmer,////
     Rocketeer,////
+
     Bumper,
     Dispersion
   ];
@@ -243,7 +245,8 @@ function System(name){ // 게임의 전체 진행 담당
         deleteList[this.objectList[key].id]=true;
       }
     }
-    for (let key in objectList){ // 탱크 지정
+    this.objectOrder = objectList;
+    for (let key=0;key<objectList.length;key++){ // 탱크 지정
       let obj = objectList[key];
       deleteList[obj.id]=false;
       switch (obj.objType){
@@ -473,7 +476,7 @@ function System(name){ // 게임의 전체 진행 담당
     }
 
     this.drawObject.backgroundDraw();
-    this.drawObject.objectDraw(this.objectList);
+    this.drawObject.objectDraw(this.objectList,this.objectOrder);
     this.drawObject.objectStatusDraw(this.objectList);
     this.drawObject.uiDraw(this.uiObjectList);
 
