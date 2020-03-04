@@ -5,7 +5,6 @@ const app = express();
 const server = require('http').createServer(app);
 const SAT = require('sat');
 const io = require('socket.io')(server);
-const os = require('os-utils');
 
 io.set('heartbeat timeout', 60000);
 io.set('heartbeat interval', 25000);
@@ -17,7 +16,6 @@ const bulletUtil = require('./lib/bulletSet');
 const shapeUtil = require('./lib/shapeSet');
 
 const quadtree = require('./lib/QuadTree');
-//const quadtree = require('simple-quadtree'); // 쿼드 트리 (충돌 감지)
 const readline = require('readline'); // 콘솔 창 명령어 실행 패키지
 
 let V = SAT.Vector;
@@ -39,7 +37,6 @@ let tankLength = 56; // 탱크의 목록 길이.
 
 let tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 let sendTree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
-//let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
 app.get('/', (req, res) => {
@@ -180,13 +177,7 @@ io.on('connection', (socket) => { // 접속.
       currentPlayer.target.y = data.y - currentPlayer.controlObject.y;
     }
   });
-/*
-  socket.on('windowResized', (data) => {
-    if (!data) return;
-    currentPlayer.screenWidth = data.screenWidth;
-    currentPlayer.screenHeight = data.screenHeight;
-  });
-*/
+
   socket.on('leftMouse', (data) => {
     currentPlayer.mouse.left = data;
   });
@@ -564,14 +555,7 @@ function sendUpdates(){
 }
 
 setInterval(moveloop,1000/60);
-setInterval(sendUpdates,1000/40);
-/*
-setInterval(function(){
-  os.cpuUsage(function(v){
-    console.log( 'CPU Usage (%): ' + v );
-  });
-},2000);
-*/
+setInterval(sendUpdates,1000/30);
 server.listen(80, () => {
     console.log("잠깐, 지금 서버를 연거야?");
 });
