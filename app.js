@@ -191,6 +191,7 @@ io.on('connection', (socket) => { // 접속.
   });
 
   socket.on('moveRotate', (data) => {
+    if(isNaN(Number(data)))return;
     currentPlayer.moveRotate = data;
   });
 
