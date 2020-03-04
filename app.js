@@ -282,7 +282,7 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
         p.controlObject.event.rightEvent();
       }
     }
-    if (p.moveRotate === null){
+    if (typeof(p.moveRotate) !== "number"){
       p.controlObject.isMove = false;
     }
     else{
