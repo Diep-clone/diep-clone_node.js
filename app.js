@@ -427,7 +427,7 @@ function tickObject(obj,index){
 
 function moveloop(){
   tree.clear();
-  let ulen = users.length;
+  const ulen = users.length;
   for (let i=0;i<ulen;i++){
     tickPlayer(users[i]);
   }
@@ -442,10 +442,10 @@ function moveloop(){
       if (o.deadTime===-1){
         o.deadTime=1000;
         if (o.guns){
-          let glen = o.guns.length;
+          const glen = o.guns.length;
           for (let j=0;j<glen;j++){
             if (!o.guns[j]) continue;
-            let blen = o.guns[j].bullets.length;
+            const blen = o.guns[j].bullets.length;
             for (let k=0;k<blen;k++){
               o.guns[j].bullets[k].isDead = true;
             }
@@ -466,7 +466,7 @@ function moveloop(){
 function sendUpdates(){
   sendTree.clear();
   var scoreBoardList=[];
-  let olen=objects.length;
+  const olen=objects.length;
   for (let i=0;i<olen;i++){
     let f = objects[i];
     if (!f.isDead && f.objType==="tank"){
@@ -480,7 +480,7 @@ function sendUpdates(){
   scoreBoardList = scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
   }).slice(0,10);
-  let ulen=users.length;
+  const ulen=users.length;
   for (let i=0;i<ulen;i++){
     let u = users[i];
     let objList = sendTree.retrieve({
@@ -490,7 +490,7 @@ function sendUpdates(){
                   y2:u.camera.y - 720 / u.camera.z
                 },true);
     let visibleObject = [];
-    let olen = objList.length;
+    const olen = objList.length;
     for (let j=0;j<olen;j++){
       let f = objList[j];
       let r = util.isF(f.radius);
