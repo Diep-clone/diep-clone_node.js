@@ -470,7 +470,7 @@ function sendUpdates(){
     });
     sendTree.insert(f);
   });
-  scoreBoardList.sort(function(a,b){
+  scoreBoardList = scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
   }).slice(0,10);
   users.forEach((u) => {
