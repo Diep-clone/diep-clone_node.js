@@ -321,8 +321,8 @@ function System(name){ // 게임의 전체 진행 담당
             new RGB(252,118,118),
             new RGB(118,140,252),
             new RGB(118,140,252),
-            new RGB(228,102,233),
-            new RGB(228,102,233)
+            new RGB(241,119,221),
+            new RGB(241,119,221)
           ];
           objO.setColor(colorList[obj.type]);
         }
