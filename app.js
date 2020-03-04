@@ -395,7 +395,7 @@ function tickObject(obj,index){
   if (obj.guns){
     bulletUtil.gunSet(obj,index,io);
   }
-
+/*
   tree.retrieve(obj).forEach((u) => {
     let res = new SAT.Response();
     let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
@@ -404,7 +404,7 @@ function tickObject(obj,index){
     }
   });
 
-  tree.insert(obj);
+  tree.insert(obj);*/
 
   if (obj.isMove || obj.isShot || obj.invTime<0){
     obj.opacity=Math.min(obj.opacity+0.1,1);
@@ -417,7 +417,7 @@ function tickObject(obj,index){
 }
 
 function moveloop(){
-  tree.clear();
+  //tree.clear();
   const ulen = users.length;
   for (let i=0;i<ulen;i++){
     tickPlayer(users[i]);
