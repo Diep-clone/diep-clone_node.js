@@ -427,7 +427,7 @@ function ScoreBoard() {
 
     this.scoreBoardTitle.setPosition(x,y);
 
-    for(var i=0;i<this.scoreBoardList.length;i++)
+    for(var i=0;i<10;i++)
     {
       let per = this.scoreBoardList[i].score/this.scoreBoardList[0].score;
       if (this.scoreBoardList[0].score===0) per=1;
