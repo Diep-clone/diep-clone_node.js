@@ -427,22 +427,26 @@ function tickObject(obj,index){
 
 function moveloop(){
   tree.clear();
-  for (let i=0;i<users.length;i++){
+  let ulen = users.length;
+  for (let i=0;i<ulen;i++){
     tickPlayer(users[i]);
   }
   shapeUtil.spawnShape(gameSet.mapSize);
-  for (let i=0;i<objects.length;i++){
+  let olen = objects.length;
+  for (let i=0;i<olen;i++){
     tickObject(objects[i],i);
   }
-  for (let i=0;i<objects.length;i++){
+  for (let i=0;i<olen;i++){
     let o = objects[i];
     if (o.isDead){
       if (o.deadTime===-1){
         o.deadTime=1000;
         if (o.guns){
-          for (let j=0;j<o.guns.length;j++){
+          let glen = o.guns.length;
+          for (let j=0;j<glen;j++){
             if (!o.guns[j]) continue;
-            for (let k=0;k<o.guns[j].bullets.length;k++){
+            let blen = o.guns[j].bullets.length;
+            for (let k=0;k<blen;k++){
               o.guns[j].bullets[k].isDead = true;
             }
           }
@@ -450,6 +454,7 @@ function moveloop(){
       }
       else if (o.deadTime<0){
         objects.splice(i,1);
+        olen--;
       }
       else{
         o.deadTime-=1000/60;
@@ -461,7 +466,8 @@ function moveloop(){
 function sendUpdates(){
   sendTree.clear();
   var scoreBoardList=[];
-  for (let i=0;i<objects.length;i++){
+  let olen=objects.length;
+  for (let i=0;i<olen;i++){
     let f = objects[i];
     if (!f.isDead && f.objType==="tank"){
       scoreBoardList.push({
@@ -474,68 +480,76 @@ function sendUpdates(){
   scoreBoardList = scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
   }).slice(0,10);
-  for (let i=0;i<users.length;i++){
+  let ulen=users.length;
+  for (let i=0;i<ulen;i++){
     let u = users[i];
-    let visibleObject  = sendTree.retrieve({
+    let objList = sendTree.retrieve({
                   x:u.camera.x + 1280 / u.camera.z,
                   y:u.camera.y + 720 / u.camera.z,
                   x2:u.camera.x - 1280 / u.camera.z,
                   y2:u.camera.y - 720 / u.camera.z
-                },true).map(function(f) {
-                if ( f.x > u.camera.x - 1280 / u.camera.z - util.isF(f.radius) &&
-                    f.x < u.camera.x + 1280 / u.camera.z + util.isF(f.radius) &&
-                    f.y > u.camera.y - 720 / u.camera.z - util.isF(f.radius) &&
-                    f.y < u.camera.y + 720 / u.camera.z + util.isF(f.radius) && f.opacity > 0) {
-                    switch (f.objType){
-                      case "tank":
-                      return {
-                        objType:"tank",
-                        id:f.id,
-                        x:util.floor(f.x,2),
-                        y:util.floor(f.y,2),
-                        radius:util.floor(util.isF(f.radius),1),
-                        rotate:util.floor(f.rotate,2),
-                        maxHealth:util.floor(f.lastMaxHealth,1),
-                        health:util.floor(f.health,1),
-                        opacity:util.floor(f.opacity,2),
-                        type:f.type,
-                        score:f.exp,
-                        name:f.name,
-                        owner:(f.owner)?f.owner.id:null,
-                        isDead:f.isDead
-                      };
-                      case "bullet":
-                      case "drone":
-                      return {
-                        objType:f.objType,
-                        id:f.id,
-                        x:util.floor(f.x,2),
-                        y:util.floor(f.y,2),
-                        radius:util.floor(util.isF(f.radius),1),
-                        rotate:util.floor(f.rotate,2),
-                        type:f.type,
-                        owner:f.owner.id,
-                        isDead:f.isDead
-                      };
-                      case "shape":
-                      return {
-                        objType:"shape",
-                        id:f.id,
-                        x:util.floor(f.x,2),
-                        y:util.floor(f.y,2),
-                        radius:util.floor(util.isF(f.radius),1),
-                        rotate:util.floor(f.rotate,2),
-                        maxHealth:util.floor(util.isF(f.maxHealth),1),
-                        health:util.floor(f.health,1),
-                        type:f.type,
-                        isDead:f.isDead
-                      };
-                      default:
-                      return {};
-                    }
-                }
-            })
-            .filter(function(f) { return f; });
+                },true);
+    let visibleObject = [];
+    let olen = objList.length;
+    for (let j=0;j<olen;j++){
+      let f = objList[j];
+      let r = util.isF(f.radius);
+      if ( f.x > u.camera.x - 1280 / u.camera.z - r &&
+          f.x < u.camera.x + 1280 / u.camera.z + r &&
+          f.y > u.camera.y - 720 / u.camera.z - r &&
+          f.y < u.camera.y + 720 / u.camera.z + r && f.opacity > 0) {
+          switch (f.objType){
+            case "tank":
+            visibleObject.push({
+              objType:"tank",
+              id:f.id,
+              x:util.floor(f.x,2),
+              y:util.floor(f.y,2),
+              radius:util.floor(r,1),
+              rotate:util.floor(f.rotate,2),
+              maxHealth:util.floor(f.lastMaxHealth,1),
+              health:util.floor(f.health,1),
+              opacity:util.floor(f.opacity,2),
+              type:f.type,
+              score:f.exp,
+              name:f.name,
+              owner:(f.owner)?f.owner.id:null,
+              isDead:f.isDead
+            });
+            break;
+            case "bullet":
+            case "drone":
+            visibleObject.push({
+              objType:f.objType,
+              id:f.id,
+              x:util.floor(f.x,2),
+              y:util.floor(f.y,2),
+              radius:util.floor(r,1),
+              rotate:util.floor(f.rotate,2),
+              type:f.type,
+              owner:f.owner.id,
+              isDead:f.isDead
+            });
+            break;
+            case "shape":
+            visibleObject.push({
+              objType:"shape",
+              id:f.id,
+              x:util.floor(f.x,2),
+              y:util.floor(f.y,2),
+              radius:util.floor(r,1),
+              rotate:util.floor(f.rotate,2),
+              maxHealth:util.floor(util.isF(f.maxHealth),1),
+              health:util.floor(f.health,1),
+              type:f.type,
+              isDead:f.isDead
+            });
+            break;
+            default:
+            break;
+          }
+      }
+    }
     sockets[u.id].emit('objectList',visibleObject);
     sockets[u.id].emit('playerSet',{
       level:u.controlObject.level,
