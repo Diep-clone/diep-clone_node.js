@@ -427,14 +427,15 @@ function tickObject(obj,index){
 
 function moveloop(){
   tree.clear();
-  for (let i=0;i<user.length;i++){
-    tickPlayer(user[i]);
+  for (let i=0;i<users.length;i++){
+    tickPlayer(users[i]);
   }
   shapeUtil.spawnShape(gameSet.mapSize);
   for (let i=0;i<objects.length;i++){
-    tickObject(o,i);
+    tickObject(objects[i],i);
   }
   for (let i=0;i<objects.length;i++){
+    let o = objects[i];
     if (o.isDead){
       if (o.deadTime===-1){
         o.deadTime=1000;
@@ -473,8 +474,8 @@ function sendUpdates(){
   scoreBoardList = scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
   }).slice(0,10);
-  for (let i=0;i<user.length;i++){
-    let u = user[i];
+  for (let i=0;i<users.length;i++){
+    let u = users[i];
     let visibleObject  = sendTree.retrieve({
                   x:u.camera.x + 1280 / u.camera.z,
                   y:u.camera.y + 720 / u.camera.z,
