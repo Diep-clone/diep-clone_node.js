@@ -427,53 +427,54 @@ function tickObject(obj,index){
 
 function moveloop(){
   tree.clear();
-  users.forEach((u) => {
-    tickPlayer(u);
-  });
+  for (let i=0;i<user.length;i++){
+    tickPlayer(user[i]);
+  }
   shapeUtil.spawnShape(gameSet.mapSize);
-  let index = 0;
-  objects.forEach((o) => {
-    tickObject(o,index++);
-  });
-  index = 0;
-  objects.forEach((o) => {
+  for (let i=0;i<objects.length;i++){
+    tickObject(o,i);
+  }
+  for (let i=0;i<objects.length;i++){
     if (o.isDead){
       if (o.deadTime===-1){
         o.deadTime=1000;
         if (o.guns){
-          for (let i=0;i<o.guns.length;i++){
-            if (!o.guns[i]) continue;
-            for (let j=0;j<o.guns[i].bullets.length;j++){
-              o.guns[i].bullets[j].isDead = true;
+          for (let j=0;j<o.guns.length;j++){
+            if (!o.guns[j]) continue;
+            for (let k=0;k<o.guns[j].bullets.length;k++){
+              o.guns[j].bullets[k].isDead = true;
             }
           }
         }
       }
       else if (o.deadTime<0){
-        objects.splice(index,1);
+        objects.splice(i,1);
       }
       else{
         o.deadTime-=1000/60;
       }
     }
-    index++;
-  });
+  };
 }
 
 function sendUpdates(){
   sendTree.clear();
   var scoreBoardList=[];
-  objects.forEach(function(f){
-    if (!f.isDead && f.objType==="tank") scoreBoardList.push({
-      name:f.name,
-      score:f.exp
-    });
+  for (let i=0;i<objects.length;i++){
+    let f = objects[i];
+    if (!f.isDead && f.objType==="tank"){
+      scoreBoardList.push({
+        name:f.name,
+        score:f.exp
+      });
+    }
     sendTree.insert(f);
-  });
+  };
   scoreBoardList = scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
   }).slice(0,10);
-  users.forEach((u) => {
+  for (let i=0;i<user.length;i++){
+    let u = user[i];
     let visibleObject  = sendTree.retrieve({
                   x:u.camera.x + 1280 / u.camera.z,
                   y:u.camera.y + 720 / u.camera.z,
@@ -544,7 +545,7 @@ function sendUpdates(){
       maxStats:u.controlObject.maxStats
     });
     sockets[u.id].emit('scoreboardlist',scoreBoardList);
-  });
+  };
 }
 
 setInterval(moveloop,1000/60);
