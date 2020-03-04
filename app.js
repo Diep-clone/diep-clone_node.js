@@ -26,7 +26,7 @@ let C = SAT.Circle;
 var gameSet = {
   gameMode: "sandbox",
   maxPlayer: 50,
-  mapSize: {x: 1000,y: 1000}
+  mapSize: {x: 2000,y: 2000}
 };
 
 let users = []; // 유저 목록.
@@ -38,6 +38,7 @@ let sockets = {}; // 유저 접속 목록.
 let tankLength = 56; // 탱크의 목록 길이.
 
 let tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
+let sendTree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 //let tree = new QuadTree(new Box(-gameSet.mapSize.x,-gameSet.mapSize.y,gameSet.mapSize.x,gameSet.mapSize.y));
 
 app.use(express.static(__dirname + '/static')); // 클라이언트 코드 목록 불러오기.
@@ -89,7 +90,7 @@ io.on('connection', (socket) => { // 접속.
 
   //shapeUtil.extendMaxShape(10);
 
-  tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
+  tree = sendTree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 
   io.emit('mapSize', gameSet.mapSize);
 
@@ -227,7 +228,7 @@ io.on('connection', (socket) => { // 접속.
       //gameSet.mapSize.x+= 50;
       //gameSet.mapSize.y+= 50;
 
-      tree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
+      tree = sendTree = new quadtree(-gameSet.mapSize.x*2,-gameSet.mapSize.y*2,gameSet.mapSize.x*4,gameSet.mapSize.y*4);
 
       //shapeUtil.extendMaxShape(-10);
 
@@ -460,28 +461,25 @@ function moveloop(){
 }
 
 function sendUpdates(){
-  var scoreBoardList=objects.map(function(f)
-  {
-    switch (f.objType){
-      case "tank":
-      if(!f.isDead)
-      {
-        return {
-          type:f.type,
-          score:f.exp,
-          name:f.name,
-          isDead:f.isDead
-        };
-      }
-      default:
-    }
-  }).filter(function(f) { return f; }).sort(function(a,b)
-  {
+  sendTree.clear();
+  var scoreBoardList=[];
+  objects.forEach(function(f){
+    if (!f.isDead && f.objType==="tank") scoreBoardList.push({
+      name:f.name,
+      score:f.exp
+    });
+    sendTree.insert(f);
+  });
+  scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
   }).slice(0,10);
   users.forEach((u) => {
-    let visibleObject  = objects
-            .map(function(f) {
+    let visibleObject  = sendTree.retrieve({
+                  x:u.camera.x + 1280 / u.camera.z,
+                  y:u.camera.y + 720 / u.camera.z,
+                  x2:u.camera.x - 1280 / u.camera.z,
+                  y2:u.camera.y - 720 / u.camera.z
+                },true).map(function(f) {
                 if ( f.x > u.camera.x - 1280 / u.camera.z - util.isF(f.radius) &&
                     f.x < u.camera.x + 1280 / u.camera.z + util.isF(f.radius) &&
                     f.y > u.camera.y - 720 / u.camera.z - util.isF(f.radius) &&
