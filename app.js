@@ -307,6 +307,18 @@ function tickPlayer(p){ // 플레이어를 기준으로 반복되는 코드입�
 function tickObject(obj,index){
   objUtil.moveObject(obj);
 
+  tree.retrieve(obj).forEach((u) => {
+    if (!u.isDead){
+      let res = new SAT.Response();
+      let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
+      if (isCol){
+        collisionCheck(obj,u);
+      }
+    }
+  });
+
+  tree.insert(obj);
+
   if (obj.isDead) return;
 
   if (obj.health<=0){
@@ -396,18 +408,6 @@ function tickObject(obj,index){
   if (obj.guns){
     bulletUtil.gunSet(obj,index,io);
   }
-
-  tree.retrieve(obj).forEach((u) => {
-    if (!u.isDead){
-      let res = new SAT.Response();
-      let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
-      if (isCol){
-        collisionCheck(obj,u);
-      }
-    }
-  });
-
-  tree.insert(obj);
 
   if (obj.isMove || obj.isShot || obj.invTime<0){
     obj.opacity=Math.min(obj.opacity+0.1,1);
