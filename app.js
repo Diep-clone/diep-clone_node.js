@@ -398,10 +398,12 @@ function tickObject(obj,index){
   }
 
   tree.retrieve(obj).forEach((u) => {
-    let res = new SAT.Response();
-    let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
-    if (isCol){
-      collisionCheck(obj,u);
+    if (!u.isDead){
+      let res = new SAT.Response();
+      let isCol = SAT.testCircleCircle(new C(new V(obj.x,obj.y),util.isF(obj.radius)),new C(new V(u.x,u.y),util.isF(u.radius)),res);
+      if (isCol){
+        collisionCheck(obj,u);
+      }
     }
   });
 
