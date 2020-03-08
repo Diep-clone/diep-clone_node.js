@@ -456,7 +456,7 @@ function moveloop(){
 }
 
 function sendUpdates(){
-  sendTree.clear();
+  //sendTree.clear();
   var scoreBoardList=[];
   const olen=objects.length;
   for (let i=0;i<olen;i++){
@@ -467,7 +467,7 @@ function sendUpdates(){
         score:f.exp
       });
     }
-    sendTree.insert(f);
+    //sendTree.insert(f);
   };
   scoreBoardList = scoreBoardList.sort(function(a,b){
       return Math.sign(b.score-a.score);
@@ -475,7 +475,7 @@ function sendUpdates(){
   const ulen=users.length;
   for (let i=0;i<ulen;i++){
     let u = users[i];
-    let objList = sendTree.retrieve({
+    let objList = tree.retrieve({
                   x:u.camera.x + 1280 / u.camera.z,
                   y:u.camera.y + 720 / u.camera.z,
                   x2:u.camera.x - 1280 / u.camera.z,
